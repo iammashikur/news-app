@@ -1,18 +1,18 @@
-@if (Request::segment('1') == 'news-add' || Request::segment('1') == 'news-edit')
+@if (Request::segment('2') == 'news-add' || Request::segment('2') == 'news-edit')
 
 
 
 
 
 <!-- General JS Scripts -->
-<script src="assets/backend/js/app.min.js"></script>
+<script src="{{url('/')}}/assets/backend/js/app.min.js"></script>
 <!-- JS Libraies -->
-<script src="assets/backend/bundles/summernote/summernote-bs4.js"></script>
-<script src="assets/backend/bundles/jquery-selectric/jquery.selectric.min.js"></script>
-<script src="assets/backend/bundles/upload-preview/assets/js/jquery.uploadPreview.min.js"></script>
-<script src="assets/backend/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+<script src="{{url('/')}}/assets/backend/bundles/summernote/summernote-bs4.js"></script>
+<script src="{{url('/')}}/assets/backend/bundles/jquery-selectric/jquery.selectric.min.js"></script>
+<script src="{{url('/')}}/assets/backend/bundles/upload-preview/assets/js/jquery.uploadPreview.min.js"></script>
+<script src="{{url('/')}}/assets/backend/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 <!-- Page Specific JS File -->
-<script src="assets/backend/js/page/create-post.js"></script>
+<script src="{{url('/')}}/assets/backend/js/page/create-post.js"></script>
 
 
 
@@ -24,7 +24,7 @@
     $('#select').on('click', function(){
 
         var value = $( 'input[name=image]:checked' ).val();
-        $('#post-image').attr('src', value);
+        $('#post-image').attr('src', '<?= url('/'); ?>/'+value);
         $('#post-image').addClass('file-manager-image');
         $('#modelId').modal('toggle');
 
@@ -161,20 +161,20 @@
 
 
 <!-- Template JS File -->
-<script src="assets/backend/js/scripts.js"></script>
+<script src="{{url('/')}}/assets/backend/js/scripts.js"></script>
 <!-- Custom JS File -->
-<script src="assets/backend/js/custom.js"></script>
+<script src="{{url('/')}}/assets/backend/js/custom.js"></script>
 
 
 @else
 
 <!-- General JS Scripts -->
-<script src="assets/backend/js/app.min.js"></script>
+<script src="{{url('/')}}/assets/backend/js/app.min.js"></script>
 <!-- JS Libraies -->
 
 
 <!-- Template JS File -->
-<script src="assets/backend/js/scripts.js"></script>
+<script src="{{url('/')}}/assets/backend/js/scripts.js"></script>
 <!-- Custom JS File -->
-<script src="assets/backend/js/custom.js"></script>
+<script src="{{url('/')}}/assets/backend/js/custom.js"></script>
 @endif

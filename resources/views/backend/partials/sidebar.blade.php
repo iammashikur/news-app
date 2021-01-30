@@ -1,7 +1,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index"> <img alt="image" src="assets/backend/img/logo.png" class="header-logo" /> <span class="logo-name">Otika</span>
+            <a href="index"> <img alt="image" src="{{url('assets/backend/img/logo.png')}}" class="header-logo" /> <span class="logo-name">itFactory</span>
             </a>
         </div>
         <ul class="sidebar-menu">

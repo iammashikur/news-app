@@ -6,7 +6,7 @@
     <div class="custom-control custom-radio image-checkbox">
         <input type="radio" class="custom-control-input" id="{{$files->id}}" name="image" value="{{$files->file_path}}">
         <label class="custom-control-label" for="{{$files->id}}">
-            <img src="{{ str_replace('news_image/', 'news_image/thumb/', $files->file_path) }}" alt="{{$files->file_name}}" class="w-100 file-manager-image">
+            <img src="{{ url(str_replace('news_image/', 'news_image/thumb/', $files->file_path)) }}" alt="{{$files->file_name}}" class="w-100 file-manager-image">
         </label>
     </div>
 </div>

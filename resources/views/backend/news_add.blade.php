@@ -12,12 +12,12 @@
 
 
 
-                    <div class="row justify-content-md-center">
+                    <div class="row">
 
 
 
 
-                        <div class="col-md-6">
+                        <div class="col-lg-8 col-12">
 
                             <div class="card">
 
