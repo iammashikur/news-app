@@ -9,70 +9,63 @@ use App\Files;
 
 class FilesController extends Controller
 {
-    public function images()
-    {
-        return 'hello';
-    }
 
+    ################################
+    ##        FILE MANAGER        ##
+    ################################
+
+    // Show All Files
     public function index()
     {
         $data = DB::table('images')->paginate(8);
         return view('pagination', compact('data'));
     }
 
-
+    // Ajax Fetch All Files
     public function fetch_data(Request $request)
-
     {
-
-        if($request->ajax())
-        {
-
+        if ($request->ajax()) {
             $query = $request->get('query');
-
             $query = str_replace(" ", "%", $query);
             $data = DB::table('files')
-                    ->where('file_path', 'like', '%'.$query.'%')
-                    ->orWhere('file_name', 'like', '%'.$query.'%')
-                    ->orderBy("id", "desc")
-                    ->paginate(8);
+                ->where('file_path', 'like', '%' . $query . '%')
+                ->orWhere('file_name', 'like', '%' . $query . '%')
+                ->orderBy("id", "desc")
+                ->paginate(8);
             return view('backend.partials.filemanager', compact('data'))->render();
         }
-
-
     }
 
+    // Upload An Image
     public function upload_data(Request $request)
     {
 
-        if(!$request->hasFile('image'))
-        {
+        // Check image selected
+        if (!$request->hasFile('image')) {
             return response([
                 'img_status' => 'notselected',
             ]);
-
         }
 
-        if(!$request->name)
-        {
+        // Check image name
+        if (!$request->name) {
             return response([
                 'name_status' => 'missing',
             ]);
-
         }
 
 
-        if($request->hasFile('image'))
-        {
+        // Upload image
+        if ($request->hasFile('image')) {
 
             // Upload File
             $image = $request->file('image');
-            $name = 'news_image_'.time();
+            $name = 'news_image_' . time();
             $main_folder  = 'assets/frontend/news_image/';
             $thumb_folder = 'assets/frontend/news_image/thumb/';
 
-            $main_path  = $main_folder.  $name . '.' . $image->getClientOriginalExtension();
-            $thumb_path = $thumb_folder. $name . '.' . $image->getClientOriginalExtension();
+            $main_path  = $main_folder .  $name . '.' . $image->getClientOriginalExtension();
+            $thumb_path = $thumb_folder . $name . '.' . $image->getClientOriginalExtension();
 
             //Resize Big Image
             $main = Image::make($image);
@@ -97,13 +90,6 @@ class FilesController extends Controller
                 'name_status' => 'exist',
                 'img_status' => 'uploaded',
             ]);
-
-
         }
-
-
-
-
-
     }
 }

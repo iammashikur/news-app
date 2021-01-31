@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Auth::routes();
 
@@ -24,26 +22,36 @@ Auth::routes();
 Route::group(['prefix' => 'admin'], function () {
 
 
-    Route::get('/' , 'AdminController@index');
+    Route::get('/', 'AdminController@index');
 
-    Route::get('/news-add' , 'AdminController@news_add')->name('news_add');
-    Route::post('/news-add' , 'AdminController@news_store')->name('news_store');
+    // News Route
+    Route::get('/news-publish',   'AdminController@news_form')->name('news_form');
+    Route::post('/news-publish', 'AdminController@news_store')->name('news_store');
+    Route::get('/news-manage',   'AdminController@news_form')->name('news_all');
+    Route::get('/news-trash',   'AdminController@news_trash')->name('news_trash');
+    Route::get('/news-update/{id}', 'AdminController@news_update')->name('news_update');
+    Route::get('/news-delete/{id}', 'AdminController@news_update')->name('news_delete');
 
-    Route::get('/news-edit' , 'AdminController@news_edit');
+    // Category Route
+
+    Route::get('/category-manage',   'AdminController@category_all')->name('category_all');
+    Route::get('/category-publish',   'AdminController@category_form')->name('category_form');
+    Route::post('/category-publish', 'AdminController@category_store')->name('category_store');
+    Route::get('/category-update/{id}', 'AdminController@category_update')->name('category_update');
+    Route::get('/category-delete/{id}', 'AdminController@category_update')->name('category_delete');
 
 
 
 
-    Route::get('/file-manager'   , 'FilesController@fetch_data')->name('filemanager.images');
-    Route::post('/file-manager' , 'FilesController@upload_data')->name('filemanager.upload');
+    Route::get('/file-manager', 'FilesController@fetch_data')->name('filemanager.images');
+    Route::post('/file-manager', 'FilesController@upload_data')->name('filemanager.upload');
 
 
 
 
-    Route::get('/blog' , function(){
+    Route::get('/blog', function () {
         return view('backend.blog');
     });
-
 });
 
 

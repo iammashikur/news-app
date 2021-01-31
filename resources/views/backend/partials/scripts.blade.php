@@ -1,4 +1,4 @@
-@if (Request::segment('2') == 'news-add' || Request::segment('2') == 'news-edit')
+@if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update')
 
 
 
@@ -24,7 +24,8 @@
     $('#select').on('click', function(){
 
         var value = $( 'input[name=image]:checked' ).val();
-        $('#post-image').attr('src', '<?= url('/'); ?>/'+value);
+        $('#post-image').attr('src', '<?= url('/') ?>/'+value);
+        $('#form-image').val(value);
         $('#post-image').addClass('file-manager-image');
         $('#modelId').modal('toggle');
 

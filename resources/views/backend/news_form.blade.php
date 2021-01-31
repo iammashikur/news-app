@@ -11,11 +11,7 @@
                 <div class="col-12">
 
 
-
                     <div class="row">
-
-
-
 
                         <div class="col-lg-8 col-12">
 
@@ -23,38 +19,36 @@
 
                                 <div class="card-body">
 
+                                    <form method="POST" {{ route('news_store') }}>
+
+                                        @csrf
+
 
                                     <div class="form-group">
                                         <label for="">Title</label>
-                                        <input type="text" class="form-control" name="" id="" aria-describedby="helpId"
-                                            placeholder="">
-                                        <small id="helpId" class="form-text text-muted">Help text</small>
+                                        <input type="text" class="form-control" name="title" id="" aria-describedby="helpId"
+                                            placeholder="News title here" required>
+
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label for="">Title</label>
-                                        <select class="form-control selectric">
+                                        <label for="">Category</label>
+                                        <select class="form-control selectric" name="category_id" required>
                                             <option selected disabled>-- Select --</option>
-                                            <option>Tech</option>
-                                            <option>News</option>
-                                            <option>Political</option>
+
+                                            @foreach (App\Categories::get() as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach
+
                                         </select>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label for="">Title</label>
-                                        <textarea class="summernote-simple"></textarea>
+                                        <label for="">Content</label>
+                                        <textarea class="summernote-simple" name="content" required></textarea>
                                     </div>
-
-
-
-
-
-
-
-
 
 
                                     <div class="form-group">
@@ -63,39 +57,47 @@
 
                                         <label for="">News Image</label>
 
-
-
                                         <div class="form-control-file mb-4">
-                                            <button class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#modelId" id="image-select"> Select File </button> From
+                                            <a class="btn btn-success btn-sm text-white" data-toggle="modal"
+                                                data-target="#modelId" id="image-select"> Select File </a> From
                                             Media Gallery
                                         </div>
 
                                         <img id="post-image" width="200px">
 
+                                        <input id="form-image" type="hidden" name="image" value="" required>
+
                                     </div>
+
+
+                                    <div class="form-group">
+                                        <label for="">Tags</label>
+                                        <textarea name="description" type="text" class="form-control" required></textarea>
+                                    </div>
+
 
 
 
                                     <div class="form-group">
-                                        <label for="">Title</label>
-                                        <input type="text" class="form-control inputtags">
+                                        <label for="">Tags</label>
+                                        <input name="tags" type="text" class="form-control inputtags" required>
                                     </div>
+
+
 
 
                                     <div class="form-group">
                                         <label for="">Status</label>
-                                        <select class="form-control selectric">
-                                            <option>Publish</option>
-                                            <option>Draft</option>
-                                            <option>Pending</option>
+                                        <select class="form-control selectric" name="status" required>
+                                            <option value="publish">Publish</option>
+                                            <option value="draft">Draft</option>
                                         </select>
                                     </div>
 
 
                                     <div class="form-group">
 
-                                        <button class="btn btn-primary">Create Post</button>
+                                        <button type="submit" class="btn btn-primary">Create Post</button>
 
                                     </div>
 
@@ -109,7 +111,10 @@
 
 
 
-                                </div>
+
+
+
+                                </form>  </div>
 
 
                             </div>

@@ -16,20 +16,17 @@
       data-feather="layout"></i><span>News</span></a>
                 <ul class="dropdown-menu">
 
-                    <li><a class="nav-link" href="{{route('news_add')}}">Add News</a></li>
-                    <li><a class="nav-link" href="widget-data">Edit News</a></li>
-                    <li><a class="nav-link" href="widget-chart">Manage News</a></li>
-                    <li><a class="nav-link" href="widget-data">Draft</a></li>
-                    <li><a class="nav-link" href="widget-data">Trash Bin</a></li>
+                    <li><a class="nav-link" href="{{route('news_form')}}">Publish News</a></li>
+                    <li><a class="nav-link" href="{{route('news_all')}}">Manage News</a></li>
+                    <li><a class="nav-link" href="{{route('news_trash')}}">Trash Bin</a></li>
 
                 </ul>
             </li>
             <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command"></i><span>Category</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="chat">Add Catrgoty</a></li>
-                    <li><a class="nav-link" href="portfolio">Edit Category</a></li>
-                    <li><a class="nav-link" href="portfolio">Manage Category</a></li>
+                    <li><a class="nav-link" href="{{route('category_form')}}">Add Catrgoty</a></li>
+                    <li><a class="nav-link" href="{{route('category_all')}}">Manage Category</a></li>
 
                 </ul>
             </li>
