@@ -1,5 +1,13 @@
 "use strict";
 
+$('form').on('keyup keypress', function(e) {
+    var keyCode = e.keyCode || e.which;
+    if (keyCode === 13) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
 $("select").selectric();
 $.uploadPreview({
   input_field: "#image-upload",   // Default: .image-upload
@@ -10,4 +18,8 @@ $.uploadPreview({
   no_label: false,                // Default: false
   success_callback: null          // Default: null
 });
+
 $(".inputtags").tagsinput('items');
+
+
+

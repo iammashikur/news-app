@@ -10,16 +10,23 @@
             <div class="row">
                 <div class="col-12">
 
-
                     <div class="row">
 
                         <div class="col-lg-8 col-12">
+
+                            @if(Session::has('success'))
+
+                            <div class="alert alert-success mb-4">
+                                {{Session::get('success') }}
+                              </div>
+                            @endif
 
                             <div class="card">
 
                                 <div class="card-body">
 
-                                    <form method="POST" {{ route('news_store') }}>
+                                <form method="POST" {{ route('news_store') }}>
+
 
                                         @csrf
 
@@ -35,7 +42,7 @@
                                     <div class="form-group">
                                         <label for="">Category</label>
                                         <select class="form-control selectric" name="category_id" required>
-                                            <option selected disabled>-- Select --</option>
+                                            <option selected disabled value="">-- Select --</option>
 
                                             @foreach (App\Categories::get() as $category)
                                                 <option value="{{$category->id}}">{{$category->name}}</option>
@@ -102,21 +109,8 @@
                                     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-                                </form>  </div>
-
-
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

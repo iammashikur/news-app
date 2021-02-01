@@ -35,7 +35,7 @@ class AdminController extends Controller
     // Show All News
     public function news_all()
     {
-        $posts = Posts::latest()->paginage(10);
+        $posts = Posts::latest()->paginate(10);
         return view('backend.news_all', compact('posts'));
     }
 
@@ -63,14 +63,11 @@ class AdminController extends Controller
     {
 
         // News Status
-        if ($request->status == 'published') {
+        if ($request->status == 'publish') {
             $status = 'Published';
         }
         if ($request->status == 'draft') {
             $status = 'Drafted';
-        }
-        if ($request->status == 'cancel') {
-            return redirect()->route('news.form')->with('success', 'News Publish Cancelled !');
         }
 
         // News insert
@@ -83,6 +80,7 @@ class AdminController extends Controller
             'slug'        => Str::slug($request->title, '-'),
             'tags'        => $request->tags,
             'category_id' => $request->category_id,
+            'status'      => $request->status,
             'created_at'  => Carbon::now(),
             'updated_at'  => Carbon::now(),
 
@@ -101,7 +99,7 @@ class AdminController extends Controller
     public function news_update(Request $request)
     {
         // News Status
-        if ($request->status == 'published') {
+        if ($request->status == 'publish') {
             $status = 'Published';
         }
 
@@ -109,9 +107,6 @@ class AdminController extends Controller
             $status = 'Drafted';
         }
 
-        if ($request->status == 'cancel') {
-            return redirect()->back()->with('success', 'News Cancelled !');
-        }
 
         //News Update
         Posts::find($request->id)->insert([
@@ -123,6 +118,7 @@ class AdminController extends Controller
             //'slug'        => Str::slug($request->title, '-'),
             'tags'        => $request->tags,
             'category_id' => $request->category_id,
+            'status'      => $request->status,
             'updated_at'  => Carbon::now(),
 
         ]);
@@ -146,7 +142,7 @@ class AdminController extends Controller
     // Show All Categories
     public function category_all(Request $request)
     {
-        $categories = Categories::latest()->paginage(10);
+        $categories = Categories::latest()->paginate(10);
         return view('backend.category_all', compact('categories'));
     }
 
@@ -203,7 +199,7 @@ class AdminController extends Controller
     // Show All Categories
     public function gallery_all(Request $request)
     {
-        $galleries = Galleries::latest()->paginage(10);
+        $galleries = Galleries::latest()->paginate(10);
         return view('backend.news_all', compact('galleries'));
     }
 
@@ -237,7 +233,7 @@ class AdminController extends Controller
     // Show All Categories
     public function video_all(Request $request)
     {
-        $videos = Videos::latest()->paginage(10);
+        $videos = Videos::latest()->paginate(10);
         return view('backend.news_all', compact('videos'));
     }
 

@@ -27,7 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
     // News Route
     Route::get('/news-publish',   'AdminController@news_form')->name('news_form');
     Route::post('/news-publish', 'AdminController@news_store')->name('news_store');
-    Route::get('/news-manage',   'AdminController@news_form')->name('news_all');
+    Route::get('/news-manage',   'AdminController@news_all')->name('news_all');
     Route::get('/news-trash',   'AdminController@news_trash')->name('news_trash');
     Route::get('/news-update/{id}', 'AdminController@news_update')->name('news_update');
     Route::get('/news-delete/{id}', 'AdminController@news_update')->name('news_delete');

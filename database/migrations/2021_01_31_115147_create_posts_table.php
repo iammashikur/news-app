@@ -22,6 +22,7 @@ class CreatePostsTable extends Migration
             $table->string('slug');
             $table->string('tags');
             $table->integer('category_id');
+            $table->string('status');
             $table->timestamps();
         });
     }
