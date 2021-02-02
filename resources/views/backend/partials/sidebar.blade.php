@@ -34,15 +34,15 @@
             <li class="menu-header">Media</li>
 
             <li class="dropdown">
-                <a href="index" class="nav-link"><i data-feather="image"></i><span>Gallery</span></a>
+                <a href="{{route('gallery_all')}}" class="nav-link"><i data-feather="image"></i><span>Gallery</span></a>
             </li>
 
             <li class="dropdown">
-                <a href="index" class="nav-link"><i data-feather="video"></i><span>Videos</span></a>
+                <a href="{{route('video_all')}}" class="nav-link"><i data-feather="video"></i><span>Videos</span></a>
             </li>
 
             <li class="dropdown">
-                <a href="index" class="nav-link"><i data-feather="folder"></i><span>File Manager</span></a>
+                <a href="{{route('filemanager_all')}}" class="nav-link"><i data-feather="folder"></i><span>File Manager</span></a>
             </li>
 
 
@@ -53,15 +53,18 @@
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="settings"></i><span>Settings
       </span></a>
                 <ul class="dropdown-menu">
+
+
                     <li><a class="nav-link" href="alert">Search Engine</a></li>
                     <li><a class="nav-link" href="badge">Google Ads</a></li>
+                    <li><a class="nav-link" href="breadcrumb">Site Config</a></li>
                     <li><a class="nav-link" href="breadcrumb">Site Config</a></li>
 
                 </ul>
             </li>
 
             <li class="dropdown">
-                <a href="index" class="nav-link"><i data-feather="link"></i><span>Visit Frontend</span></a>
+                <a href="{{url('/')}}" class="nav-link"><i data-feather="link"></i><span>Visit Frontend</span></a>
             </li>
 
 

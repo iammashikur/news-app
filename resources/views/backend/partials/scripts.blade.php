@@ -1,8 +1,8 @@
+@if (Request::segment('2') == 'news-manage')
+
+@endif
+
 @if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update')
-
-
-
-
 
 <!-- General JS Scripts -->
 <script src="{{url('/')}}/assets/backend/js/app.min.js"></script>
@@ -13,9 +13,6 @@
 <script src="{{url('/')}}/assets/backend/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 <!-- Page Specific JS File -->
 <script src="{{url('/')}}/assets/backend/js/page/create-post.js"></script>
-
-
-
 
 
 <script>

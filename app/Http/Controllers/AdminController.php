@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Posts;
@@ -14,6 +15,25 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
+
+    ################################
+    ##           LOGIN            ##
+    ################################
+
+    public function login_form()
+    {
+
+        if(Auth::check() && Auth::user()->is_admin == 1)
+        {
+            return view('backend.index');
+        }
+        else
+        {
+            return view('backend.login_form');
+
+        }
+
+    }
 
     ################################
     ##         DASHBOARD          ##

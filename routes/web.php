@@ -16,15 +16,21 @@ use Illuminate\Support\Facades\Auth;
 
 
 
+
 Auth::routes();
 
+// Admin Routes
 
-Route::group(['prefix' => 'admin'], function () {
 
 
-    Route::get('/', 'AdminController@index');
+Route::get('/admin', 'AdminController@login_form')->name('login_form');
+
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
+{
 
     // News Route
+
     Route::get('/news-publish',   'AdminController@news_form')->name('news_form');
     Route::post('/news-publish', 'AdminController@news_store')->name('news_store');
     Route::get('/news-manage',   'AdminController@news_all')->name('news_all');
@@ -34,25 +40,34 @@ Route::group(['prefix' => 'admin'], function () {
 
     // Category Route
 
-    Route::get('/category-manage',   'AdminController@category_all')->name('category_all');
+    Route::get('/category-manage',    'AdminController@category_all')->name('category_all');
     Route::get('/category-publish',   'AdminController@category_form')->name('category_form');
-    Route::post('/category-publish', 'AdminController@category_store')->name('category_store');
+    Route::post('/category-publish',  'AdminController@category_store')->name('category_store');
     Route::get('/category-update/{id}', 'AdminController@category_update')->name('category_update');
     Route::get('/category-delete/{id}', 'AdminController@category_update')->name('category_delete');
 
-
-
+    // File Picker Route
 
     Route::get('/file-manager', 'FilesController@fetch_data')->name('filemanager.images');
     Route::post('/file-manager', 'FilesController@upload_data')->name('filemanager.upload');
 
 
+     // Filemanager Route
+     Route::get('/filemanager', 'AdminController@filemanager_all')->name('filemanager_all');
+     Route::post('/filemanager', 'AdminController@filemanager_store')->name('filemanager_store');
+     Route::get('/filemanager-delete/{id}', 'AdminController@filemanager_delete')->name('filemanager_delete');
 
 
-    Route::get('/blog', function () {
-        return view('backend.blog');
-    });
+     // Gallery Route
+     Route::get('/gallery', 'AdminController@gallery_all')->name('gallery_all');
+     Route::post('/gallery', 'AdminController@gallery_store')->name('gallery_store');
+     Route::get('/gallery-update/{id}', 'AdminController@gallery_update')->name('gallery_update');
+     Route::get('/gallery-delete/{id}', 'AdminController@gallery_delete')->name('gallery_delete');
+
+     // Video Route
+     Route::get('/video', 'AdminController@video_all')->name('video_all');
+     Route::post('/video', 'AdminController@video_store')->name('video_store');
+     Route::get('/video-update/{id}', 'AdminController@video_update')->name('video_update');
+     Route::get('/video-delete/{id}', 'AdminController@video_delete')->name('video_delete');
+
 });
-
-
-Route::get('/home', 'HomeController@index')->name('home');
