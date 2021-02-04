@@ -11,16 +11,12 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                Manage News
+                Trash
               </div>
               <div class="card-body">
 
-                <div class="float-left">
-                    <a class="btn btn-md btn-primary" href="{{route('news_form')}}"> <i class="fas fa-plus    "></i> New</a>
-                </div>
-
                 <div class="float-right">
-                  <form method="GET" action="{{route('news_search')}}">
+                  <form method="GET" action="{{route('news_search_trash')}}">
 
                     <div class="input-group">
                       <input name="query" type="text" class="form-control" placeholder="Search">
@@ -33,6 +29,7 @@
 
 
                 <div class="clearfix mb-3"></div>
+
 
 
                 <table class="table table-responsive-sm table-striped border">
@@ -63,8 +60,8 @@
                             <td>{{$post->status}}</td>
                             <td class="text-right">
 
-                                <a href="{{route('news_trash_id', ['id' => $post->id ])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i> Trash</a>
-                                <a href="{{route('news_update', ['id' => $post->id ])}}" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Update</a>
+                                    <a href="{{route('news_delete_id',['id'=>$post->id])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i>Delete</a>
+                                    <a href="{{route('news_recycle_id',['id'=>$post->id])}}" class="btn btn-sm btn-primary text-white"> <i class="fas fa-sync    "></i> Restore</a>
 
                             </td>
                         </tr>
@@ -77,6 +74,7 @@
                 </table>
 
 
+
                 {{$posts->links()}}
 
 
@@ -87,7 +85,8 @@
         </div>
       </div>
     </section>
-   </div>
+
+  </div>
 
 
 

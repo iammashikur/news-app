@@ -15,6 +15,19 @@
 <script src="{{url('/')}}/assets/backend/js/page/create-post.js"></script>
 
 
+<style>
+
+    .mirash{
+
+        background: red;
+    }
+
+    .sabbir{
+        background: blue;
+    }
+</style>
+
+
 <script>
 
 

@@ -10,9 +10,12 @@
             <div class="row">
                 <div class="col-12">
 
+
                     <div class="row">
 
                         <div class="col-lg-8 col-12">
+
+
 
                             @if(Session::has('success'))
 
@@ -22,6 +25,12 @@
                             @endif
 
                             <div class="card">
+
+
+                                <div class="card-header">
+                                    Publish News
+                                </div>
+
 
                                 <div class="card-body">
 
@@ -66,7 +75,7 @@
 
                                         <div class="form-control-file mb-4">
                                             <a class="btn btn-success btn-sm text-white" data-toggle="modal"
-                                                data-target="#modelId" id="image-select"> Select File </a> From
+                                                data-target="#modelId" id="image-select"> <i class="fas fa-image    "></i> Select File </a> From
                                             Media Gallery
                                         </div>
 
@@ -76,9 +85,21 @@
 
                                     </div>
 
+                                    <div class="form-group">
+                                      <label for=""></label>
+                                      <input type="text"
+                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+                                      <small id="helpId" class="form-text text-muted">Help text</small>
+                                    </div>
+
 
                                     <div class="form-group">
-                                        <label for="">Tags</label>
+                                        <label for="">Source</label>
+                                        <textarea name="description" type="text" class="form-control" required></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Caption</label>
                                         <textarea name="description" type="text" class="form-control" required></textarea>
                                     </div>
 
@@ -92,19 +113,30 @@
 
 
 
+                                    <div class="form-check form-check-inline mb-4">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="main_lead" id="" value="1"> Main Lead
+                                        </label>
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="sub_lead" id="" value="1"> Sub Lead
+                                        </label>
+
+                                    </div>
+
+
 
                                     <div class="form-group">
                                         <label for="">Status</label>
                                         <select class="form-control selectric" name="status" required>
-                                            <option value="publish">Publish</option>
-                                            <option value="draft">Draft</option>
+                                            <option value="published">Publish</option>
+                                            <option value="drafted">Draft</option>
                                         </select>
                                     </div>
 
 
                                     <div class="form-group">
 
-                                        <button type="submit" class="btn btn-primary">Create Post</button>
+                                        <button type="submit" class="btn btn-primary"> <i class="fas fa-save    "></i> Save</button>
 
                                     </div>
 

@@ -26,17 +26,27 @@ Auth::routes();
 Route::get('/admin', 'AdminController@login_form')->name('login_form');
 
 
+
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
 {
+
+    Route::get('/', 'AdminController@index')->name('index');
 
     // News Route
 
     Route::get('/news-publish',   'AdminController@news_form')->name('news_form');
     Route::post('/news-publish', 'AdminController@news_store')->name('news_store');
     Route::get('/news-manage',   'AdminController@news_all')->name('news_all');
+    Route::get('/news-search',   'AdminController@news_search')->name('news_search');
+
+    Route::get('/news-update/{id}', 'AdminController@news_update_form')->name('news_update');
+
+
     Route::get('/news-trash',   'AdminController@news_trash')->name('news_trash');
-    Route::get('/news-update/{id}', 'AdminController@news_update')->name('news_update');
-    Route::get('/news-delete/{id}', 'AdminController@news_update')->name('news_delete');
+    Route::get('/news-trash/{id}', 'AdminController@news_trash_id')->name('news_trash_id');
+    Route::get('/news-recycle/{id}', 'AdminController@news_recycle_id')->name('news_recycle_id');
+    Route::get('/news-trash-search',   'AdminController@news_search_trash')->name('news_search_trash');
+    Route::get('/news-delete/{id}', 'AdminController@news_delete_id')->name('news_delete_id');
 
     // Category Route
 
@@ -44,7 +54,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
     Route::get('/category-publish',   'AdminController@category_form')->name('category_form');
     Route::post('/category-publish',  'AdminController@category_store')->name('category_store');
     Route::get('/category-update/{id}', 'AdminController@category_update')->name('category_update');
-    Route::get('/category-delete/{id}', 'AdminController@category_update')->name('category_delete');
+    Route::get('/category-delete/{id}', 'AdminController@category_delete')->name('category_delete_id');
 
     // File Picker Route
 

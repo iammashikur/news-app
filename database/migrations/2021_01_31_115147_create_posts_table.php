@@ -22,7 +22,11 @@ class CreatePostsTable extends Migration
             $table->string('slug');
             $table->string('tags');
             $table->integer('category_id');
+            $table->integer('author_id');
+            $table->boolean('main_lead')->default(0);
+            $table->boolean('sub_lead')->default(0);
             $table->string('status');
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }

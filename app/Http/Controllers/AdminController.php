@@ -55,18 +55,51 @@ class AdminController extends Controller
     // Show All News
     public function news_all()
     {
-        $posts = Posts::latest()->paginate(10);
+        $posts = Posts::where('status','published')->orWhere('status','drafted')->latest()->paginate(10);
         return view('backend.news_all', compact('posts'));
+    }
+
+    // Show All News
+    public function news_trash()
+    {
+        $posts = Posts::where('status', 'trashed')->latest()->paginate(10);
+        return view('backend.news_trash', compact('posts'));
+    }
+
+    // Search From News
+    public function news_search_trash(Request $request)
+    {
+        $query = str_replace(" ", "%", $request->get('query'));
+        $posts = Posts::where('status', 'trashed')
+            ->where('title', 'like', '%' . $query . '%')
+            ->orderBy("id", "desc")
+            ->paginate(10);
+            return view('backend.news_trash', compact('posts'));
+    }
+
+
+    public function news_recycle_id(Request $request)
+    {
+
+        //News Update
+        Posts::find($request->id)->update([
+            'status'      => 'drafted',
+            'updated_at'  => Carbon::now(),
+        ]);
+
+        return redirect()->back()->with('success', 'News Recycled !');
+
     }
 
     // Search From News
     public function news_search(Request $request)
     {
 
-        $query = $request->search();
-        $query = str_replace(" ", "%", $query);
-        $posts = Posts::where('title', 'like', '%' . $query . '%')
-            ->orWhere('content', 'like', '%' . $query . '%')
+        $query = str_replace(" ", "%", $request->get('query'));
+        $posts = Posts::where('status', 'published')
+        ->orWhere('status', 'drafted')
+        ->where('title', 'like', '%' . $query . '%')
+
             ->orderBy("id", "desc")
             ->paginate(8);
         return view('backend.news_all', compact('posts'));
@@ -83,11 +116,34 @@ class AdminController extends Controller
     {
 
         // News Status
-        if ($request->status == 'publish') {
+        if ($request->status == 'published')
+        {
             $status = 'Published';
         }
-        if ($request->status == 'draft') {
+
+        if ($request->status == 'drafted')
+        {
             $status = 'Drafted';
+        }
+
+        // News Status
+        if ($request->has('main_lead'))
+        {
+            $main_lead = $request->main_lead;
+        }
+        else
+        {
+            $main_lead = 0;
+        }
+
+        // News Status
+        if ($request->has('sub_lead'))
+        {
+            $sub_lead = $request->sub_lead;
+        }
+        else
+        {
+            $sub_lead = 0;
         }
 
         // News insert
@@ -100,36 +156,60 @@ class AdminController extends Controller
             'slug'        => Str::slug($request->title, '-'),
             'tags'        => $request->tags,
             'category_id' => $request->category_id,
+            'author_id'   => Auth::id(),
+            'newssource'    => $sub_lead,
+            'sub_lead'    => $sub_lead,
+            'main_lead'   => $main_lead,
             'status'      => $request->status,
             'created_at'  => Carbon::now(),
             'updated_at'  => Carbon::now(),
 
         ]);
 
-        return redirect()->route('news_form')->with('success', 'News ' . $status . ' !');
+        return redirect()->route('news_all')->with('success', 'News ' . $status . ' !');
     }
 
     // News Update Form
-    public function news_update_form()
+    public function news_update_form(Request $request)
     {
-        return view('backend.news_update_form');
+        $news = Posts::find($request->id)->get();
+        return view('backend.news_update_form', compact('news'));
     }
-
     // News Update
     public function news_update(Request $request)
     {
         // News Status
-        if ($request->status == 'publish') {
+        if ($request->status == 'published') {
             $status = 'Published';
         }
 
-        if ($request->status == 'draft') {
+        if ($request->status == 'drafted') {
             $status = 'Drafted';
+        }
+
+        // News Status
+        if ($request->has('main_lead'))
+        {
+            $main_lead = $request->main_lead;
+        }
+        else
+        {
+            $main_lead = 0;
+        }
+
+        // News Status
+        if ($request->has('sub_lead'))
+        {
+            $sub_lead = $request->sub_lead;
+        }
+        else
+        {
+            $sub_lead = 0;
         }
 
 
         //News Update
-        Posts::find($request->id)->insert([
+        Posts::find($request->id)->update([
 
             'title'       => $request->title,
             'content'     => $request->content,
@@ -138,6 +218,8 @@ class AdminController extends Controller
             //'slug'        => Str::slug($request->title, '-'),
             'tags'        => $request->tags,
             'category_id' => $request->category_id,
+            'sub_lead'    => $sub_lead,
+            'main_lead'   => $main_lead,
             'status'      => $request->status,
             'updated_at'  => Carbon::now(),
 
@@ -147,10 +229,23 @@ class AdminController extends Controller
     }
 
     // News Delete
-    public function news_delete(Request $request)
+    public function news_trash_id(Request $request)
+    {
+
+        //News Update
+        Posts::find($request->id)->update([
+            'status'      => 'trashed',
+        ]);
+
+        return redirect()->back()->with('success', 'News Moved To Trash !');
+
+    }
+
+    // News Delete
+    public function news_delete_id(Request $request)
     {
         Posts::find($request->id)->delete();
-        return redirect()->route('news_all')->with('success', 'News Deleted');
+        return redirect()->back()->with('success', 'News Deleted Permanently !');
     }
 
 
@@ -181,6 +276,7 @@ class AdminController extends Controller
 
             'name'        => $request->name,
             'order'       => $request->order,
+            'slug'        => Str::slug($request->name, '-'),
             'created_at'  => Carbon::now(),
             'updated_at'  => Carbon::now(),
 
@@ -209,7 +305,9 @@ class AdminController extends Controller
     // Category Delete
     public function category_delete(Request $request)
     {
-        return $request;
+        Categories::find($request->id)->delete();
+        return redirect()->back()->with('success', 'Category Deleted');
+
     }
 
     ################################
@@ -220,13 +318,13 @@ class AdminController extends Controller
     public function gallery_all(Request $request)
     {
         $galleries = Galleries::latest()->paginate(10);
-        return view('backend.news_all', compact('galleries'));
+        return view('backend.gallery_all', compact('galleries'));
     }
 
     // Category Insert Form
     public function gallery_form(Request $request)
     {
-        return $request;
+        return view('backend.allery_form');
     }
 
 
@@ -254,13 +352,13 @@ class AdminController extends Controller
     public function video_all(Request $request)
     {
         $videos = Videos::latest()->paginate(10);
-        return view('backend.news_all', compact('videos'));
+        return view('backend.video_all', compact('videos'));
     }
 
     // Category Insert Form
     public function video_form(Request $request)
     {
-        return $request;
+        return view('backend.video_form');
     }
 
 
