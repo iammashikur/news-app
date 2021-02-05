@@ -23,6 +23,7 @@
 
     </div>
   </div>
+  @include('sweetalert::alert')
   @include('backend.partials.scripts')
 </body>
 

@@ -53,6 +53,8 @@
                 <a href="{{route('profile')}}" class="nav-link"><i data-feather="user"></i><span>My Profile</span></a>
             </li>
 
+
+            @if(Auth::user()->is_admin == 1)
             <li class="dropdown @if(Request::segment(2) == 'settings') active @endif">
                 <a href="{{route('roles')}}" class="nav-link"><i data-feather="users"></i><span>Roles & User</span></a>
             </li>
@@ -62,6 +64,9 @@
             <li class="dropdown @if(Request::segment(2) == 'settings') active @endif">
                 <a href="{{route('settings')}}" class="nav-link"><i data-feather="settings"></i><span>Settings</span></a>
             </li>
+            @endif
+
+
 
 
 

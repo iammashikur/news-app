@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 */
 
 
+Route::get('/', 'HomeController@index')->name('home');
+
 
 
 Auth::routes();
@@ -91,11 +93,23 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/files', 'AdminController@files_all')->name('files_all');
     Route::get('/files-delete', 'AdminController@files_delete')->name('files_delete');
 
-    // Settings
+    // Profile
 
     Route::get('/profile', 'AdminController@profile')->name('profile');
     Route::post('/profile', 'AdminController@profile_update')->name('profile_update');
+
+
+    // Admin Roles
     Route::get('/roles', 'AdminController@roles')->name('roles');
+    Route::get('/roles-add', 'AdminController@roles_form')->name('roles_form');
+    Route::post('/roles-add', 'AdminController@roles_store')->name('roles_store');
+
+    Route::get('/roles-update', 'AdminController@roles_update_form')->name('roles_update_form');
+    Route::post('/roles-update', 'AdminController@roles_update')->name('roles_update');
+
+    Route::get('/roles-delete{id}', 'AdminController@roles_delete')->name('roles_delete');
+
+    // Settings
     Route::get('/settings', 'AdminController@settings')->name('settings');
 
 });

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Posts;
 use App\Categories;
 use App\Galleries;
@@ -15,6 +15,7 @@ use App\Files;
 use App\Settings;
 use App\User;
 use Carbon\Carbon;
+
 
 
 
@@ -83,7 +84,8 @@ class AdminController extends Controller
             'updated_at'  => Carbon::now(),
         ]);
 
-        return redirect()->back()->with('success', 'News Recycled !');
+        Alert::toast('News Recycled !', 'success');
+        return redirect()->back();
     }
 
     // Search From News
@@ -154,7 +156,8 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->route('news_all')->with('success', 'News ' . $status . ' !');
+        Alert::toast('News ' . $status . ' !', 'success');
+        return redirect()->route('news_all');
     }
 
     // News Update Form
@@ -209,7 +212,8 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->back()->with('success', 'News Updated &' . $status . ' !');
+        Alert::toast('News Updated & ' . $status . ' !', 'success');
+        return redirect()->back();
     }
 
     // News Delete
@@ -221,14 +225,16 @@ class AdminController extends Controller
             'status'      => 'trashed',
         ]);
 
-        return redirect()->back()->with('success', 'News Moved To Trash !');
+        Alert::toast('News Moved To Trash !', 'success');
+        return redirect()->back();
     }
 
     // News Delete
     public function news_delete_id(Request $request)
     {
         Posts::find($request->id)->delete();
-        return redirect()->back()->with('success', 'News Deleted Permanently !');
+        Alert::toast('News Deleted Permanently !', 'success');
+        return redirect()->back();
     }
 
 
@@ -265,7 +271,8 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->route('category_all')->with('success', 'Category Added !');
+        Alert::toast('Category Added !', 'success');
+        return redirect()->route('category_all');
     }
 
     public function category_update_form(Request $request)
@@ -285,7 +292,8 @@ class AdminController extends Controller
             'order' => $request->order,
         ]);
 
-        return redirect()->route('category_all')->with('success', 'Category Updated !');
+        Alert::toast('Category Added !', 'success');
+        return redirect()->route('category_all');
     }
 
     // Category Delete
@@ -293,7 +301,8 @@ class AdminController extends Controller
     {
 
         Categories::find($request->id)->delete();
-        return redirect()->back()->with('success', 'Category Deleted');
+        Alert::toast('Category Deleted !', 'success');
+        return redirect()->back();
     }
 
     ################################
@@ -328,7 +337,8 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->route('gallery_all')->with('success', 'Image Added !');
+        Alert::toast('Image Added !', 'success');
+        return redirect()->route('gallery_all');
     }
 
     // Category Update Form
@@ -351,14 +361,18 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->route('gallery_all')->with('success', 'Image Updated !');
+        Alert::toast('Image Updated !', 'success');
+        return redirect()->route('gallery_all');
     }
 
     // Category Delete
     public function gallery_delete(Request $request)
     {
         Galleries::find($request->id)->delete();
-        return redirect()->back()->with('success', 'Image Deleted');
+
+        Alert::toast('Image Deleted !', 'success');
+
+        return redirect()->back();
     }
 
 
@@ -396,7 +410,8 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->route('video_all')->with('success', 'Image Added !');
+        Alert::toast('Video Added !', 'success');
+        return redirect()->route('video_all');
     }
 
     // Category Update Form
@@ -419,14 +434,17 @@ class AdminController extends Controller
 
         ]);
 
-        return redirect()->route('video_all')->with('success', 'Video Updated !');
+        Alert::toast('Video Updated !', 'success');
+        return redirect()->route('video_all');
     }
 
     // Category Delete
     public function video_delete(Request $request)
     {
         Videos::find($request->id)->delete();
-        return redirect()->back()->with('success', 'Video Deleted');
+
+        Alert::toast('Video Deleted !', 'success');
+        return redirect()->back();
     }
 
 
@@ -475,59 +493,124 @@ class AdminController extends Controller
         ]);
 
 
-        if($request->has('password')){
+        if ($request->password !== null) {
 
-            if($request->has('password') && $request->has('confirm'))
-            {
-                if($request->has('password') == $request->has('confirm'))
-                {
+            if ($request->has('password') && $request->has('confirm')) {
+                if ($request->has('password') == $request->has('confirm')) {
 
                     User::find(Auth::user()->id)->update([
                         'password' => bcrypt($request->password),
                     ]);
                 }
 
-                return redirect()->back()->with('error', 'Confirm password not matched !');
+                Alert::toast('Confirm password not matched !', 'error');
+                return redirect()->back();
             }
 
-            return redirect()->back()->with('error', 'Please enter confirm password !');
+            Alert::toast('Please enter confirm password !', 'success');
+            return redirect()->back();
+        }
+
+        Alert::toast('Profile Updated !', 'success');
+        return redirect()->back();
+    }
+
+    public function roles()
+    {
+
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
+
+        $users = User::paginate(10);
+        return view('backend.roles', compact('users'));
+    }
+
+    public function roles_form()
+    {
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
+
+        return view('backend.roles_form');
+    }
+
+    public function roles_store(Request $request)
+    {
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
+
+
+
+        if (strlen($request->password) < 8) {
+
+            Alert::toast('Password should be 8 characters !', 'error');
+            return redirect()->back();
+        }
+
+        if ($request->password !== $request->confirm) {
+
+            Alert::toast('Confirm password not matched !', 'error');
+            return redirect()->back();
 
         }
 
-        return redirect()->back()->with('success', 'Profile Updated !');
+
+        if (User::where('email', $request->email)->count()) {
+
+            Alert::toast('Email already exist !', 'error');
+            return redirect()->back();
+
+        }
 
 
+        User::insert([
+            'name' => $request->name,
+            'email' => $request->email,
+            'is_admin' => $request->role,
+            'password' => $request->password,
+        ]);
+
+        Alert::toast('User Added !', 'success');
+        return redirect()->route('roles');
 
     }
 
-    public function role()
+    public function roles_update_form()
     {
-        return view('backend.role');
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
+        return view('backend.roles_update_form');
     }
 
-    public function role_add()
+    public function roles_update()
     {
-
-    }
-    public function role_update_form()
-    {
-        return view('backend.role_update_form');
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
     }
 
-    public function role_update()
+    public function roles_delete()
     {
-
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
     }
 
     public function settings()
     {
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
         return view('backend.settings');
     }
 
     public function settings_update()
     {
-
+        if (Auth::user()->is_admin !== 1) {
+            return abort(403, 'Unauthorized action.');
+        }
     }
-
-
 }
