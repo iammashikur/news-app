@@ -91,7 +91,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/roles-update/{id}', 'AdminController@roles_update_form')->name('roles_update_form');
     Route::post('/roles-update/{id}', 'AdminController@roles_update')->name('roles_update');
 
-    Route::get('/roles-delete{id}', 'AdminController@roles_delete')->name('roles_delete');
+    Route::get('/roles-delete/{id}', 'AdminController@roles_delete')->name('roles_delete');
 
     // Settings
     Route::get('/settings', 'AdminController@settings')->name('settings');

@@ -621,11 +621,15 @@ class AdminController extends Controller
         return redirect()->route('roles');
     }
 
-    public function roles_delete()
+    public function roles_delete(Request $request)
     {
         if (Auth::user()->is_admin !== 1) {
             return abort(403, 'Unauthorized action.');
         }
+
+        User::find($request->id)->delete();
+        Alert::toast('User deleted !', 'success');
+        return redirect()->back();
     }
 
     public function settings()

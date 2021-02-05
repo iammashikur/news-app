@@ -53,6 +53,8 @@
 
                         @foreach ($users as $user)
 
+
+
                         <tr>
 
 
@@ -68,12 +70,19 @@
                                 @endif
                             </td>
                             <td class="text-right">
-
-                                <a href="{{route('roles_delete', ['id'=>$user->id])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i> Delete</a>
-                                <a href="{{route('roles_update_form', ['id'=>$user->id])}}" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Edit</a>
-
+                                @if (Auth::user()->id !== $user->id)
+                                <a  href="{{route('roles_delete', ['id'=>$user->id])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i> Delete</a>
+                                <a href="{{route('roles_update_form', ['id'=>$user->id])}}" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Update</a>
+                                @else
+                                <button class="btn btn-sm btn-danger text-white" disabled><i class="fas fa-trash"></i> Delete</button>
+                                <button class="btn btn-sm btn-primary" disabled><i class="fas fa-edit"></i> Update</button>
+                                @endif
                             </td>
                         </tr>
+
+
+
+
 
                         @endforeach
 

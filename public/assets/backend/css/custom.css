@@ -101,6 +101,10 @@
     border-radius: 0px;
 }
 
+.card .card-header {
+    border-bottom-color: #e6e6e68c;
+}
+
 .main-content {
     padding-top: 110px;
 }
