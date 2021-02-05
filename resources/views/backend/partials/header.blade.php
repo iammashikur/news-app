@@ -34,7 +34,7 @@
             <div class="dropdown-menu dropdown-menu-right pullDown">
 
 
-                <a href="" class="dropdown-item has-icon"> <i class="fas fa-cog"></i> Settings
+                <a href="{{route('profile')}}" class="dropdown-item has-icon"><i class="fas fa-user"></i> Profile
                 </a>
                 <div class="dropdown-divider"></div>
 

@@ -15,15 +15,12 @@ use Illuminate\Support\Facades\Auth;
 */
 
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'FrontendController@index')->name('home');
 
 
-
-Auth::routes();
+Auth::routes(['register' => false]);
 
 // Admin Routes
-
-
 
 Route::get('admin', 'AdminController@index')->name('admin');
 
