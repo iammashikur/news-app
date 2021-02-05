@@ -28,13 +28,13 @@ roles_form
 
 
                                 <div class="card-header">
-                                    Add User
+                                    Update User
                                 </div>
 
 
                                 <div class="card-body">
 
-                                <form method="POST" {{ route('roles_store') }}>
+                                <form method="POST" {{ route('roles_update',['id' => $user->id]) }}>
 
 
                                         @csrf
@@ -42,25 +42,23 @@ roles_form
 
                                     <div class="form-group">
                                         <label for="">Name</label>
-                                        <input name="name" type="text" class="form-control" id=""
+                                        <input name="name" type="text" class="form-control" id="" value="{{$user->name}}"
                                              required>
 
                                     </div>
 
                                     <div class="form-group">
                                         <label for="">Email</label>
-                                        <input type="email" class="form-control" name="email" id=""
-                                             required>
+                                        <input type="email" class="form-control" name="email" id="" value="{{$user->email}}"
+                                             disabled>
                                     </div>
 
 
                                     <div class="form-group">
-                                      <label for="">Role</label>
-                                      <select class="form-control" name="role" id="" required="">
-
-                                        <option value="1">Admin</option>
-                                        <option value="2">Publisher</option>
-
+                                      <label for="role">Role</label>
+                                      <select class="form-control" name="role" id="role" required="">
+                                        <option @if ($user->is_admin == 1) selected @endif value="1">Admin</option>
+                                        <option @if ($user->is_admin == 2) selected @endif value="2" >Publisher</option>
                                       </select>
                                     </div>
 
@@ -68,12 +66,12 @@ roles_form
 
                                     <div class="form-group">
                                         <label for="">Password</label>
-                                        <input type="password" class="form-control" name="password" required>
+                                        <input type="password" class="form-control" name="password">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="">Confirm Password</label>
-                                        <input type="password" class="form-control" name="confirm" required>
+                                        <input type="password" class="form-control" name="confirm">
                                     </div>
 
 

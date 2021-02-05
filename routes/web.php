@@ -35,7 +35,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('/news-publish', 'AdminController@news_store')->name('news_store');
     Route::get('/news-manage',   'AdminController@news_all')->name('news_all');
     Route::get('/news-search',   'AdminController@news_search')->name('news_search');
-
     Route::get('/news-update/{id}', 'AdminController@news_update_form')->name('news_update_form');
     Route::post('/news-update/{id}', 'AdminController@news_update')->name('news_update');
 
@@ -51,26 +50,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/category-manage',    'AdminController@category_all')->name('category_all');
     Route::get('/category-publish',   'AdminController@category_form')->name('category_form');
     Route::post('/category-publish',  'AdminController@category_store')->name('category_store');
-
-
     Route::get('/category-update/{id}', 'AdminController@category_update_form')->name('category_update_form');
     Route::post('/category-update/{id}', 'AdminController@category_update_id')->name('category_update_id');
-
-
-
     Route::get('/category-delete/{id}', 'AdminController@category_delete')->name('category_delete_id');
-
-
-
 
     // File Picker Route
 
     Route::get('/file-manager', 'FilesController@fetch_data')->name('filemanager.images');
     Route::post('/file-manager', 'FilesController@upload_data')->name('filemanager.upload');
-
-
-
-
 
     // Gallery Route
     Route::get('/gallery', 'AdminController@gallery_all')->name('gallery_all');
@@ -104,12 +91,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/roles-add', 'AdminController@roles_form')->name('roles_form');
     Route::post('/roles-add', 'AdminController@roles_store')->name('roles_store');
 
-    Route::get('/roles-update', 'AdminController@roles_update_form')->name('roles_update_form');
-    Route::post('/roles-update', 'AdminController@roles_update')->name('roles_update');
+    Route::get('/roles-update/{id}', 'AdminController@roles_update_form')->name('roles_update_form');
+    Route::post('/roles-update/{id}', 'AdminController@roles_update')->name('roles_update');
 
     Route::get('/roles-delete{id}', 'AdminController@roles_delete')->name('roles_delete');
 
     // Settings
     Route::get('/settings', 'AdminController@settings')->name('settings');
+    Route::post('/settings', 'AdminController@settings_update')->name('settings_update');
 
 });

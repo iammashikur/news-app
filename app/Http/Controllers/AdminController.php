@@ -569,7 +569,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'is_admin' => $request->role,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
         ]);
 
         Alert::toast('User Added !', 'success');
@@ -577,19 +577,48 @@ class AdminController extends Controller
 
     }
 
-    public function roles_update_form()
+    public function roles_update_form(Request $request)
     {
         if (Auth::user()->is_admin !== 1) {
             return abort(403, 'Unauthorized action.');
         }
-        return view('backend.roles_update_form');
+
+       $user = User::find($request->id);
+        return view('backend.roles_update_form' , compact('user'));
     }
 
-    public function roles_update()
+    public function roles_update(Request $request)
     {
         if (Auth::user()->is_admin !== 1) {
             return abort(403, 'Unauthorized action.');
         }
+
+        User::find($request->id)->update([
+            'name' => $request->name,
+            'is_admin' => $request->role,
+        ]);
+
+
+        if ($request->password !== null) {
+
+            if ($request->has('password') && $request->has('confirm')) {
+                if ($request->has('password') == $request->has('confirm')) {
+
+                    User::find(Auth::user()->id)->update([
+                        'password' => bcrypt($request->password),
+                    ]);
+                }
+
+                Alert::toast('Confirm password not matched !', 'error');
+                return redirect()->back();
+            }
+
+            Alert::toast('Please enter confirm password !', 'success');
+            return redirect()->back();
+        }
+
+        Alert::toast('User Updated !', 'success');
+        return redirect()->route('roles');
     }
 
     public function roles_delete()

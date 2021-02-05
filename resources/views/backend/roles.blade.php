@@ -69,8 +69,8 @@
                             </td>
                             <td class="text-right">
 
-                                <a href="{{route('category_delete_id', ['id'=>$user->id])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i> Delete</a>
-                                <a href="{{route('category_update_form', ['id'=>$user->id])}}" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Edit</a>
+                                <a href="{{route('roles_delete', ['id'=>$user->id])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i> Delete</a>
+                                <a href="{{route('roles_update_form', ['id'=>$user->id])}}" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Edit</a>
 
                             </td>
                         </tr>
