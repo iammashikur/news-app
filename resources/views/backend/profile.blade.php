@@ -1,4 +1,3 @@
-e4wtwert
 @extends('backend.partials.stracture')
 @section('main')
 
@@ -19,7 +18,6 @@ e4wtwert
 
 
                             @if(Session::has('success'))
-
                             <div class="alert alert-success mb-4">
                                 {{Session::get('success') }}
                               </div>
@@ -29,44 +27,50 @@ e4wtwert
 
 
                                 <div class="card-header">
-                                   Add Category
+                                   Update Profile
                                 </div>
 
 
                                 <div class="card-body">
 
-
-                                <form method="POST" action="{{ route('category_update_id', ['id' => $category->id]) }}">
+                                <form method="POST" {{ route('profile_update') }}>
 
 
                                         @csrf
 
 
                                     <div class="form-group">
-                                        <label for="">Category Name</label>
-                                        <input name="name" type="text" class="form-control" name="title" id="" aria-describedby="helpId"
-                                            value="{{$category->name}}" required>
+                                        <label for="">Name</label>
+                                        <input name="name" type="text" class="form-control" id=""
+                                            value="{{$user->name}}" required>
 
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="">Menu Order</label>
-                                        <input name="order" type="number" class="form-control" name="title" id="" aria-describedby="helpId"
-                                            value="{{$category->order}}" required>
+                                        <label for="">Email</label>
+                                        <input type="email" class="form-control" name="email" id=""
+                                            value="{{$user->email}}" required>
+                                    </div>
 
+                                    <div class="form-group">
+                                        <label for="">Password</label>
+                                        <input type="password" class="form-control" name="password">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Confirm Password</label>
+                                        <input type="password" class="form-control" name="confirm" >
                                     </div>
 
 
                                     <div class="form-group">
 
-                                        <button type="submit" class="btn btn-primary"> <i class="fas fa-save    "></i> Save</button>
+                                        <button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> Save</button>
 
                                     </div>
 
 
                                     </form>
-
-
                                 </div>
                             </div>
                         </div>

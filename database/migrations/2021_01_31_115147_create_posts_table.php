@@ -18,11 +18,13 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('image');
+            $table->string('caption');
             $table->string('description');
             $table->string('slug');
             $table->string('tags');
             $table->integer('category_id');
             $table->integer('author_id');
+            $table->string('source');
             $table->boolean('main_lead')->default(0);
             $table->boolean('sub_lead')->default(0);
             $table->string('status');

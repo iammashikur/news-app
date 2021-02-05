@@ -23,14 +23,9 @@ Auth::routes();
 
 
 
-Route::get('/admin', 'AdminController@login_form')->name('login_form');
+Route::get('admin', 'AdminController@index')->name('admin');
 
-
-
-Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
-{
-
-    Route::get('/', 'AdminController@index')->name('index');
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
     // News Route
 
@@ -39,7 +34,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
     Route::get('/news-manage',   'AdminController@news_all')->name('news_all');
     Route::get('/news-search',   'AdminController@news_search')->name('news_search');
 
-    Route::get('/news-update/{id}', 'AdminController@news_update_form')->name('news_update');
+    Route::get('/news-update/{id}', 'AdminController@news_update_form')->name('news_update_form');
+    Route::post('/news-update/{id}', 'AdminController@news_update')->name('news_update');
 
 
     Route::get('/news-trash',   'AdminController@news_trash')->name('news_trash');
@@ -53,8 +49,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
     Route::get('/category-manage',    'AdminController@category_all')->name('category_all');
     Route::get('/category-publish',   'AdminController@category_form')->name('category_form');
     Route::post('/category-publish',  'AdminController@category_store')->name('category_store');
-    Route::get('/category-update/{id}', 'AdminController@category_update')->name('category_update');
+
+
+    Route::get('/category-update/{id}', 'AdminController@category_update_form')->name('category_update_form');
+    Route::post('/category-update/{id}', 'AdminController@category_update_id')->name('category_update_id');
+
+
+
     Route::get('/category-delete/{id}', 'AdminController@category_delete')->name('category_delete_id');
+
+
+
 
     // File Picker Route
 
@@ -62,22 +67,35 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ()
     Route::post('/file-manager', 'FilesController@upload_data')->name('filemanager.upload');
 
 
-     // Filemanager Route
-     Route::get('/filemanager', 'AdminController@filemanager_all')->name('filemanager_all');
-     Route::post('/filemanager', 'AdminController@filemanager_store')->name('filemanager_store');
-     Route::get('/filemanager-delete/{id}', 'AdminController@filemanager_delete')->name('filemanager_delete');
 
 
-     // Gallery Route
-     Route::get('/gallery', 'AdminController@gallery_all')->name('gallery_all');
-     Route::post('/gallery', 'AdminController@gallery_store')->name('gallery_store');
-     Route::get('/gallery-update/{id}', 'AdminController@gallery_update')->name('gallery_update');
-     Route::get('/gallery-delete/{id}', 'AdminController@gallery_delete')->name('gallery_delete');
 
-     // Video Route
-     Route::get('/video', 'AdminController@video_all')->name('video_all');
-     Route::post('/video', 'AdminController@video_store')->name('video_store');
-     Route::get('/video-update/{id}', 'AdminController@video_update')->name('video_update');
-     Route::get('/video-delete/{id}', 'AdminController@video_delete')->name('video_delete');
+    // Gallery Route
+    Route::get('/gallery', 'AdminController@gallery_all')->name('gallery_all');
+    Route::get('/gallery-add', 'AdminController@gallery_form')->name('gallery_form');
+    Route::post('/gallery-add', 'AdminController@gallery_store')->name('gallery_store');
+    Route::get('/gallery-update/{id}', 'AdminController@gallery_update_form')->name('gallery_update_form');
+    Route::post('/gallery-update/{id}', 'AdminController@gallery_update')->name('gallery_update');
+    Route::get('/gallery-delete/{id}', 'AdminController@gallery_delete')->name('gallery_delete');
+
+    // Video Route
+    Route::get('/video', 'AdminController@video_all')->name('video_all');
+    Route::get('/video-add', 'AdminController@video_form')->name('video_form');
+    Route::post('/video-add', 'AdminController@video_store')->name('video_store');
+
+    Route::get('/video-update/{id}', 'AdminController@video_update_form')->name('video_update_form');
+    Route::post('/video-update/{id}', 'AdminController@video_update')->name('video_update');
+    Route::get('/video-delete/{id}', 'AdminController@video_delete')->name('video_delete');
+
+    // Files Route
+    Route::get('/files', 'AdminController@files_all')->name('files_all');
+    Route::get('/files-delete', 'AdminController@files_delete')->name('files_delete');
+
+    // Settings
+
+    Route::get('/profile', 'AdminController@profile')->name('profile');
+    Route::post('/profile', 'AdminController@profile_update')->name('profile_update');
+    Route::get('/roles', 'AdminController@roles')->name('roles');
+    Route::get('/settings', 'AdminController@settings')->name('settings');
 
 });

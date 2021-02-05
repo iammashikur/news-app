@@ -24,81 +24,10 @@
                               </div>
                             @endif
 
-                            <div class="card">
-
-
-                                <div class="card-header">
-                                   Add Gallery Image
-                                </div>
-
-
-                                <div class="card-body">
-
-                                <form method="POST" {{ route('gallery_store') }}>
-
-
-                                        @csrf
-
-
-                                        <div class="form-group">
-
-
-
-                                            <label for="">Gallery Image</label>
-
-                                            <div class="form-control-file mb-4">
-                                                <a class="btn btn-success btn-sm text-white" data-toggle="modal"
-                                                    data-target="#modelId" id="image-select"> <i class="fas fa-image    "></i> Select File </a> From
-                                                Media Gallery
-                                            </div>
-
-                                            <img id="post-image" width="200px">
-
-                                            <input id="form-image" type="hidden" name="image" value="" required>
-
-                                        </div>
-
-
-                                    <div class="form-group">
-                                        <label for="">Image Caption</label>
-                                        <input type="text" class="form-control" name="caption" id="" aria-describedby="helpId"
-                                            placeholder="Caption" required>
-
-                                    </div>
-
-
-
-
-                                    <div class="form-group">
-
-                                        <button type="submit" class="btn btn-primary"> <i class="fas fa-save    "></i> Save</button>
-
-                                    </div>
-
-
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-</div>
-
-
-
-
 
 <!-- Modal -->
-<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="card">
+    <div class="">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Gallery</h5>
@@ -114,6 +43,16 @@
             </div>
             <div class="modal-body">
 
+
+                <div class="alert alert-danger alert-dismissible fade d-none" role="alert" id="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>File Deleted !</strong>
+                </div>
+
+
                 <div class="row" id="table_data">
 
 
@@ -122,6 +61,7 @@
 
             </div>
             <div class="modal-footer d-block">
+
 
                 <form id="formId" method="POST" enctype="multipart/form-data" action="<?= route('filemanager.upload') ?>">
 
@@ -157,11 +97,9 @@
 
                     <div class="form-group">
 
-                        <button class="btn btn-sm btn-danger float-left" type="submit"> <i class="fas fa-upload    "></i> Upload</button>
+                        <button class="btn btn-sm btn-primary float-left" type="submit"> <i class="fas fa-upload    "></i> Upload</button>
 
-                        <button  type="button" class="btn btn-sm btn-danger float-right ml-2" data-dismiss="modal">Close</button>
-
-                        <button id="custom_button" type="button" class="btn btn-sm btn-primary float-right">Select</button>
+                        <button id="custom_button" type="button" class="btn btn-sm btn-danger float-right"><i class="fas fa-trash    "></i> Delete</button>
 
 
                     </div>
@@ -185,6 +123,17 @@
         </div>
     </div>
 </div>
+                        </div>
+                    </div>
 
+
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
 
 @endsection

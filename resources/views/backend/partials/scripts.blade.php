@@ -2,7 +2,8 @@
 
 @endif
 
-@if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update')
+@if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update' || Request::segment('2') ==
+'gallery-add'|| Request::segment('2') == 'gallery-update' || Request::segment('2') == 'files')
 
 <!-- General JS Scripts -->
 <script src="{{url('/')}}/assets/backend/js/app.min.js"></script>
@@ -15,26 +16,57 @@
 <script src="{{url('/')}}/assets/backend/js/page/create-post.js"></script>
 
 
-<style>
+@if (Request::segment('2') == 'files')
 
-    .mirash{
+<script>
+    $('#custom_button').on('click', function () {
 
-        background: red;
-    }
+        var value = $('input[name=image]:checked').attr('id');
 
-    .sabbir{
-        background: blue;
-    }
-</style>
+        $.ajax({
+
+            url: "<?= route('files_delete') ?>?id=" + value,
+
+            success: function (data) {
+
+
+
+                if (data.status == 'deleted') {
+                    var query = $('#serach').val();
+                    fetch_data(1, query);
+                    $("#custom_button").attr("disabled", true);
+
+                    $('#alert').addClass('d-block show');
+
+
+                    setTimeout(function () {
+                        $('#alert').removeClass('d-block show');
+                        $('#alert').addClass('d-none');
+                    }, 2000);
+
+
+
+
+
+                }
+
+            }
+        });
+
+
+
+    });
+
+</script>
+
+@endif
 
 
 <script>
+    $('#custom_button').on('click', function () {
 
-
-    $('#select').on('click', function(){
-
-        var value = $( 'input[name=image]:checked' ).val();
-        $('#post-image').attr('src', '<?= url('/') ?>/'+value);
+        var value = $('input[name=image]:checked').val();
+        $('#post-image').attr('src', '<?= url('/').'/' ?>' + value);
         $('#form-image').val(value);
         $('#post-image').addClass('file-manager-image');
         $('#modelId').modal('toggle');
@@ -89,8 +121,7 @@
                 if (data.img_status == 'uploaded' && data.name_status == 'exist') {
                     var query = $('#serach').val();
                     fetch_data(1, query);
-
-                    $("#select").attr("disabled", true);
+                    $("#custom_button").attr("disabled", true);
 
                     $('#inputGroupFile').val(null);
                     $('.custom-file-label').html('Choose file');
@@ -149,6 +180,30 @@
 
     });
 
+
+    $(document).ready(function () {
+        var query = $('#serach').val();
+        fetch_data(1, query);
+
+        $(document).on('click', '.pagination a', function (event) {
+            event.preventDefault();
+
+            var query = $('#serach').val();
+            var page = $(this).attr('href').split('page=')[1];
+            fetch_data(page, query);
+        });
+
+        $('#serach').on('keyup', function () {
+
+            var query = $('#serach').val();
+            fetch_data(1, query);
+
+        });
+    });
+
+
+
+
     function fetch_data(page, query) {
 
         $.ajax({
@@ -159,7 +214,7 @@
             success: function (data) {
 
                 $('#table_data').html(data);
-                $("#select").attr("disabled", true);
+                $("#custom_button").attr("disabled", true);
 
             }
         });

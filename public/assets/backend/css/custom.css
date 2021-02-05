@@ -10,6 +10,16 @@
                 * Licensed under MIT (https://github.com/iqbalfnn/bootstrap-image-checkbox/blob/master/LICENSE)
                 */
 
+::-webkit-scrollbar {
+    background-color: rgb(226, 226, 226);
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #242047;
+    border-radius: 5px;
+}
+
 .custom-control.image-checkbox {
     position: relative;
     padding-left: 0;
@@ -87,12 +97,58 @@
     box-shadow: 0 0.0rem 0.0rem rgb(0 0 0 / 0%);
 }
 
-.card{
+.card {
     border-radius: 0px;
 }
 
 .main-content {
     padding-top: 110px;
 }
+
+.banner-img {
+    width: 100px;
+}
+
+.dash-card {
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.card-block {
+    padding: 20px;
+}
+
+.card-block .rotate {
+    z-index: 8;
+    float: right;
+    height: 100%;
+}
+
+.card-block .rotate svg {
+    width: 30px;
+    height: 30px;
+    color: rgba(20, 20, 20, 0.747);
+    position: absolute;
+    left: 0;
+    left: auto;
+    right: 32px;
+    bottom: 32px;
+    display: block;
+    -webkit-transform: rotate(-44deg);
+    -moz-transform: rotate(-44deg);
+    -o-transform: rotate(-44deg);
+    -ms-transform: rotate(-44deg);
+    transform: rotate(-44deg);
+}
+
+.card-block p {
+    font-weight: 800;
+}
+
+.dash-text p,
+h2 {
+    color: rgba(20, 20, 20, 0.747);
+}
+
 
 /*# sourceMappingURL=bootstrap-image-checkbox.css.map */

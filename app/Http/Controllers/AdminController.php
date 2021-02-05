@@ -3,48 +3,44 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
 use App\Posts;
 use App\Categories;
 use App\Galleries;
 use App\Videos;
+use App\Files;
 use App\Settings;
+use App\User;
 use Carbon\Carbon;
+
+
+
 
 
 class AdminController extends Controller
 {
 
     ################################
-    ##           LOGIN            ##
+    ##      LOGIN/DASHBOARD       ##
     ################################
 
-    public function login_form()
+    public function index()
     {
 
-        if(Auth::check() && Auth::user()->is_admin == 1)
-        {
+        if (Auth::check() && Auth::user()->is_admin == 1) {
             return view('backend.index');
-        }
-        else
-        {
+        } else {
             return view('backend.login_form');
-
         }
-
     }
 
     ################################
     ##         DASHBOARD          ##
     ################################
 
-
-    // Show Admin Index (Dashboard)
-    public function index()
-    {
-        return view('backend.index');
-    }
 
 
     ################################
@@ -55,7 +51,7 @@ class AdminController extends Controller
     // Show All News
     public function news_all()
     {
-        $posts = Posts::where('status','published')->orWhere('status','drafted')->latest()->paginate(10);
+        $posts = Posts::where('status', 'published')->orWhere('status', 'drafted')->latest()->paginate(10);
         return view('backend.news_all', compact('posts'));
     }
 
@@ -74,7 +70,7 @@ class AdminController extends Controller
             ->where('title', 'like', '%' . $query . '%')
             ->orderBy("id", "desc")
             ->paginate(10);
-            return view('backend.news_trash', compact('posts'));
+        return view('backend.news_trash', compact('posts'));
     }
 
 
@@ -88,7 +84,6 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'News Recycled !');
-
     }
 
     // Search From News
@@ -97,8 +92,8 @@ class AdminController extends Controller
 
         $query = str_replace(" ", "%", $request->get('query'));
         $posts = Posts::where('status', 'published')
-        ->orWhere('status', 'drafted')
-        ->where('title', 'like', '%' . $query . '%')
+            ->orWhere('status', 'drafted')
+            ->where('title', 'like', '%' . $query . '%')
 
             ->orderBy("id", "desc")
             ->paginate(8);
@@ -116,33 +111,25 @@ class AdminController extends Controller
     {
 
         // News Status
-        if ($request->status == 'published')
-        {
+        if ($request->status == 'published') {
             $status = 'Published';
         }
 
-        if ($request->status == 'drafted')
-        {
+        if ($request->status == 'drafted') {
             $status = 'Drafted';
         }
 
         // News Status
-        if ($request->has('main_lead'))
-        {
+        if ($request->has('main_lead')) {
             $main_lead = $request->main_lead;
-        }
-        else
-        {
+        } else {
             $main_lead = 0;
         }
 
         // News Status
-        if ($request->has('sub_lead'))
-        {
+        if ($request->has('sub_lead')) {
             $sub_lead = $request->sub_lead;
-        }
-        else
-        {
+        } else {
             $sub_lead = 0;
         }
 
@@ -152,12 +139,13 @@ class AdminController extends Controller
             'title'       => $request->title,
             'content'     => $request->content,
             'image'       => $request->image,
+            'caption'     => $request->caption,
             'description' => $request->description,
             'slug'        => Str::slug($request->title, '-'),
             'tags'        => $request->tags,
             'category_id' => $request->category_id,
             'author_id'   => Auth::id(),
-            'newssource'    => $sub_lead,
+            'source'      => $request->source,
             'sub_lead'    => $sub_lead,
             'main_lead'   => $main_lead,
             'status'      => $request->status,
@@ -188,22 +176,16 @@ class AdminController extends Controller
         }
 
         // News Status
-        if ($request->has('main_lead'))
-        {
+        if ($request->has('main_lead')) {
             $main_lead = $request->main_lead;
-        }
-        else
-        {
+        } else {
             $main_lead = 0;
         }
 
         // News Status
-        if ($request->has('sub_lead'))
-        {
+        if ($request->has('sub_lead')) {
             $sub_lead = $request->sub_lead;
-        }
-        else
-        {
+        } else {
             $sub_lead = 0;
         }
 
@@ -214,10 +196,12 @@ class AdminController extends Controller
             'title'       => $request->title,
             'content'     => $request->content,
             'image'       => $request->image,
+            'caption'     => $request->caption,
             'description' => $request->description,
             //'slug'        => Str::slug($request->title, '-'),
             'tags'        => $request->tags,
             'category_id' => $request->category_id,
+            'source'      => $request->source,
             'sub_lead'    => $sub_lead,
             'main_lead'   => $main_lead,
             'status'      => $request->status,
@@ -238,7 +222,6 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'News Moved To Trash !');
-
     }
 
     // News Delete
@@ -271,8 +254,8 @@ class AdminController extends Controller
     // Category Insert
     public function category_store(Request $request)
     {
-         // News insert
-         Categories::insert([
+        // News insert
+        Categories::insert([
 
             'name'        => $request->name,
             'order'       => $request->order,
@@ -283,31 +266,34 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('category_all')->with('success', 'Category Added !');
-
     }
 
-     // Category Update
-     public function category_update(Request $request)
-     {
-          // Category Update
-          Categories::find($request->id)->update([
+    public function category_update_form(Request $request)
+    {
 
-            'name'        => $request->name,
-            'order'       => $request->order,
-            'updated_at'  => Carbon::now(),
 
-         ]);
+        $category = Categories::find($request->id);
+        return view('backend.category_update_form', compact('category'));
+    }
 
-         return redirect()->route('category_all')->with('success', 'Category Updated !');
+    // Category Update
+    public function category_update_id(Request $request)
+    {
 
-     }
+        Categories::find($request->id)->update([
+            'name' => $request->name,
+            'order' => $request->order,
+        ]);
+
+        return redirect()->route('category_all')->with('success', 'Category Updated !');
+    }
 
     // Category Delete
     public function category_delete(Request $request)
     {
+
         Categories::find($request->id)->delete();
         return redirect()->back()->with('success', 'Category Deleted');
-
     }
 
     ################################
@@ -324,20 +310,55 @@ class AdminController extends Controller
     // Category Insert Form
     public function gallery_form(Request $request)
     {
-        return view('backend.allery_form');
+        return view('backend.gallery_form');
     }
 
 
     // Category Insert
     public function gallery_store(Request $request)
     {
-        return $request;
+
+        // News insert
+        Galleries::insert([
+
+            'image'       => $request->image,
+            'caption'     => $request->caption,
+            'created_at'  => Carbon::now(),
+            'updated_at'  => Carbon::now(),
+
+        ]);
+
+        return redirect()->route('gallery_all')->with('success', 'Image Added !');
+    }
+
+    // Category Update Form
+    public function gallery_update_form(Request $request)
+    {
+        $gallery = Galleries::find($request->id);
+        return view('backend.gallery_update_form', compact('gallery'));
+    }
+
+
+    // Category Insert
+    public function gallery_update(Request $request)
+    {
+        // News insert
+        Galleries::find($request->id)->update([
+
+            'image'       => $request->image,
+            'caption'     => $request->caption,
+            'updated_at'  => Carbon::now(),
+
+        ]);
+
+        return redirect()->route('gallery_all')->with('success', 'Image Updated !');
     }
 
     // Category Delete
     public function gallery_delete(Request $request)
     {
-        return $request;
+        Galleries::find($request->id)->delete();
+        return redirect()->back()->with('success', 'Image Deleted');
     }
 
 
@@ -347,12 +368,11 @@ class AdminController extends Controller
     ##            VIDEO           ##
     ################################
 
-
     // Show All Categories
     public function video_all(Request $request)
     {
-        $videos = Videos::latest()->paginate(10);
-        return view('backend.video_all', compact('videos'));
+        $galleries = Videos::latest()->paginate(10);
+        return view('backend.video_all', compact('galleries'));
     }
 
     // Category Insert Form
@@ -365,28 +385,149 @@ class AdminController extends Controller
     // Category Insert
     public function video_store(Request $request)
     {
-        return $request;
+
+        // News insert
+        Videos::insert([
+
+            'link'        => $request->link,
+            'title'       => $request->title,
+            'created_at'  => Carbon::now(),
+            'updated_at'  => Carbon::now(),
+
+        ]);
+
+        return redirect()->route('video_all')->with('success', 'Image Added !');
+    }
+
+    // Category Update Form
+    public function video_update_form(Request $request)
+    {
+        $video = Videos::find($request->id);
+        return view('backend.video_update_form', compact('video'));
+    }
+
+
+    // Category Insert
+    public function video_update(Request $request)
+    {
+        // News insert
+        Videos::find($request->id)->update([
+
+            'link'        => $request->link,
+            'title'       => $request->title,
+            'updated_at'  => Carbon::now(),
+
+        ]);
+
+        return redirect()->route('video_all')->with('success', 'Video Updated !');
     }
 
     // Category Delete
     public function video_delete(Request $request)
     {
-        return $request;
+        Videos::find($request->id)->delete();
+        return redirect()->back()->with('success', 'Video Deleted');
     }
 
+
+    ################################
+    ##            VIDEO           ##
+    ################################
+
+    // Show All Categories
+    public function files_all(Request $request)
+    {
+        $files = Files::latest()->paginate(10);
+        return view('backend.filemanager', compact('files'));
+    }
+
+
+    // Category Delete
+    public function files_delete(Request $request)
+    {
+        $file = Files::find($request->id);
+        File::delete(public_path($file->file_path));
+        File::delete(public_path(str_replace('frontend/news_image', 'frontend/news_image/thumb', $file->file_path)));
+        Files::find($request->id)->delete();
+
+        return response([
+            'status' => 'deleted'
+        ]);
+    }
 
     ################################
     ##          SETTINGS          ##
     ################################
 
+
+    public function profile()
+    {
+        $user = User::find(Auth::user()->id);
+        return view('backend.profile', compact('user'));
+    }
+
+    public function profile_update(Request $request)
+    {
+
+        User::find(Auth::user()->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+
+        if($request->has('password')){
+
+            if($request->has('password') && $request->has('confirm'))
+            {
+                if($request->has('password') == $request->has('confirm'))
+                {
+
+                    User::find(Auth::user()->id)->update([
+                        'password' => bcrypt($request->password),
+                    ]);
+                }
+
+                return redirect()->back()->with('error', 'Confirm password not matched !');
+            }
+
+            return redirect()->back()->with('error', 'Please enter confirm password !');
+
+        }
+
+        return redirect()->back()->with('success', 'Profile Updated !');
+
+
+
+    }
+
+    public function role()
+    {
+        return view('backend.role');
+    }
+
+    public function role_add()
+    {
+
+    }
+    public function role_update_form()
+    {
+        return view('backend.role_update_form');
+    }
+
+    public function role_update()
+    {
+
+    }
 
     public function settings()
     {
-        $posts = Settings::get();
-        return view('backend.news_all', compact('posts'));
+        return view('backend.settings');
     }
 
-    ################################
-    ##          SETTINGS          ##
-    ################################
+    public function settings_update()
+    {
+
+    }
+
+
 }

@@ -45,8 +45,7 @@
 $('input[name=image]').change(function(){
 var value = $( 'input[name=image]:checked' ).val();
 
-$('#select').removeAttr('disabled');;
-
+$('#custom_button').removeAttr('disabled');
 
 });
 </script>

@@ -52,17 +52,18 @@
 
                         @foreach ($categories as $category)
 
-
-
-
                         <tr>
 
                             <td>{{$category->name}}</td>
                             <td>{{$category->order}}</td>
                             <td class="text-right">
 
+
+
+
                                 <a href="{{route('category_delete_id', ['id'=>$category->id])}}" class="btn btn-sm btn-danger text-white"> <i class="fas fa-trash    "></i> Delete</a>
-                                <a href="" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Edit</a>
+                                <a href="{{route('category_update_form', ['id'=>$category->id])}}" class="btn btn-sm btn-primary"> <i class="fas fa-edit    "></i> Edit</a>
+
 
                             </td>
                         </tr>

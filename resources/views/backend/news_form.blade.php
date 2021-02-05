@@ -42,7 +42,7 @@
 
                                     <div class="form-group">
                                         <label for="">Title</label>
-                                        <input type="text" class="form-control" name="title" id="" aria-describedby="helpId"
+                                        <input type="text" class="form-control" name="title" id=""
                                             placeholder="News title here" required>
 
                                     </div>
@@ -86,20 +86,22 @@
                                     </div>
 
                                     <div class="form-group">
-                                      <label for=""></label>
+                                      <label for="">Caption</label>
                                       <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                      <small id="helpId" class="form-text text-muted">Help text</small>
-                                    </div>
+                                        class="form-control" name="caption" id=""  placeholder="">
 
-
-                                    <div class="form-group">
-                                        <label for="">Source</label>
-                                        <textarea name="description" type="text" class="form-control" required></textarea>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="">Caption</label>
+                                        <label for="">News Source</label>
+                                        <input type="text"
+                                          class="form-control" name="source" id=""  placeholder="">
+
+                                      </div>
+
+
+                                    <div class="form-group">
+                                        <label for="">Description (Short)</label>
                                         <textarea name="description" type="text" class="form-control" required></textarea>
                                     </div>
 
@@ -205,7 +207,7 @@
 
                     <div class="form-group">
 
-                      <input type="text" class="form-control" name="name" id="file-name" aria-describedby="helpId" placeholder="Image Name">
+                      <input type="text" class="form-control" name="name" id="file-name"  placeholder="Image Name">
 
                     </div>
 
@@ -225,7 +227,7 @@
 
                         <button  type="button" class="btn btn-sm btn-danger float-right ml-2" data-dismiss="modal">Close</button>
 
-                        <button id="select" type="button" class="btn btn-sm btn-primary float-right">Select</button>
+                        <button id="custom_button" type="button" class="btn btn-sm btn-primary float-right">Select</button>
 
 
                     </div>

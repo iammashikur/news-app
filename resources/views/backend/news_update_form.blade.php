@@ -38,7 +38,7 @@
 
 
 
-                                    <form method="POST" {{ route('news_store') }}>
+                                    <form method="POST" {{ route('news_update' , ['id' => $post->id]) }}>
 
 
                                         @csrf
@@ -57,7 +57,7 @@
                                             <select class="form-control selectric" name="category_id" required>
 
                                                 @foreach (App\Categories::find($post->category_id)->get() as $category)
-                                                <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                                                <option value="{{$category->id}}" @if($category->id == $post->category_id) selected @endif>{{$category->name}}</option>
                                                 @endforeach
 
                                             </select>
@@ -88,6 +88,20 @@
 
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="">Caption</label>
+                                            <input type="text"
+                                              class="form-control" name="caption" id="" value="{{$post->caption}}">
+
+                                          </div>
+
+                                          <div class="form-group">
+                                            <label for="">News Source</label>
+                                            <input type="text"
+                                              class="form-control" name="source" id="" value="{{$post->source}}">
+
+                                          </div>
+
 
                                         <div class="form-group">
                                             <label for="">Short Description</label>
@@ -104,12 +118,14 @@
 
 
 
+
+
                                         <div class="form-check form-check-inline mb-4">
                                             <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox" name="main_lead" id="" value="1"> Main Lead
+                                                <input @if ($post->main_lead == 1) checked @endif class="form-check-input" type="checkbox" name="main_lead" id="" value="1"> Main Lead
                                             </label>
                                             <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox" name="sub_lead" id="" value="1"> Sub Lead
+                                                <input @if ($post->sub_lead == 1) checked @endif class="form-check-input" type="checkbox" name="sub_lead" id="" value="1"> Sub Lead
                                             </label>
 
                                         </div>
@@ -119,8 +135,10 @@
                                         <div class="form-group">
                                             <label for="">Status</label>
                                             <select class="form-control selectric" name="status" required>
-                                                <option value="published">Publish</option>
-                                                <option value="drafted">Draft</option>
+
+                                                <option value="published" @if ($post->status == 'published') selected @endif>Publish</option>
+                                                <option value="drafted" @if ($post->status == 'drafted') selected @endif>Draft</option>
+
                                             </select>
                                         </div>
 
@@ -219,7 +237,7 @@
 
                         <button  type="button" class="btn btn-sm btn-danger float-right ml-2" data-dismiss="modal">Close</button>
 
-                        <button id="select" type="button" class="btn btn-sm btn-primary float-right">Select</button>
+                        <button id="custom_button" type="button" class="btn btn-sm btn-primary float-right">Select</button>
 
 
                     </div>
