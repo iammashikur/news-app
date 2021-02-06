@@ -1,75 +1,50 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Category from './pages/Category';
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
-  export default function Index() {
+   function Index() {
     return (
-      <Router>
-        <div>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-          </ul>
 
-          <hr />
+
+
+
+
+
+
+
+      <Router>
+          <Navbar/>
+
+
+          <div style={{minHeight: "100vh"}}>
 
 
           <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/about">
-              <About />
-            </Route>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
+
+            <Route path="/" exact component={Home} />
+
+            <Route exact path="/category/1" exact component={Category} />
+
           </Switch>
-        </div>
+
+
+
+          </div>
+          <Footer/>
+
       </Router>
+
+
     );
   }
 
-  // You can think of these components as "pages"
-  // in your app.
 
-  function Home() {
-    return (
-      <div>
-        <h2>Home</h2>
-      </div>
-    );
-  }
-
-  function About() {
-    return (
-      <div>
-        <h2>About</h2>
-      </div>
-    );
-  }
-
-  function Dashboard() {
-    return (
-      <div>
-        <h2>Dashboard</h2>
-      </div>
-    );
-  }
 
 if (document.getElementById('index')) {
     ReactDOM.render(<Index />, document.getElementById('index'));
