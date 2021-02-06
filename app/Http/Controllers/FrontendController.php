@@ -9,6 +9,12 @@ class FrontendController extends Controller
     public function index()
     {
         return view('index');
-        // return abort(403, 'App is under construction !');
+
+    }
+
+    public function menu(){
+        return response()->json([
+            'hi' => 'sfksdf',
+        ]);
     }
 }

@@ -1,41 +1,55 @@
-import React, { Component } from 'react';
-class Navbar extends Component {
-
-    render() {
-        return (
-        <div>
-
-
-            <nav class='navbar navbar-expand-sm navbar-light bg-light'>
-                <a class='navbar-brand' href='#'>Navbar</a>
-                <button class='navbar-toggler d-lg-none' type='button' data-toggle='collapse' data-target='#collapsibleNavId' aria-controls='collapsibleNavId'
-                    aria-expanded='false' aria-label='Toggle navigation'>
-                    <span class='navbar-toggler-icon'></span>
+import React from "react";
+import { Link } from "react-router-dom";
+const Navbar = () => {
+    return (
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="container">
+                <Link className="navbar-brand" to="/">
+                    Navbar
+                </Link>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarColor03"
+                    aria-controls="navbarColor03"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
                 </button>
-                <div class='collapse navbar-collapse' id='collapsibleNavId'>
-                    <ul class='navbar-nav mr-auto mt-2 mt-lg-0'>
-                        <li class='nav-item active'>
-                            <a class='nav-link' href='#'>Home <span class='sr-only'>(current)</span></a>
+
+                <div className="collapse navbar-collapse" id="navbarColor03">
+                    <ul className="navbar-nav mr-auto">
+                        <li className="nav-item active">
+                            <Link className="nav-link" to="/">
+                                Home
+                                <span className="sr-only">(current)</span>
+                            </Link>
                         </li>
-                        <li class='nav-item'>
-                            <a class='nav-link' href='#'>Link</a>
-                        </li>
-                        <li class='nav-item dropdown'>
-                            <a class='nav-link dropdown-toggle' href='#' id='dropdownId' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Dropdown</a>
-                            <div class='dropdown-menu' aria-labelledby='dropdownId'>
-                                <a class='dropdown-item' href='#'>Action 1</a>
-                                <a class='dropdown-item' href='#'>Action 2</a>
-                            </div>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/category/1">
+                                Category
+                            </Link>
                         </li>
                     </ul>
-
+                    <form className="form-inline my-2 my-lg-0">
+                        <input
+                            className="form-control mr-sm-2"
+                            type="text"
+                            placeholder="Search"
+                        ></input>
+                        <button
+                            className="btn btn-secondary my-2 my-sm-0"
+                            type="submit"
+                        >
+                            Search
+                        </button>
+                    </form>
                 </div>
-            </nav>
-
-
-        </div>
-        );
-    }
-}
+            </div>
+        </nav>
+    );
+};
 
 export default Navbar;

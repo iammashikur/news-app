@@ -14,8 +14,15 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::get('/menu', 'FrontendController@menu');
 
-Route::get('/', 'FrontendController@index')->name('home');
+
+
+Route::resource('/', 'FrontendController');
+Route::resource('/category', 'FrontendController');
+
+
+
 
 
 Auth::routes(['register' => false]);
