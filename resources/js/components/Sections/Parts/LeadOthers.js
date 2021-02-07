@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-class LeadFirst extends Component {
+class LeadOthers extends Component {
 
 
     state = {
@@ -25,21 +25,17 @@ class LeadFirst extends Component {
                         className="news-box"
                         to={'/news/'+news.slug}
                     >
-                        <div className="row">
-                            <div className="col-md-6 col-12 mt-4 mt-md-0">
+
+
+
+
                                 <h1>{news.title}</h1>
                                 <p>{news.content}</p>
                                 <small>
-                                    <i className="fas fa-clock    " />{news.date}</small>
-                            </div>
-                            <div className="col-md-6 col-12">
-                                <img
-                                    src={news.image}
-                                    width="100%"
-                                    height="100%"
-                                />
-                            </div>
-                        </div>
+                                    <i className="fas fa-clock"/>{news.date}
+                                </small>
+
+
                     </Link>
                 ))}
             </>
@@ -47,4 +43,4 @@ class LeadFirst extends Component {
     }
 }
 
-export default LeadFirst;
+export default LeadOthers;

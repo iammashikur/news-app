@@ -34,11 +34,11 @@
 
                                 <div class="card-body">
 
-                                    @foreach ($news as $post)
 
 
 
-                                    <form method="POST" {{ route('news_update' , ['id' => $post->id]) }}>
+
+                                    <form method="POST" {{ route('news_update' , ['id' => $news->id]) }}>
 
 
                                         @csrf
@@ -47,7 +47,7 @@
                                         <div class="form-group">
                                             <label for="">Title</label>
                                             <input type="text" class="form-control" name="title" id="" aria-describedby="helpId"
-                                                value="{{$post->title}}" required>
+                                                value="{{$news->title}}" required>
 
                                         </div>
 
@@ -56,8 +56,8 @@
                                             <label for="">Category</label>
                                             <select class="form-control selectric" name="category_id" required>
 
-                                                @foreach (App\Categories::find($post->category_id)->get() as $category)
-                                                <option value="{{$category->id}}" @if($category->id == $post->category_id) selected @endif>{{$category->name}}</option>
+                                                @foreach (App\Categories::all() as $category)
+                                                <option value="{{$category->id}}" @if($category->id == $news->category_id) selected @endif>{{$category->name}}</option>
                                                 @endforeach
 
                                             </select>
@@ -66,7 +66,7 @@
 
                                         <div class="form-group">
                                             <label for="">Content</label>
-                                            <textarea class="summernote-simple" name="content" required>{{$post->content}}</textarea>
+                                            <textarea class="summernote-simple" name="content" required>{{$news->content}}</textarea>
                                         </div>
 
 
@@ -82,30 +82,30 @@
                                                 Media Gallery
                                             </div>
 
-                                            <img id="post-image" width="200px" src="{{url($post->image)}}">
+                                            <img id="news-image" width="200px" src="{{url($news->image)}}">
 
-                                            <input id="form-image" type="hidden" name="image" value="{{$post->image}}" required>
+                                            <input id="form-image" type="hidden" name="image" value="{{$news->image}}" required>
 
                                         </div>
 
                                         <div class="form-group">
                                             <label for="">Caption</label>
                                             <input type="text"
-                                              class="form-control" name="caption" id="" value="{{$post->caption}}">
+                                              class="form-control" name="caption" id="" value="{{$news->caption}}">
 
                                           </div>
 
                                           <div class="form-group">
                                             <label for="">News Source</label>
                                             <input type="text"
-                                              class="form-control" name="source" id="" value="{{$post->source}}">
+                                              class="form-control" name="source" id="" value="{{$news->source}}">
 
                                           </div>
 
 
                                         <div class="form-group">
                                             <label for="">Short Description</label>
-                                            <textarea name="description" type="text" class="form-control" required>{{$post->description}}</textarea>
+                                            <textarea name="description" type="text" class="form-control" required>{{$news->description}}</textarea>
                                         </div>
 
 
@@ -113,7 +113,7 @@
 
                                         <div class="form-group">
                                             <label for="">Tags</label>
-                                            <input name="tags" type="text" class="form-control inputtags" value="{{$post->tags}}" required>
+                                            <input name="tags" type="text" class="form-control inputtags" value="{{$news->tags}}" required>
                                         </div>
 
 
@@ -122,10 +122,10 @@
 
                                         <div class="form-check form-check-inline mb-4">
                                             <label class="form-check-label">
-                                                <input @if ($post->main_lead == 1) checked @endif class="form-check-input" type="checkbox" name="main_lead" id="" value="1"> Main Lead
+                                                <input @if ($news->main_lead == 1) checked @endif class="form-check-input" type="checkbox" name="main_lead" id="" value="1"> Main Lead
                                             </label>
                                             <label class="form-check-label">
-                                                <input @if ($post->sub_lead == 1) checked @endif class="form-check-input" type="checkbox" name="sub_lead" id="" value="1"> Sub Lead
+                                                <input @if ($news->sub_lead == 1) checked @endif class="form-check-input" type="checkbox" name="sub_lead" id="" value="1"> Sub Lead
                                             </label>
 
                                         </div>
@@ -136,8 +136,8 @@
                                             <label for="">Status</label>
                                             <select class="form-control selectric" name="status" required>
 
-                                                <option value="published" @if ($post->status == 'published') selected @endif>Publish</option>
-                                                <option value="drafted" @if ($post->status == 'drafted') selected @endif>Draft</option>
+                                                <option value="published" @if ($news->status == 'published') selected @endif>Publish</option>
+                                                <option value="drafted" @if ($news->status == 'drafted') selected @endif>Draft</option>
 
                                             </select>
                                         </div>
@@ -152,7 +152,7 @@
 
                                     </form>
 
-                                    @endforeach
+
 
                                 </div>
                             </div>

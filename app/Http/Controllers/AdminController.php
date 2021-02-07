@@ -163,7 +163,7 @@ class AdminController extends Controller
     // News Update Form
     public function news_update_form(Request $request)
     {
-        $news = Posts::find($request->id)->get();
+        $news = Posts::find($request->id);
         return view('backend.news_update_form', compact('news'));
     }
     // News Update

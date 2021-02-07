@@ -69,7 +69,7 @@ class FilesController extends Controller
 
             //Resize Big Image
             $main = Image::make($image);
-            $main->fit(724, 410);
+            $main->fit(598, 410);
             $main->save(public_path($main_path));
 
             //Resize Thumbnail

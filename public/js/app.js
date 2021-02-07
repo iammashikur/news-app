@@ -70207,6 +70207,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70230,6 +70231,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -70262,7 +70264,7 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/0/1").then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/" + this.props.skip + "/" + this.props.take).then(function (res) {
         var item = res.data;
 
         _this2.setState({
@@ -70274,20 +70276,20 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
           key: index,
           className: "news-box",
-          href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%93%e0%a7%9f%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ac%e0%a6%97%e0%a6%bf-%e0%a6%b2/"
+          to: '/news/' + news.slug
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "row"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "col-md-6 col-12 mt-4 mt-md-0"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, news.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-clock    "
-        }), " 5 February 2021, 5:02 AM")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }), news.date)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "col-md-6 col-12"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-          src: "https://deshdorpon.com/media/2021/02/train_maijghow_deshdorpon.jpg",
+          src: news.image,
           width: "100%",
           height: "100%"
         }))));
@@ -70299,6 +70301,220 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (LeadFirst);
+
+/***/ }),
+
+/***/ "./resources/js/components/Sections/Parts/LeadOthers.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/Sections/Parts/LeadOthers.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var LeadOthers = /*#__PURE__*/function (_Component) {
+  _inherits(LeadOthers, _Component);
+
+  var _super = _createSuper(LeadOthers);
+
+  function LeadOthers() {
+    var _this;
+
+    _classCallCheck(this, LeadOthers);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(LeadOthers, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/" + this.props.skip + "/" + this.props.take).then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+          key: index,
+          className: "news-box",
+          to: '/news/' + news.slug
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, news.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-clock"
+        }), news.date));
+      }));
+    }
+  }]);
+
+  return LeadOthers;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (LeadOthers);
+
+/***/ }),
+
+/***/ "./resources/js/components/Sections/Parts/SubLead.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/Sections/Parts/SubLead.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var SubLeads = /*#__PURE__*/function (_Component) {
+  _inherits(SubLeads, _Component);
+
+  var _super = _createSuper(SubLeads);
+
+  function SubLeads() {
+    var _this;
+
+    _classCallCheck(this, SubLeads);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(SubLeads, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/" + this.props.skip + "/" + this.props.take).then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-md-4",
+          key: index
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+          className: "news-bar",
+          to: "/news/" + news.slug
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-4 col-md-6 pr-2"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: news.image,
+          width: "100%",
+          height: "100%"
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-8 col-md-6 pl-2"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-clock"
+        }), news.date)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: " line-bottom mt-0 mt-md-4"
+        }));
+      }));
+    }
+  }]);
+
+  return SubLeads;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (SubLeads);
 
 /***/ }),
 
@@ -70314,6 +70530,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Parts_LeadFirst__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Parts/LeadFirst */ "./resources/js/components/Sections/Parts/LeadFirst.js");
+/* harmony import */ var _Parts_LeadOthers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Parts/LeadOthers */ "./resources/js/components/Sections/Parts/LeadOthers.js");
+/* harmony import */ var _Parts_SubLead__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Parts/SubLead */ "./resources/js/components/Sections/Parts/SubLead.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70339,6 +70557,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
+
 var SectionOne = /*#__PURE__*/function (_Component) {
   _inherits(SectionOne, _Component);
 
@@ -70354,7 +70574,7 @@ var SectionOne = /*#__PURE__*/function (_Component) {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        "class": "container"
+        className: "container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row",
         style: {
@@ -70366,14 +70586,15 @@ var SectionOne = /*#__PURE__*/function (_Component) {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-8 line-right"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadFirst__WEBPACK_IMPORTED_MODULE_1__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadFirst__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        skip: 0,
+        take: 1
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-4 mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-box",
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%81-%e0%a6%9a%e0%a6%bf-%e0%a7%a7%e0%a7%aa-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09B8\u09C1 \u099A\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09B0\u09BF\u09AE\u09BE\u09A8\u09CD\u09A1\u09C7\xA0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09B8\u09C7\u09A8\u09BE\u09AC\u09BE\u09B9\u09BF\u09A8\u09C0\u09B0 \u09B9\u09BE\u09A4\u09C7 \u0986\u099F\u0995 \u09AE\u09BF\u09DF\u09BE\u09A8\u09BE\u09AE\u09BE\u09B0\u09C7\u09B0 \u09A8\u09C7\u09A4\u09CD\u09B0\u09C0 \u0985\u0982 \u09B8\u09BE\u09A8 \u09B8\u09C1 \u099A\u09BF\u0995\u09C7 \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09B0\u09BF\u09AE\u09BE\u09A8\u09CD\u09A1\u09C7 \u09A8\u09BF\u09DF\u09C7\u099B\u09C7 \u09A6\u09C7\u09B6\u099F\u09BF\u09B0 \u09AA\u09C1\u09B2\u09BF\u09B6\u0964 \u098F\u09B0 \u0986\u0997\u09C7 \u0985\u09AC\u09C8\u09A7\u09AD\u09BE\u09AC\u09C7 \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09B8\u09B0\u099E\u09CD\u099C\u09BE\u09AE\u09BE\u09A6\u09BF \u0986\u09AE\u09A6\u09BE\u09A8\u09BF\u09B0 \u0985\u09AD\u09BF\u09AF\u09CB\u0997\u09C7 \u09A4\u09BE\u09B0 \u09AC\u09BF\u09B0\u09C1\u09A6\u09CD\u09A7\u09C7 \u09AE\u09BE\u09AE\u09B2\u09BE \u09A6\u09BE\u09DF\u09C7\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u0964 \u09B8\u09C1... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 3 February 2021, 8:22 PM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadOthers__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        skip: 1,
+        take: 1
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "line-bottom mt-4 mb-4"
@@ -70381,26 +70602,20 @@ var SectionOne = /*#__PURE__*/function (_Component) {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-4 line-right"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-box",
-        href: "https://deshdorpon.com/%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%a6%e0%a6%b2-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a7%81-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%ae/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2 \u09A8\u09C7\u09A4\u09BE \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09C7\u099B\u09BE\u09B2\u09CB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09B8\u09BF\u09B2\u09C7\u099F \u09AE\u09B9\u09BE\u09A8\u0997\u09B0 \u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2\u09C7\u09B0 \u09B8\u09BE\u09AC\u09C7\u0995 \u09B8\u09B9-\u09AA\u09CD\u09B0\u099A\u09BE\u09B0 \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u0995 \u09AB\u09DF\u099C\u09C1\u09B2 \u09B9\u0995 \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09BF\u099B\u09BF\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u099C \u09AC\u09C1\u09A7\u09AC\u09BE\u09B0 (\u09E9 \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF) \u098F\u0987 \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8\u09C7\u09B0 \u09A4\u09BE\u09B0\u09BF\u0996 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u099B\u09BF\u09B2\u0964 \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u09B8\u0995\u09B2... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 3 February 2021, 5:36 PM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadOthers__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        skip: 2,
+        take: 1
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-4 line-right mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-box",
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a6%a6%e0%a7%8d%e0%a6%af%e0%a7%81%e0%a6%a4%e0%a7%87%e0%a6%b0-%e0%a6%ad%e0%a7%8b%e0%a6%97%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a4/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09A4\u09C7\u09B0 \u09AD\u09CB\u0997\u09BE\u09A8\u09CD\u09A4\u09BF \u0986\u09B0\u0993 \u09EC \u09A6\u09BF\u09A8!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u0989\u09A8\u09CD\u09A8\u09DF\u09A8 \u0995\u09BE\u099C\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0986\u09B0\u0993 \u099B\u09DF\u09A6\u09BF\u09A8 \u09A5\u09BE\u0995\u09AC\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09A4\u09C7\u09B0 \u09AD\u09CB\u0997\u09BE\u09A8\u09CD\u09A4\u09BF\u0964 \u098F \u099B\u09DF \u09A6\u09BF\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09DF\u09C7 \u09B8\u0982\u09AF\u09CB\u0997 \u09AC\u09A8\u09CD\u09A7 \u09B0\u09BE\u0996\u09AC\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09AC\u09BF\u09AD\u09BE\u0997\u0964 \u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 (\u09E7 \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF) \u098F\u0995 \u09AC\u09BF\u099C\u09CD\u099E\u09AA\u09CD\u09A4\u09BF \u099C\u09BE\u09A8\u09BF\u09DF\u09C7\u099B\u09C7\u09A8 \u09AC\u09BF\u09B7\u09DF\u099F\u09BF \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AC\u09BF\u0989\u09AC\u09CB-\u09E8... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 2 February 2021, 12:21 AM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadOthers__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        skip: 3,
+        take: 1
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-4 mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-box",
-        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a6%be-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b%e0%a6%a4%e0%a7%87-%e0%a6%a4%e0%a7%81/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09B0\u09BE\u09B8\u09CD\u09A4\u09BE \u09A5\u09C7\u0995\u09C7 \u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09A4\u09C7 \u09A4\u09C1\u09B2\u09C7 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3, \u0986\u099F\u0995 \u09E8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0995\u0995\u09CD\u09B8\u09AC\u09BE\u099C\u09BE\u09B0\u09C7 \u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09AC\u09BE\u09B8\u09C7 \u09A4\u09C1\u09B2\u09C7 \u0985\u09AA\u09B9\u09B0\u09A3\u09C7\u09B0 \u09AA\u09B0 \u098F\u0995 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3\u09C7\u09B0 \u0998\u099F\u09A8\u09BE \u0998\u099F\u09C7\u099B\u09C7\u0964 \u09AA\u09B0\u09BF\u09AC\u09B9\u09A8 \u09B6\u09CD\u09B0\u09AE\u09BF\u0995\u09B0\u09BE \u09A6\u09B2\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3 \u09B6\u09C7\u09B7\u09C7 \u0993\u0987 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u098F\u0995\u099C\u09A8 \u09B6\u09CD\u09B0\u09AE\u09BF\u0995 \u09A8\u09C7\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7 \u0989\u09AA\u09A2\u09CC\u0995\u09A8 \u09A6\u09BF\u09A4\u09C7 \u0997\u09BF\u09DF\u09C7\u0987 \u09AA\u09C1\u09B2\u09BF\u09B6\u09C7\u09B0 \u09B9\u09BE\u09A4\u09C7 \u09A7\u09B0\u09BE \u09AA\u09DC\u09C7... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 1 February 2021, 11:58 PM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadOthers__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        skip: 4,
+        take: 1
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "line-bottom mt-4 mb-4"
@@ -70410,113 +70625,17 @@ var SectionOne = /*#__PURE__*/function (_Component) {
         className: "col-md-12 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-bar",
-        href: "https://deshdorpon.com/%e0%a7%ac-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0%e0%a7%87-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%b8%e0%a6%ae%e0%a6%be%e0%a6%ac%e0%a7%87%e0%a6%b6%e0%a7%87%e0%a6%b0-%e0%a6%98%e0%a7%8b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4 col-md-6 pr-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "https://deshdorpon.com/media/2020/12/bnp_logo_deshdorpon_01.jpg",
-        width: "100%"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-8 col-md-6 pl-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09EC \u09AE\u09B9\u09BE\u09A8\u0997\u09B0\u09C7 \u09AE\u09B9\u09BE\u09B8\u09AE\u09BE\u09AC\u09C7\u09B6\u09C7\u09B0 \u0998\u09CB\u09B7\u09A3\u09BE \u09AC\u09BF\u098F\u09A8\u09AA\u09BF\u09B0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 5 February 2021, 2:36 PM")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: " line-bottom mt-0 mt-md-4"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4 mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-bar",
-        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%bf%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a6%be%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a6%b8%e0%a6%b9-%e0%a6%af%e0%a7%87%e0%a6%b8%e0%a6%ac-%e0%a6%8f%e0%a6%b2%e0%a6%be%e0%a6%95%e0%a6%be/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4 col-md-6 pr-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "https://deshdorpon.com/media/2021/02/Elecation_deshdorpon_01.psd.jpg",
-        width: "100%"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-8 col-md-6 pl-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u099C\u09BF\u09A8\u09CD\u09A6\u09BE\u09AC\u09BE\u099C\u09BE\u09B0\u09B8\u09B9 \u09AF\u09C7\u09B8\u09AC \u098F\u09B2\u09BE\u0995\u09BE\u09DF \u0986\u099C \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09A5\u09BE\u0995\u09AC\u09C7 \u09A8\u09BE"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 5 February 2021, 4:58 AM")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: " line-bottom mt-0 mt-md-4"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4 mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-bar",
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%9b%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a5%e0%a6%ae-%e0%a6%ae%e0%a6%be%e0%a6%b8%e0%a7%87-%e0%a6%b6%e0%a6%a4%e0%a6%be%e0%a6%a7%e0%a6%bf%e0%a6%95-%e0%a6%a7/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4 col-md-6 pr-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "https://deshdorpon.com/media/2021/01/mohila_porisod_deshdorpon.png",
-        width: "100%"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-8 col-md-6 pl-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09AC\u099B\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09AE\u09BE\u09B8\u09C7 \u09B6\u09A4\u09BE\u09A7\u09BF\u0995 \u09A7\u09B0\u09CD\u09B7\u09A3"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 2 February 2021, 2:04 AM")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "line-bottom mt-0 mt-md-4"
-      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_SubLead__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        skip: 0,
+        take: 3
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-bar",
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%b2%e0%a7%9f%e0%a7%87%e0%a6%b6%e0%a6%bf%e0%a7%9f%e0%a6%be-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%ac%e0%a6%be%e0%a6%b8%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4 col-md-6 pr-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "https://deshdorpon.com/media/2021/02/popy_deshdorpon_01.jpg",
-        width: "100%"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-8 col-md-6 pl-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09AE\u09BE\u09B2\u09DF\u09C7\u09B6\u09BF\u09DF\u09BE \u09AA\u09CD\u09B0\u09AC\u09BE\u09B8\u09C0\u0995\u09C7 \u09AC\u09BF\u09DF\u09C7 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AA\u09AA\u09BF!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 1 February 2021, 9:22 PM"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4 mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-bar",
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%ad%e0%a6%bf%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%aa%e0%a6%be%e0%a6%b0%e0%a7%8b%e0%a6%b8%e0%a6%ae%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%b6%e0%a6%99%e0%a7%8d/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4 col-md-6 pr-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "https://deshdorpon.com/media/2021/01/corona_after_deshdorpon.jpg",
-        width: "100%"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-8 col-md-6 pl-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u0995\u09AD\u09BF\u09A1\u09C7\u09B0 \u09AA\u09B0 \u09AA\u09BE\u09B0\u09CB\u09B8\u09AE\u09BF\u09DF\u09BE\u09B0 \u09B6\u0999\u09CD\u0995\u09BE"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 31 January 2021, 9:05 PM"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4 mt-4 mt-md-0"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "news-bar",
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a7%9f-%e0%a6%86%e0%a6%b0%e0%a6%93-%e0%a7%a7%e0%a7%ab-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4 col-md-6 pr-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "https://deshdorpon.com/media/2020/12/Corona_logo_deshdorpon_12_20.jpg",
-        width: "100%"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-8 col-md-6 pl-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u0995\u09B0\u09CB\u09A8\u09BE\u09DF \u0986\u09B0\u0993 \u09E7\u09EB \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1, \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u09EB\u09E6\u09EF"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-clock    "
-      }), " 28 January 2021, 4:54 PM"))))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_SubLead__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        skip: 3,
+        take: 3
+      }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-3 mt-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "latest-popular"
@@ -71526,12 +71645,6 @@ var SectionOne = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "line-bottom mt-4 mb-4"
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-xl-3 col-12 "
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "line-bottom mt-4 mb-4"
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "wetget mb-4"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "line-bottom mt-4 mb-4"
@@ -71542,75 +71655,7 @@ var SectionOne = /*#__PURE__*/function (_Component) {
         style: {
           height: 'auto !important'
         }
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ins", {
-        className: "adsbygoogle",
-        style: {
-          display: 'block',
-          height: '0px'
-        },
-        "data-ad-client": "ca-pub-3220166061238106",
-        "data-ad-slot": 4316716040,
-        "data-ad-format": "auto",
-        "data-full-width-responsive": "true",
-        "data-adsbygoogle-status": "done"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ins", {
-        id: "aswift_1_expand",
-        style: {
-          display: 'inline-table',
-          border: 'none',
-          height: '0px',
-          margin: '0px',
-          padding: '0px',
-          position: 'relative',
-          visibility: 'visible',
-          width: '1110px',
-          backgroundColor: 'transparent'
-        },
-        tabIndex: 0,
-        title: "Advertisement",
-        "aria-label": "Advertisement"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ins", {
-        id: "aswift_1_anchor",
-        style: {
-          display: 'block',
-          border: 'none',
-          height: '0px',
-          margin: '0px',
-          padding: '0px',
-          position: 'relative',
-          visibility: 'visible',
-          width: '1110px',
-          backgroundColor: 'transparent',
-          overflow: 'hidden',
-          opacity: 0
-        }
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
-        id: "aswift_1",
-        name: "aswift_1",
-        style: {
-          left: 0,
-          position: 'absolute',
-          top: 0,
-          border: 0,
-          width: '1110px',
-          height: '280px'
-        },
-        sandbox: "allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation",
-        width: 1110,
-        height: 280,
-        frameBorder: 0,
-        src: "https://googleads.g.doubleclick.net/pagead/ads?guci=2.2.0.0.2.2.0.0&client=ca-pub-3220166061238106&output=html&h=280&slotname=4316716040&adk=2682919827&adf=3185538927&pi=t.ma~as.4316716040&w=1110&fwrn=4&fwrnh=100&lmt=1612687841&rafmt=1&psa=1&format=1110x280&url=https%3A%2F%2Fdeshdorpon.com%2F&flash=0&fwr=0&fwrattr=true&rpe=1&resp_fmts=3&wgl=1&dt=1612687840359&bpp=14&bdt=5076&idt=1287&shv=r20210202&cbv=r20190131&ptt=9&saldr=aa&abxe=1&cookie=ID%3Db4c20b834225e13d-22092266e9c500be%3AT%3D1612330298%3ART%3D1612330298%3AS%3DALNI_MZFJXWw6LPlNGGkS2vcRk1nvcMHsA&prev_fmts=0x0&nras=1&correlator=6382092516898&frm=20&pv=1&ga_vid=700724346.1612330298&ga_sid=1612687842&ga_hid=2005021505&ga_fc=0&u_tz=360&u_his=2&u_java=0&u_h=768&u_w=1366&u_ah=728&u_aw=1366&u_cd=24&u_nplug=3&u_nmime=4&adx=123&ady=1148&biw=1356&bih=657&scr_x=0&scr_y=0&eid=44736376%2C21068769%2C21068893&oid=3&pvsid=261752696402459&pem=269&rx=0&eae=0&fc=1920&brdim=0%2C0%2C0%2C0%2C1366%2C0%2C1366%2C728%2C1366%2C657&vis=1&rsz=%7C%7CeEbr%7C&abl=CS&pfx=0&cms=2&fu=8320&bc=31&ifi=1&uci=a!1&btvi=1&fsb=1&xpc=GfzBu7Tklb&p=https%3A//deshdorpon.com&dtd=1297",
-        marginWidth: 0,
-        marginHeight: 0,
-        vspace: 0,
-        hspace: 0,
-        allowTransparency: "true",
-        scrolling: "no",
-        allowFullScreen: "true",
-        "data-google-container-id": "a!1",
-        "data-google-query-id": "CK-4vq-y1-4CFRkXrQYdZm4OAQ",
-        "data-load-complete": "true"
-      })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "ads")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "line-bottom mt-4 mb-4"
@@ -71736,7 +71781,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
   _createClass(Home, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null));
     }
   }]);
 
