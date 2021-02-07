@@ -14,16 +14,20 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/menu', 'FrontendController@menu');
-
-
 
 Route::resource('/', 'FrontendController');
+
 Route::resource('/category', 'FrontendController');
 
+// Api Routes
 
+Route::get('/menu', 'FrontendController@menu');
 
+Route::get('/news', 'FrontendController@news');
 
+Route::get('/api/lead/{skip}/{take}' , 'FrontendController@fetch_lead');
+Route::get('/api/sub/{skip}/{take}' , 'FrontendController@fetch_sub');
+Route::get('/api/news/{category}/{skip}/{take}' , 'FrontendController@fetch_news');
 
 Auth::routes(['register' => false]);
 

@@ -1,12 +1,34 @@
-import React from "react";
+import React from 'react';
+import axios from 'axios';
 import { Link } from "react-router-dom";
-const Navbar = () => {
-    return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+
+
+class Navbar extends React.Component {
+
+    state = {
+        item: [],
+      }
+
+      componentDidMount() {
+        axios.get('/menu')
+          .then(res => {
+            const item = res.data;
+            this.setState({ item });
+          })
+      }
+
+      render() {
+        return (
+
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container">
+
                 <Link className="navbar-brand" to="/">
                     Navbar
                 </Link>
+
+
+
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -21,17 +43,18 @@ const Navbar = () => {
 
                 <div className="collapse navbar-collapse" id="navbarColor03">
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
-                            <Link className="nav-link" to="/">
-                                Home
-                                <span className="sr-only">(current)</span>
+
+                    {this.state.item.map((category, idx) => (
+
+                        <li className="nav-item" key={idx}>
+                            <Link className="nav-link" to={'/category/' + category.slug}>
+                            {category.name}
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/category/1">
-                                Category
-                            </Link>
-                        </li>
+
+                    ))}
+
+
                     </ul>
                     <form className="form-inline my-2 my-lg-0">
                         <input
@@ -49,7 +72,13 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
-    );
-};
+
+
+
+
+        )
+      }
+}
 
 export default Navbar;
+

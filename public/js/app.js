@@ -161,18 +161,6 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/regenerator/index.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
-
-
-/***/ }),
-
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -68286,765 +68274,6 @@ if (false) {} else {
 
 /***/ }),
 
-/***/ "./node_modules/regenerator-runtime/runtime.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-var runtime = (function (exports) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-    return obj[key];
-  }
-  try {
-    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
-    define({}, "");
-  } catch (err) {
-    define = function(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  exports.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunction.displayName = define(
-    GeneratorFunctionPrototype,
-    toStringTagSymbol,
-    "GeneratorFunction"
-  );
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      define(prototype, method, function(arg) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-
-  exports.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  exports.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      define(genFun, toStringTagSymbol, "GeneratorFunction");
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  exports.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return PromiseImpl.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return PromiseImpl.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  exports.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList),
-      PromiseImpl
-    );
-
-    return exports.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        // Note: ["return"] must be used for ES3 parsing compatibility.
-        if (delegate.iterator["return"]) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  define(Gp, toStringTagSymbol, "Generator");
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  exports.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  exports.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-
-  // Regardless of whether this script is executing as a CommonJS module
-  // or not, return the runtime object so that we can declare the variable
-  // regeneratorRuntime in the outer scope, which allows this module to be
-  // injected easily by `bin/regenerator --include-runtime script.js`.
-  return exports;
-
-}(
-  // If this script is executing as a CommonJS module, use module.exports
-  // as the regeneratorRuntime namespace. Otherwise create a new empty
-  // object. Either way, the resulting object will be used to initialize
-  // the regeneratorRuntime variable at the top of this file.
-   true ? module.exports : undefined
-));
-
-try {
-  regeneratorRuntime = runtime;
-} catch (accidentalStrictMode) {
-  // This module should not be running in strict mode, so the above
-  // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, we can escape
-  // strict mode using a global Function call. This could conceivably fail
-  // if a Content Security Policy forbids using Function, but in that case
-  // the proper solution is to fix the accidental strict mode problem. If
-  // you've misconfigured your bundler to force strict mode and applied a
-  // CSP to forbid Function, and you're not willing to fix either of those
-  // problems, please detail your unique predicament in a GitHub issue.
-  Function("r", "regeneratorRuntime = r")(runtime);
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/resolve-pathname/esm/resolve-pathname.js":
 /*!***************************************************************!*\
   !*** ./node_modules/resolve-pathname/esm/resolve-pathname.js ***!
@@ -70767,86 +69996,6 @@ var Footer = function Footer() {
 
 /***/ }),
 
-/***/ "./resources/js/components/Menu.js":
-/*!*****************************************!*\
-  !*** ./resources/js/components/Menu.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-function Menu() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(null),
-      _useState2 = _slicedToArray(_useState, 2),
-      books = _useState2[0],
-      setBooks = _useState2[1];
-
-  var apiURL = "https://www.anapioficeandfire.com/api/books?pageSize=30";
-
-  var fetchData = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(apiURL);
-
-            case 2:
-              response = _context.sent;
-              document.getElementsByClassName('data').innerHtml(response);
-
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function fetchData() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
-    className: "data"
-  }));
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Menu);
-
-/***/ }),
-
 /***/ "./resources/js/components/Navbar.js":
 /*!*******************************************!*\
   !*** ./resources/js/components/Navbar.js ***!
@@ -70858,56 +70007,121 @@ function Menu() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
-var Navbar = function Navbar() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-    className: "navbar navbar-expand-lg navbar-light bg-light"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "navbar-brand",
-    to: "/"
-  }, "Navbar"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "navbar-toggler",
-    type: "button",
-    "data-toggle": "collapse",
-    "data-target": "#navbarColor03",
-    "aria-controls": "navbarColor03",
-    "aria-expanded": "false",
-    "aria-label": "Toggle navigation"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "navbar-toggler-icon"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "collapse navbar-collapse",
-    id: "navbarColor03"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-    className: "navbar-nav mr-auto"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item active"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "nav-link",
-    to: "/"
-  }, "Home", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "sr-only"
-  }, "(current)"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    className: "nav-link",
-    to: "/category/1"
-  }, "Category"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-    className: "form-inline my-2 my-lg-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "form-control mr-sm-2",
-    type: "text",
-    placeholder: "Search"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-secondary my-2 my-sm-0",
-    type: "submit"
-  }, "Search")))));
-};
+
+
+var Navbar = /*#__PURE__*/function (_React$Component) {
+  _inherits(Navbar, _React$Component);
+
+  var _super = _createSuper(Navbar);
+
+  function Navbar() {
+    var _this;
+
+    _classCallCheck(this, Navbar);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(Navbar, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/menu').then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
+        className: "navbar navbar-expand-lg navbar-light bg-light"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "container"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        className: "navbar-brand",
+        to: "/"
+      }, "Navbar"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "navbar-toggler",
+        type: "button",
+        "data-toggle": "collapse",
+        "data-target": "#navbarColor03",
+        "aria-controls": "navbarColor03",
+        "aria-expanded": "false",
+        "aria-label": "Toggle navigation"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "navbar-toggler-icon"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "collapse navbar-collapse",
+        id: "navbarColor03"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "navbar-nav mr-auto"
+      }, this.state.item.map(function (category, idx) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          className: "nav-item",
+          key: idx
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+          className: "nav-link",
+          to: '/category/' + category.slug
+        }, category.name));
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        className: "form-inline my-2 my-lg-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "form-control mr-sm-2",
+        type: "text",
+        placeholder: "Search"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-secondary my-2 my-sm-0",
+        type: "submit"
+      }, "Search")))));
+    }
+  }]);
+
+  return Navbar;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Navbar);
 
@@ -70924,1669 +70138,1490 @@ var Navbar = function Navbar() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _Sections_SectionOne__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Sections/SectionOne */ "./resources/js/components/Sections/SectionOne.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
-var Sections = function Sections() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-xl-9 col-12 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-8 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6 col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6 col-12 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 line-right mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-0 mt-md-4"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 mt-4 mt-md-0"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-xl-3 col-12 "
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "ad-box mt-4 mt-md-0"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "ad-box"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "ad-box"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-9"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-    className: "nav nav-tabs",
-    role: "tablist"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "nav-link active",
-    "data-toggle": "tab",
-    href: "#tabs-1",
-    role: "tab"
-  }, "First Panel")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "nav-link",
-    "data-toggle": "tab",
-    href: "#tabs-2",
-    role: "tab"
-  }, "Second Panel"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "tab-content"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "tab-pane active",
-    id: "tabs-1",
-    role: "tabpanel"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "tab-pane",
-    id: "tabs-2",
-    role: "tabpanel"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Second Panel")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box",
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar mt-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-9"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-8"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-box h-20"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4  line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4  line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "section-video mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AD\u09BF\u09A1\u09BF\u0993 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "videoone"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "video"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "video"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "video"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "video"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "news-bar big"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-4 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-8 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "d-none d-md-block"
-  }, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3 line-right"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u099B\u09C1\u099F\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099B\u09DF \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u098F \u099B\u09BE\u09DC\u09BE \u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u09B9\u09C0 \u0986\u09A6\u09C7\u09B6\u09C7 \u099B\u09C1\u099F\u09BF \u0986\u099B\u09C7 \u0986\u099F \u09A6\u09BF\u09A8\u0964 \u09A4\u09BE\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u0995 \u09A6\u09BF\u09A8 \u09AA\u09DC\u09C7\u099B\u09C7 \u09B8\u09BE\u09AA\u09CD\u09A4\u09BE\u09B9\u09BF\u0995 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7\u0964 \u09E9\u09EA \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " mt-4 mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "cat-title"
-  }, "\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "far fa-arrow-alt-circle-right"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-box mb-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-4",
-    src: 'https://via.placeholder.com/500'
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: " line-bottom mt-0 mt-md-4 mb-4"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "news-bar"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-4 col-md-6 pr-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: 'https://via.placeholder.com/500'
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-8 col-md-6 pl-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, " \u09E8\u09E6\u09E8\u09E7 \u09B8\u09BE\u09B2\u09C7 \u099B\u09C1\u099F\u09BF \u09E8\u09E8 \u09A6\u09BF\u09A8, \u09ED \u09A6\u09BF\u09A8\u0987 \u09B6\u09C1\u0995\u09CD\u09B0\u2013\u09B6\u09A8\u09BF "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fas fa-clock    "
-  }), " \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-12"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "line-bottom mt-4 mb-4"
-  })))));
-};
 
-/* harmony default export */ __webpack_exports__["default"] = (Sections);
+
+
+
+var Navbar = /*#__PURE__*/function (_React$Component) {
+  _inherits(Navbar, _React$Component);
+
+  var _super = _createSuper(Navbar);
+
+  function Navbar() {
+    _classCallCheck(this, Navbar);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Navbar, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Sections_SectionOne__WEBPACK_IMPORTED_MODULE_3__["default"], null);
+    }
+  }]);
+
+  return Navbar;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Navbar);
+
+/***/ }),
+
+/***/ "./resources/js/components/Sections/Parts/LeadFirst.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/Sections/Parts/LeadFirst.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+var LeadFirst = /*#__PURE__*/function (_Component) {
+  _inherits(LeadFirst, _Component);
+
+  var _super = _createSuper(LeadFirst);
+
+  function LeadFirst() {
+    var _this;
+
+    _classCallCheck(this, LeadFirst);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(LeadFirst, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/0/1").then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          key: index,
+          className: "news-box",
+          href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%93%e0%a7%9f%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ac%e0%a6%97%e0%a6%bf-%e0%a6%b2/"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-md-6 col-12 mt-4 mt-md-0"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, news.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-clock    "
+        }), " 5 February 2021, 5:02 AM")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-md-6 col-12"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: "https://deshdorpon.com/media/2021/02/train_maijghow_deshdorpon.jpg",
+          width: "100%",
+          height: "100%"
+        }))));
+      }));
+    }
+  }]);
+
+  return LeadFirst;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (LeadFirst);
+
+/***/ }),
+
+/***/ "./resources/js/components/Sections/SectionOne.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/Sections/SectionOne.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Parts_LeadFirst__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Parts/LeadFirst */ "./resources/js/components/Sections/Parts/LeadFirst.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+var SectionOne = /*#__PURE__*/function (_Component) {
+  _inherits(SectionOne, _Component);
+
+  var _super = _createSuper(SectionOne);
+
+  function SectionOne() {
+    _classCallCheck(this, SectionOne);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SectionOne, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        "class": "container"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row",
+        style: {
+          height: 'auto !important'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-xl-9 col-12 line-right mt-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-8 line-right"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LeadFirst__WEBPACK_IMPORTED_MODULE_1__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-box",
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%81-%e0%a6%9a%e0%a6%bf-%e0%a7%a7%e0%a7%aa-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09B8\u09C1 \u099A\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09B0\u09BF\u09AE\u09BE\u09A8\u09CD\u09A1\u09C7\xA0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09B8\u09C7\u09A8\u09BE\u09AC\u09BE\u09B9\u09BF\u09A8\u09C0\u09B0 \u09B9\u09BE\u09A4\u09C7 \u0986\u099F\u0995 \u09AE\u09BF\u09DF\u09BE\u09A8\u09BE\u09AE\u09BE\u09B0\u09C7\u09B0 \u09A8\u09C7\u09A4\u09CD\u09B0\u09C0 \u0985\u0982 \u09B8\u09BE\u09A8 \u09B8\u09C1 \u099A\u09BF\u0995\u09C7 \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09B0\u09BF\u09AE\u09BE\u09A8\u09CD\u09A1\u09C7 \u09A8\u09BF\u09DF\u09C7\u099B\u09C7 \u09A6\u09C7\u09B6\u099F\u09BF\u09B0 \u09AA\u09C1\u09B2\u09BF\u09B6\u0964 \u098F\u09B0 \u0986\u0997\u09C7 \u0985\u09AC\u09C8\u09A7\u09AD\u09BE\u09AC\u09C7 \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09B8\u09B0\u099E\u09CD\u099C\u09BE\u09AE\u09BE\u09A6\u09BF \u0986\u09AE\u09A6\u09BE\u09A8\u09BF\u09B0 \u0985\u09AD\u09BF\u09AF\u09CB\u0997\u09C7 \u09A4\u09BE\u09B0 \u09AC\u09BF\u09B0\u09C1\u09A6\u09CD\u09A7\u09C7 \u09AE\u09BE\u09AE\u09B2\u09BE \u09A6\u09BE\u09DF\u09C7\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u0964 \u09B8\u09C1... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 3 February 2021, 8:22 PM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-4 mb-4"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 line-right"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-box",
+        href: "https://deshdorpon.com/%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%a6%e0%a6%b2-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a7%81-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2 \u09A8\u09C7\u09A4\u09BE \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09C7\u099B\u09BE\u09B2\u09CB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09B8\u09BF\u09B2\u09C7\u099F \u09AE\u09B9\u09BE\u09A8\u0997\u09B0 \u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2\u09C7\u09B0 \u09B8\u09BE\u09AC\u09C7\u0995 \u09B8\u09B9-\u09AA\u09CD\u09B0\u099A\u09BE\u09B0 \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u0995 \u09AB\u09DF\u099C\u09C1\u09B2 \u09B9\u0995 \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09BF\u099B\u09BF\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u099C \u09AC\u09C1\u09A7\u09AC\u09BE\u09B0 (\u09E9 \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF) \u098F\u0987 \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8\u09C7\u09B0 \u09A4\u09BE\u09B0\u09BF\u0996 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u099B\u09BF\u09B2\u0964 \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u09B8\u0995\u09B2... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 3 February 2021, 5:36 PM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 line-right mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-box",
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a6%a6%e0%a7%8d%e0%a6%af%e0%a7%81%e0%a6%a4%e0%a7%87%e0%a6%b0-%e0%a6%ad%e0%a7%8b%e0%a6%97%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a4/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09A4\u09C7\u09B0 \u09AD\u09CB\u0997\u09BE\u09A8\u09CD\u09A4\u09BF \u0986\u09B0\u0993 \u09EC \u09A6\u09BF\u09A8!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u0989\u09A8\u09CD\u09A8\u09DF\u09A8 \u0995\u09BE\u099C\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0986\u09B0\u0993 \u099B\u09DF\u09A6\u09BF\u09A8 \u09A5\u09BE\u0995\u09AC\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09A4\u09C7\u09B0 \u09AD\u09CB\u0997\u09BE\u09A8\u09CD\u09A4\u09BF\u0964 \u098F \u099B\u09DF \u09A6\u09BF\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09DF\u09C7 \u09B8\u0982\u09AF\u09CB\u0997 \u09AC\u09A8\u09CD\u09A7 \u09B0\u09BE\u0996\u09AC\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09AC\u09BF\u09AD\u09BE\u0997\u0964 \u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 (\u09E7 \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF) \u098F\u0995 \u09AC\u09BF\u099C\u09CD\u099E\u09AA\u09CD\u09A4\u09BF \u099C\u09BE\u09A8\u09BF\u09DF\u09C7\u099B\u09C7\u09A8 \u09AC\u09BF\u09B7\u09DF\u099F\u09BF \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AC\u09BF\u0989\u09AC\u09CB-\u09E8... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 2 February 2021, 12:21 AM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-box",
+        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a6%be-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b%e0%a6%a4%e0%a7%87-%e0%a6%a4%e0%a7%81/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09B0\u09BE\u09B8\u09CD\u09A4\u09BE \u09A5\u09C7\u0995\u09C7 \u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09A4\u09C7 \u09A4\u09C1\u09B2\u09C7 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3, \u0986\u099F\u0995 \u09E8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0995\u0995\u09CD\u09B8\u09AC\u09BE\u099C\u09BE\u09B0\u09C7 \u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09AC\u09BE\u09B8\u09C7 \u09A4\u09C1\u09B2\u09C7 \u0985\u09AA\u09B9\u09B0\u09A3\u09C7\u09B0 \u09AA\u09B0 \u098F\u0995 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3\u09C7\u09B0 \u0998\u099F\u09A8\u09BE \u0998\u099F\u09C7\u099B\u09C7\u0964 \u09AA\u09B0\u09BF\u09AC\u09B9\u09A8 \u09B6\u09CD\u09B0\u09AE\u09BF\u0995\u09B0\u09BE \u09A6\u09B2\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3 \u09B6\u09C7\u09B7\u09C7 \u0993\u0987 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u098F\u0995\u099C\u09A8 \u09B6\u09CD\u09B0\u09AE\u09BF\u0995 \u09A8\u09C7\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7 \u0989\u09AA\u09A2\u09CC\u0995\u09A8 \u09A6\u09BF\u09A4\u09C7 \u0997\u09BF\u09DF\u09C7\u0987 \u09AA\u09C1\u09B2\u09BF\u09B6\u09C7\u09B0 \u09B9\u09BE\u09A4\u09C7 \u09A7\u09B0\u09BE \u09AA\u09DC\u09C7... "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 1 February 2021, 11:58 PM"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-4 mb-4"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-bar",
+        href: "https://deshdorpon.com/%e0%a7%ac-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0%e0%a7%87-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%b8%e0%a6%ae%e0%a6%be%e0%a6%ac%e0%a7%87%e0%a6%b6%e0%a7%87%e0%a6%b0-%e0%a6%98%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-4 col-md-6 pr-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "https://deshdorpon.com/media/2020/12/bnp_logo_deshdorpon_01.jpg",
+        width: "100%"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-8 col-md-6 pl-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09EC \u09AE\u09B9\u09BE\u09A8\u0997\u09B0\u09C7 \u09AE\u09B9\u09BE\u09B8\u09AE\u09BE\u09AC\u09C7\u09B6\u09C7\u09B0 \u0998\u09CB\u09B7\u09A3\u09BE \u09AC\u09BF\u098F\u09A8\u09AA\u09BF\u09B0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 5 February 2021, 2:36 PM")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: " line-bottom mt-0 mt-md-4"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-bar",
+        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%bf%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a6%be%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a6%b8%e0%a6%b9-%e0%a6%af%e0%a7%87%e0%a6%b8%e0%a6%ac-%e0%a6%8f%e0%a6%b2%e0%a6%be%e0%a6%95%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-4 col-md-6 pr-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "https://deshdorpon.com/media/2021/02/Elecation_deshdorpon_01.psd.jpg",
+        width: "100%"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-8 col-md-6 pl-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u099C\u09BF\u09A8\u09CD\u09A6\u09BE\u09AC\u09BE\u099C\u09BE\u09B0\u09B8\u09B9 \u09AF\u09C7\u09B8\u09AC \u098F\u09B2\u09BE\u0995\u09BE\u09DF \u0986\u099C \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09A5\u09BE\u0995\u09AC\u09C7 \u09A8\u09BE"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 5 February 2021, 4:58 AM")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: " line-bottom mt-0 mt-md-4"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-bar",
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%9b%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a5%e0%a6%ae-%e0%a6%ae%e0%a6%be%e0%a6%b8%e0%a7%87-%e0%a6%b6%e0%a6%a4%e0%a6%be%e0%a6%a7%e0%a6%bf%e0%a6%95-%e0%a6%a7/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-4 col-md-6 pr-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "https://deshdorpon.com/media/2021/01/mohila_porisod_deshdorpon.png",
+        width: "100%"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-8 col-md-6 pl-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09AC\u099B\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09AE\u09BE\u09B8\u09C7 \u09B6\u09A4\u09BE\u09A7\u09BF\u0995 \u09A7\u09B0\u09CD\u09B7\u09A3"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 2 February 2021, 2:04 AM")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-0 mt-md-4"
+      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-bar",
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%b2%e0%a7%9f%e0%a7%87%e0%a6%b6%e0%a6%bf%e0%a7%9f%e0%a6%be-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%ac%e0%a6%be%e0%a6%b8%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-4 col-md-6 pr-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "https://deshdorpon.com/media/2021/02/popy_deshdorpon_01.jpg",
+        width: "100%"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-8 col-md-6 pl-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u09AE\u09BE\u09B2\u09DF\u09C7\u09B6\u09BF\u09DF\u09BE \u09AA\u09CD\u09B0\u09AC\u09BE\u09B8\u09C0\u0995\u09C7 \u09AC\u09BF\u09DF\u09C7 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AA\u09AA\u09BF!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 1 February 2021, 9:22 PM"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-bar",
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%ad%e0%a6%bf%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%aa%e0%a6%be%e0%a6%b0%e0%a7%8b%e0%a6%b8%e0%a6%ae%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%b6%e0%a6%99%e0%a7%8d/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-4 col-md-6 pr-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "https://deshdorpon.com/media/2021/01/corona_after_deshdorpon.jpg",
+        width: "100%"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-8 col-md-6 pl-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u0995\u09AD\u09BF\u09A1\u09C7\u09B0 \u09AA\u09B0 \u09AA\u09BE\u09B0\u09CB\u09B8\u09AE\u09BF\u09DF\u09BE\u09B0 \u09B6\u0999\u09CD\u0995\u09BE"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 31 January 2021, 9:05 PM"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-4 mt-4 mt-md-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "news-bar",
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a7%9f-%e0%a6%86%e0%a6%b0%e0%a6%93-%e0%a7%a7%e0%a7%ab-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-4 col-md-6 pr-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "https://deshdorpon.com/media/2020/12/Corona_logo_deshdorpon_12_20.jpg",
+        width: "100%"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-8 col-md-6 pl-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "\u0995\u09B0\u09CB\u09A8\u09BE\u09DF \u0986\u09B0\u0993 \u09E7\u09EB \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1, \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u09EB\u09E6\u09EF"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-clock    "
+      }), " 28 January 2021, 4:54 PM"))))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-3 mt-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "latest-popular"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "nav nav-tabs",
+        role: "tablist"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "nav-item"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "nav-link show active",
+        "data-toggle": "tab",
+        href: "#tabs-1",
+        role: "tab",
+        "aria-selected": "true"
+      }, "\u09B8\u09B0\u09CD\u09AC\u09B6\u09C7\u09B7")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "nav-item"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "nav-link",
+        "data-toggle": "tab",
+        href: "#tabs-2",
+        role: "tab",
+        "aria-selected": "false"
+      }, "\u09B8\u09BF\u09B2\u09C7\u099F\u09C7\u09B0 \u09B8\u09B0\u09CD\u09AC\u09B6\u09C7\u09B7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tab-content"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tab-pane show active",
+        id: "tabs-1",
+        role: "tabpanel"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "bg-light",
+        style: {
+          maxHeight: '450px',
+          overflowY: 'scroll'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a7%ac-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0%e0%a7%87-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%b8%e0%a6%ae%e0%a6%be%e0%a6%ac%e0%a7%87%e0%a6%b6%e0%a7%87%e0%a6%b0-%e0%a6%98%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09EC \u09AE\u09B9\u09BE\u09A8\u0997\u09B0\u09C7 \u09AE\u09B9\u09BE\u09B8\u09AE\u09BE\u09AC\u09C7\u09B6\u09C7\u09B0 \u0998\u09CB\u09B7\u09A3\u09BE \u09AC\u09BF\u098F\u09A8\u09AA\u09BF\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%93%e0%a7%9f%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ac%e0%a6%97%e0%a6%bf-%e0%a6%b2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09BE\u0987\u099C\u0997\u09BE\u0981\u0993\u09DF\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09AC\u0997\u09BF \u09B2\u09BE\u0987\u09A8\u099A\u09CD\u09AF\u09C1\u09A4, \u09A6\u09C7\u09B6\u09C7\u09B0 \u09B8\u0999\u09CD\u0997\u09C7 \u09B0\u09C7\u09B2 \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09AC\u09A8\u09CD\u09A7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%bf%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a6%be%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a6%b8%e0%a6%b9-%e0%a6%af%e0%a7%87%e0%a6%b8%e0%a6%ac-%e0%a6%8f%e0%a6%b2%e0%a6%be%e0%a6%95%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099C\u09BF\u09A8\u09CD\u09A6\u09BE\u09AC\u09BE\u099C\u09BE\u09B0\u09B8\u09B9 \u09AF\u09C7\u09B8\u09AC \u098F\u09B2\u09BE\u0995\u09BE\u09DF \u0986\u099C \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09A5\u09BE\u0995\u09AC\u09C7 \u09A8\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%81-%e0%a6%9a%e0%a6%bf-%e0%a7%a7%e0%a7%aa-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09C1 \u099A\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09B0\u09BF\u09AE\u09BE\u09A8\u09CD\u09A1\u09C7\xA0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%a6%e0%a6%b2-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a7%81-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2 \u09A8\u09C7\u09A4\u09BE \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09C7\u099B\u09BE\u09B2\u09CB")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%9b%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a5%e0%a6%ae-%e0%a6%ae%e0%a6%be%e0%a6%b8%e0%a7%87-%e0%a6%b6%e0%a6%a4%e0%a6%be%e0%a6%a7%e0%a6%bf%e0%a6%95-%e0%a6%a7/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u099B\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09AE\u09BE\u09B8\u09C7 \u09B6\u09A4\u09BE\u09A7\u09BF\u0995 \u09A7\u09B0\u09CD\u09B7\u09A3")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a6%a6%e0%a7%8d%e0%a6%af%e0%a7%81%e0%a6%a4%e0%a7%87%e0%a6%b0-%e0%a6%ad%e0%a7%8b%e0%a6%97%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a4/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09A4\u09C7\u09B0 \u09AD\u09CB\u0997\u09BE\u09A8\u09CD\u09A4\u09BF \u0986\u09B0\u0993 \u09EC \u09A6\u09BF\u09A8!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a6%be-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b%e0%a6%a4%e0%a7%87-%e0%a6%a4%e0%a7%81/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE \u09A5\u09C7\u0995\u09C7 \u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09A4\u09C7 \u09A4\u09C1\u09B2\u09C7 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3, \u0986\u099F\u0995 \u09E8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%b2%e0%a7%9f%e0%a7%87%e0%a6%b6%e0%a6%bf%e0%a7%9f%e0%a6%be-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%ac%e0%a6%be%e0%a6%b8%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09BE\u09B2\u09DF\u09C7\u09B6\u09BF\u09DF\u09BE \u09AA\u09CD\u09B0\u09AC\u09BE\u09B8\u09C0\u0995\u09C7 \u09AC\u09BF\u09DF\u09C7 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AA\u09AA\u09BF!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a6%a7%e0%a6%be%e0%a6%a8%e0%a7%80%e0%a6%a4%e0%a7%87-%e0%a6%a7%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a6%a3%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%ac%e0%a6%bf%e0%a6%b6/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B0\u09BE\u099C\u09A7\u09BE\u09A8\u09C0\u09A4\u09C7 \u09A7\u09B0\u09CD\u09B7\u09A3\u09C7\u09B0 \u09AA\u09B0 \u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09DF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u0995\u09C7 \u09B9\u09A4\u09CD\u09AF\u09BE\u09B0 \u0985\u09AD\u09BF\u09AF\u09CB\u0997")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%ad%e0%a6%bf%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%aa%e0%a6%be%e0%a6%b0%e0%a7%8b%e0%a6%b8%e0%a6%ae%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%b6%e0%a6%99%e0%a7%8d/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09AD\u09BF\u09A1\u09C7\u09B0 \u09AA\u09B0 \u09AA\u09BE\u09B0\u09CB\u09B8\u09AE\u09BF\u09DF\u09BE\u09B0 \u09B6\u0999\u09CD\u0995\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a4%e0%a6%bf%e0%a6%ae%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80-%e0%a6%aa%e0%a6%b2%e0%a6%95%e0%a6%b8%e0%a6%b9-%e0%a6%a6%e0%a7%8d%e0%a6%ac%e0%a6%bf%e0%a6%a4/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09CD\u09B0\u09A4\u09BF\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09C0 \u09AA\u09B2\u0995\u09B8\u09B9 \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09A6\u09BF\u09A8\u09C7 \u099F\u09BF\u0995\u09BE \u09A8\u09BF\u09B2\u09C7\u09A8 \u09EB\u09EA\u09E7 \u099C\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a7%9f-%e0%a6%86%e0%a6%b0%e0%a6%93-%e0%a7%a7%e0%a7%ab-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09DF \u0986\u09B0\u0993 \u09E7\u09EB \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1, \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u09EB\u09E6\u09EF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%87%e0%a6%aa%e0%a6%bf%e0%a6%8f%e0%a6%b2%e0%a7%87%e0%a6%b0-%e0%a6%a8%e0%a6%bf%e0%a6%b2%e0%a6%be%e0%a6%ae-%e0%a7%a7%e0%a7%ae-%e0%a6%ab%e0%a7%87%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a7%81/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u0987\u09AA\u09BF\u098F\u09B2\u09C7\u09B0 \u09A8\u09BF\u09B2\u09BE\u09AE \u09E7\u09EE \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/30138-2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099A\u099F\u09CD\u099F\u0997\u09CD\u09B0\u09BE\u09AE\u09C7\u09B0 \u09A8\u09A4\u09C1\u09A8 \u2018\u09A8\u0997\u09B0\u09AA\u09BF\u09A4\u09BE\u2019 \u09A8\u09CC\u0995\u09BE\u09B0 \u09B0\u09C7\u099C\u09BE\u0989\u09B2 \u0995\u09B0\u09BF\u09AE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%a8%e0%a7%80%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a7%87-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80%e0%a6%b0-%e0%a6%a6%e0%a6%97%e0%a7%8d%e0%a6%a7/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BF\u09DF\u09BE\u09A8\u09C0\u09AC\u09BE\u099C\u09BE\u09B0\u09C7 \u2018\u09A8\u09BE\u09B0\u09C0\u09B0\u2019 \u09A6\u0997\u09CD\u09A7 \u09B2\u09BE\u09B6 \u0989\u09A6\u09CD\u09A7\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%be%e0%a6%ac%e0%a7%87%e0%a6%95-%e0%a6%b6%e0%a6%bf%e0%a6%95%e0%a7%8d%e0%a6%b7%e0%a6%be%e0%a6%ae%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80-%e0%a6%a8%e0%a6%be%e0%a6%b9%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BE\u09AC\u09C7\u0995 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09C0 \u09A8\u09BE\u09B9\u09BF\u09A6\u09C7\u09B0 \u098F\u09AA\u09BF\u098F\u09B8 \u09AA\u09B2\u09BE\u09A4\u0995: \u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3\u09BE\u09B2\u09DF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%ae%e0%a6%bf-%e0%a6%b8%e0%a7%8d%e0%a6%ac%e0%a7%87%e0%a6%9a%e0%a7%8d%e0%a6%9b%e0%a6%be%e0%a7%9f-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%a8%e0%a6%bf%e0%a6%9a%e0%a7%8d%e0%a6%9b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u09AE\u09BF \u09B8\u09CD\u09AC\u09C7\u099A\u09CD\u099B\u09BE\u09DF \u099F\u09BF\u0995\u09BE \u09A8\u09BF\u099A\u09CD\u099B\u09BF : \u09B0\u09C1\u09A8\u09C1 \u09AC\u09C7\u09B0\u09C1\u09A8\u09BF\u0995\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%82%e0%a6%b2%e0%a6%be-%e0%a6%8f%e0%a6%95%e0%a6%be%e0%a6%a1%e0%a7%87%e0%a6%ae%e0%a6%bf-%e0%a6%b8%e0%a6%be%e0%a6%b9%e0%a6%bf%e0%a6%a4%e0%a7%8d%e0%a6%af-%e0%a6%aa%e0%a7%81-2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BE\u0982\u09B2\u09BE \u098F\u0995\u09BE\u09A1\u09C7\u09AE\u09BF \u09B8\u09BE\u09B9\u09BF\u09A4\u09CD\u09AF \u09AA\u09C1\u09B0\u09B8\u09CD\u0995\u09BE\u09B0 \u09AA\u09C7\u09B2\u09C7\u09A8 \u09E7\u09E6 \u099C\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%85%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%9f%e0%a6%bf%e0%a6%ac%e0%a6%a1%e0%a6%bf-%e0%a6%aa%e0%a6%b0%e0%a7%80%e0%a6%95%e0%a7%8d/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u0985\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u09AC\u09A1\u09BF \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09A6\u09BF\u09B2 \u09B8\u09B0\u0995\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a7%aa-%e0%a6%ac%e0%a6%9b%e0%a6%b0%e0%a7%87-%e0%a7%a9%e0%a7%a6-%e0%a6%b9%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0-%e0%a7%ab%e0%a7%ad%e0%a7%a9-%e0%a6%ae%e0%a6%bf%e0%a6%a5%e0%a7%8d%e0%a6%af%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09EA \u09AC\u099B\u09B0\u09C7 \u09E9\u09E6 \u09B9\u09BE\u099C\u09BE\u09B0 \u09EB\u09ED\u09E9 \u09AE\u09BF\u09A5\u09CD\u09AF\u09C7 \u09AC\u09B2\u09C7 \u09A8\u099C\u09BF\u09B0 \u09B8\u09C3\u09B7\u09CD\u099F\u09BF \u09AA\u09CD\u09B0\u09C7\u09B8\u09BF\u09A1\u09C7\u09A8\u09CD\u099F \u099F\u09CD\u09B0\u09BE\u09AE\u09CD\u09AA\u09C7\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a7%81%e0%a6%a7%e0%a6%ac%e0%a6%be%e0%a6%b0-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%ac%e0%a6%be%e0%a6%82%e0%a6%b2%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%95%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09C1\u09A7\u09AC\u09BE\u09B0 \u09A5\u09C7\u0995\u09C7 \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09C7 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u099F\u09BF\u0995\u09BE\u09A6\u09BE\u09A8 \u09B6\u09C1\u09B0\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a6%be%e0%a6%ae%e0%a7%8d%e0%a6%aa%e0%a6%95%e0%a7%87-%e0%a6%b8%e0%a7%8b%e0%a6%b2%e0%a6%be%e0%a6%87%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a6%bf-%e0%a6%95%e0%a6%a8%e0%a7%8d%e0%a6%af/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099F\u09CD\u09B0\u09BE\u09AE\u09CD\u09AA\u0995\u09C7 \u09B8\u09CB\u09B2\u09BE\u0987\u09AE\u09BE\u09A8\u09BF \u0995\u09A8\u09CD\u09AF\u09BE\u09B0 \u09B9\u09C1\u0981\u09B6\u09BF\u09DF\u09BE\u09B0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a7%ae-%e0%a6%ab%e0%a7%87%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a7%81%e0%a7%9f%e0%a6%be%e0%a6%b0%e0%a6%bf-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%9f%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09EE \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF \u09A5\u09C7\u0995\u09C7 \u09A6\u09C7\u09B6\u09C7 \u099F\u09BF\u0995\u09BE\u09A6\u09BE\u09A8 \u09B6\u09C1\u09B0\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%aa%e0%a7%8c%e0%a6%81%e0%a6%9b%e0%a6%be%e0%a6%b2-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A6\u09C7\u09B6\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09B2 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u099F\u09BF\u0995\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a8%e0%a7%8b%e0%a7%9f%e0%a6%be%e0%a6%96%e0%a6%be%e0%a6%b2%e0%a7%80%e0%a6%a4%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a6%ac%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0-%e0%a6%95%e0%a6%b0%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A8\u09CB\u09DF\u09BE\u0996\u09BE\u09B2\u09C0\u09A4\u09C7 \u09AC\u09BF\u09AC\u09B8\u09CD\u09A4\u09CD\u09B0 \u0995\u09B0\u09C7 \u09A8\u09BF\u09B0\u09CD\u09AF\u09BE\u09A4\u09A8, \u09AE\u09B9\u09BF\u09B2\u09BE \u09AA\u09B0\u09BF\u09B7\u09A6\u09C7\u09B0 \u0997\u09AD\u09C0\u09B0 \u0989\u09A6\u09CD\u09AC\u09C7\u0997")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9a%e0%a6%b2%e0%a7%87-%e0%a6%97%e0%a7%87%e0%a6%b2%e0%a7%87%e0%a6%a8-%e0%a6%b2%e0%a7%9c%e0%a6%be%e0%a6%95%e0%a7%81-%e0%a6%af%e0%a7%81%e0%a6%a6%e0%a7%8d%e0%a6%a7%e0%a6%be-%e0%a6%a8%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099A\u09B2\u09C7 \u0997\u09C7\u09B2\u09C7\u09A8 \u09B2\u09DC\u09BE\u0995\u09C1 \u09AF\u09CB\u09A6\u09CD\u09A7\u09BE \u09A8\u09BF\u099C\u09BE\u09AE\u0989\u09A6\u09CD\u09A6\u09BF\u09A8 \u09B2\u09B8\u09CD\u0995\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%ac%e0%a6%99%e0%a7%8d%e0%a6%97%e0%a6%ad%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%95%e0%a7%8d%e0%a6%b8%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u099F\u09BF\u0995\u09BE \u09AC\u0999\u09CD\u0997\u09AD\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B0 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE\u09AE\u09C2\u09B2\u0995 \u09AA\u09CD\u09B0\u09DF\u09CB\u0997\u09C7\u09B0 \u0986\u09AC\u09C7\u09A6\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a7%ad%e0%a7%a6-%e0%a6%ac%e0%a6%9b%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%95%e0%a7%8b%e0%a6%a8%e0%a7%8b-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80%e0%a6%b0-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09ED\u09E6 \u09AC\u099B\u09B0 \u09AA\u09B0 \u0995\u09CB\u09A8\u09CB \u09A8\u09BE\u09B0\u09C0\u09B0 \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1\u09A6\u09A3\u09CD\u09A1 \u0995\u09BE\u09B0\u09CD\u09AF\u0995\u09B0 \u0995\u09B0\u09B2 \u09AF\u09C1\u0995\u09CD\u09A4\u09B0\u09BE\u09B7\u09CD\u099F\u09CD\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a7%8b%e0%a6%a8-%e0%a6%9c%e0%a7%87%e0%a6%b2%e0%a6%be%e0%a7%9f-%e0%a6%95%e0%a7%80-%e0%a6%aa%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%be%e0%a6%a3-%e0%a6%ad%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%95/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09CB\u09A8 \u099C\u09C7\u09B2\u09BE\u09DF \u0995\u09C0 \u09AA\u09B0\u09BF\u09AE\u09BE\u09A3 \u09AD\u09CD\u09AF\u09BE\u0995\u09B8\u09BF\u09A8 \u09AF\u09BE\u099A\u09CD\u099B\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%aa%e0%a6%bf-%e0%a6%95%e0%a7%87-%e0%a6%b9%e0%a6%be%e0%a6%b2%e0%a6%a6%e0%a6%be%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%98%e0%a6%a8%e0%a6%bf%e0%a6%b7%e0%a7%8d%e0%a6%a0-%e0%a6%b8%e0%a6%b9/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09BF \u0995\u09C7 \u09B9\u09BE\u09B2\u09A6\u09BE\u09B0\u09C7\u09B0 \u2018\u0998\u09A8\u09BF\u09B7\u09CD\u09A0 \u09B8\u09B9\u09AF\u09CB\u0997\u09C0\u2019 \u0985\u09AC\u09A8\u09CD\u09A4\u09BF\u0995\u09BE \u0997\u09CD\u09B0\u09C7\u09AA\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a4%e0%a6%bf%e0%a6%b0%e0%a7%8b%e0%a6%a7%e0%a7%80-%e0%a6%b8%e0%a7%8d%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a7%87-%e0%a6%86/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09B0\u09CB\u09A8\u09BE \u09AA\u09CD\u09B0\u09A4\u09BF\u09B0\u09CB\u09A7\u09C0 \u09B8\u09CD\u09AA\u09CD\u09B0\u09C7 \u0986\u09AC\u09BF\u09B7\u09CD\u0995\u09BE\u09B0\u09C7\u09B0 \u09A6\u09BE\u09AC\u09BF \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09BF \u0997\u09AC\u09C7\u09B7\u0995\u09A6\u09C7\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%81%e0%a6%b8%e0%a7%8d%e0%a6%a5-%e0%a6%b9%e0%a6%b2%e0%a7%87%e0%a6%93-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%89%e0%a6%aa%e0%a6%b8%e0%a6%b0%e0%a7%8d%e0%a6%97/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09C1\u09B8\u09CD\u09A5 \u09B9\u09B2\u09C7\u0993 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u0989\u09AA\u09B8\u09B0\u09CD\u0997 \u09A5\u09BE\u0995\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7 \u099B\u09DF \u09AE\u09BE\u09B8 : \u0997\u09AC\u09C7\u09B7\u09A3\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b2%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a6%a8-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%86%e0%a6%b8%e0%a6%b2%e0%a7%87%e0%a6%a8-%e0%a6%86%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B2\u09A8\u09CD\u09A1\u09A8\u09C7\u09B0 \u0995\u09B0\u09CB\u09A8\u09BE \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF\u09A4\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F \u098F\u09B2\u09C7\u09A8 \u0986\u09B0\u0993 \u09EA\u09E9 \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%a8%e0%a7%81%e0%a6%b6%e0%a6%95%e0%a6%be-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%aa%e0%a6%be%e0%a7%9f%e0%a7%81%e0%a6%aa%e0%a6%a5%e0%a7%87%e0%a6%93-%e0%a6%ae%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u09A8\u09C1\u09B6\u0995\u09BE \u09B9\u09A4\u09CD\u09AF\u09BE : \u09AA\u09BE\u09DF\u09C1\u09AA\u09A5\u09C7\u0993 \u09AE\u09BF\u09B2\u09C7\u099B\u09C7 \u09A8\u09BF\u09B0\u09CD\u09AF\u09BE\u09A4\u09A8\u09C7\u09B0 \u0986\u09B2\u09BE\u09AE\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0-%e0%a6%93-%e0%a6%9c%e0%a7%87%e0%a6%b2%e0%a6%be-%e0%a6%86%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F \u09AE\u09B9\u09BE\u09A8\u0997\u09B0 \u0993 \u099C\u09C7\u09B2\u09BE \u0986\u0993\u09DF\u09BE\u09AE\u09C0 \u09B2\u09C0\u0997\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09A3\u09BE\u0999\u09CD\u0997 \u0995\u09AE\u09BF\u099F\u09BF \u0998\u09CB\u09B7\u09A3\u09BE (\u09A4\u09BE\u09B2\u09BF\u0995\u09BE\u09B8\u09B9)")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a7%e0%a6%ac%e0%a7%80%e0%a6%b0-%e0%a6%9c%e0%a6%a8%e0%a7%8d%e0%a6%ae%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87-%e0%a6%97%e0%a6%bf%e0%a7%9f%e0%a7%87-%e0%a6%b2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BE\u09A8\u09CD\u09A7\u09AC\u09C0\u09B0 \u099C\u09A8\u09CD\u09AE\u09A6\u09BF\u09A8\u09C7 \u0997\u09BF\u09DF\u09C7 \u09B2\u09BE\u09B6 \u09B9\u09B2\u09C7\u09A8 \u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0\u09AE\u09BE\u0987\u09A8\u09CD\u09A1\u09C7\u09B0 \u099B\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%95%e0%a6%ac%e0%a7%87-%e0%a6%86%e0%a6%b8%e0%a6%ac%e0%a7%87-%e0%a6%9c%e0%a6%be%e0%a6%a8%e0%a6%be%e0%a6%b2%e0%a7%8b-%e0%a6%b8%e0%a7%8d%e0%a6%ac%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099F\u09BF\u0995\u09BE \u0995\u09AC\u09C7 \u0986\u09B8\u09AC\u09C7 \u099C\u09BE\u09A8\u09BE\u09B2\u09CB \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF \u0985\u09A7\u09BF\u09A6\u09AA\u09CD\u09A4\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%ae%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%86%e0%a7%9f%e0%a6%b6%e0%a6%be-%e0%a6%86%e0%a6%aa%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u0986\u09DF\u09B6\u09BE \u0986\u09AA\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a7%9f%e0%a7%8b%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a7%a7%e0%a7%ab-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a6%a7/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A6\u09C7\u09B6\u09C7 \u09AA\u09CD\u09B0\u09DF\u09CB\u0997\u09C7\u09B0 \u09E7\u09EB \u09A6\u09BF\u09A8\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099F\u09BF\u0995\u09BE \u09B0\u09AA\u09CD\u09A4\u09BE\u09A8\u09BF \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09AC\u09C7 \u09AD\u09BE\u09B0\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ab%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%a8%e0%a7%87%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%a6%e0%a7%81%e0%a6%a6/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AB\u09BE\u0987\u099C\u09BE\u09B0\u09C7\u09B0 \u099F\u09BF\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE\u09B0 \u09A6\u09C1\u09A6\u09BF\u09A8 \u09AA\u09B0\u0987 \u09AA\u09B0\u09CD\u09A4\u09C1\u0997\u09BF\u099C \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF\u0995\u09B0\u09CD\u09AE\u09C0\u09B0 \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%b0%e0%a6%93-%e0%a6%a6%e0%a7%81%e0%a6%9f%e0%a6%bf-%e0%a6%b6%e0%a7%88%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%ac%e0%a6%be%e0%a6%b9-%e0%a6%86%e0%a6%b8%e0%a6%9b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u09B0\u0993 \u09A6\u09C1\u099F\u09BF \u09B6\u09C8\u09A4\u09CD\u09AF\u09AA\u09CD\u09B0\u09AC\u09BE\u09B9 \u0986\u09B8\u099B\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be-%e0%a6%b9%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%97%e0%a7%81%e0%a6%9e%e0%a7%8d%e0%a6%9c%e0%a6%a8-%e0%a6%ac%e0%a6%bf%e0%a6%b7%e0%a7%9f%e0%a7%87-%e0%a6%ae%e0%a7%81%e0%a6%96/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09BE \u09B9\u0993\u09DF\u09BE\u09B0 \u0997\u09C1\u099E\u09CD\u099C\u09A8 \u09AC\u09BF\u09B7\u09DF\u09C7 \u09AE\u09C1\u0996 \u0996\u09C1\u09B2\u09B2\u09C7\u09A8 \u09AC\u09C1\u09AC\u09B2\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%ab%e0%a7%8d%e0%a6%b0%e0%a6%bf%e0%a6%95%e0%a6%be%e0%a7%9f-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95%e0%a7%8d%e0%a6%a4-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u2018\u0986\u09AB\u09CD\u09B0\u09BF\u0995\u09BE\u09DF \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8 \u09A7\u09B0\u09A8\u09C7 \u09AD\u09CD\u09AF\u09BE\u0995\u09B8\u09BF\u09A8 \u0995\u09BE\u099C \u09A8\u09BE\u0993 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u2019")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%85%e0%a6%95%e0%a7%8d%e0%a6%b8%e0%a6%ab%e0%a7%8b%e0%a6%b0%e0%a7%8d%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a5%e0%a6%ae-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0985\u0995\u09CD\u09B8\u09AB\u09CB\u09B0\u09CD\u09A1\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u099F\u09BF\u0995\u09BE \u09A8\u09BF\u09B2\u09C7\u09A8 \u09EE\u09E8 \u09AC\u099B\u09B0\u09C7\u09B0 \u09AC\u09CD\u09B0\u09BE\u09DF\u09BE\u09A8 \u09AA\u09BF\u0999\u09CD\u0995\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%a6%e0%a7%8d%e0%a6%ac%e0%a6%bf%e0%a6%a4%e0%a7%80%e0%a7%9f-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a6%a4%e0%a7%8b-%e0%a6%b6%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A6\u09C7\u09B6\u09C7 \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09A6\u09BF\u09A8\u09C7\u09B0 \u09AE\u09A4\u09CB \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u099A\u09BE\u09B0 \u0985\u0982\u0995\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a8%e0%a6%ac%e0%a6%ac%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%be%e0%a6%a4%e0%a7%87-%e0%a6%8f%e0%a6%95-%e0%a6%ab%e0%a7%8d%e0%a6%b2%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%9f/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A8\u09AC\u09AC\u09B0\u09CD\u09B7\u09C7\u09B0 \u09B0\u09BE\u09A4\u09C7 \u098F\u0995 \u09AB\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09C7 \u09EE \u0995\u09BF\u09B6\u09CB\u09B0-\u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u09B0 \u09B0\u09B9\u09B8\u09CD\u09AF\u09AE\u09DF \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%bf%e0%a6%8f%e0%a6%a8%e0%a6%aa%e0%a6%bf-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%ae%e0%a6%93%e0%a6%a6%e0%a7%81%e0%a6%a6-%e0%a6%86%e0%a6%b9%e0%a6%ae%e0%a6%a6-%e0%a6%b9%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BF\u098F\u09A8\u09AA\u09BF \u09A8\u09C7\u09A4\u09BE \u09AE\u0993\u09A6\u09C1\u09A6 \u0986\u09B9\u09AE\u09A6 \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ad%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%95%e0%a6%b8%e0%a6%bf%e0%a6%a8-%e0%a6%aa%e0%a6%be%e0%a6%ac%e0%a7%87-%e0%a6%9b%e0%a7%9f-%e0%a6%95%e0%a7%8b%e0%a6%9f%e0%a6%bf-%e0%a6%a8%e0%a6%be%e0%a6%97/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AD\u09CD\u09AF\u09BE\u0995\u09B8\u09BF\u09A8 \u09AA\u09BE\u09AC\u09C7 \u099B\u09DF \u0995\u09CB\u099F\u09BF \u09A8\u09BE\u0997\u09B0\u09BF\u0995")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%95%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c-%e0%a6%b8%e0%a7%80%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F-\u0995\u09B0\u09BF\u09AE\u0997\u099E\u09CD\u099C \u09B8\u09C0\u09AE\u09BE\u09A8\u09CD\u09A4\u09C7 \u09AE\u09BF\u09B2\u09B2 \u0997\u09CB\u09AA\u09A8 \u09B8\u09C1\u09DC\u0999\u09CD\u0997 \u09AA\u09A5")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%85%e0%a6%95%e0%a7%8d%e0%a6%b8%e0%a6%ab%e0%a7%8b%e0%a6%b0%e0%a7%8d%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%ad%e0%a6%be%e0%a6%b0%e0%a6%a4%e0%a7%87-%e0%a6%85/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0985\u0995\u09CD\u09B8\u09AB\u09CB\u09B0\u09CD\u09A1\u09C7\u09B0 \u099F\u09BF\u0995\u09BE \u09AD\u09BE\u09B0\u09A4\u09C7 \u0985\u09A8\u09C1\u09AE\u09CB\u09A6\u09BF\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a6%bf%e0%a6%9f%e0%a7%87%e0%a6%a8-%e0%a6%ab%e0%a7%87%e0%a6%b0%e0%a6%a4-%e0%a7%a7%e0%a7%a7-%e0%a6%af%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80-%e0%a6%95%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09CD\u09B0\u09BF\u099F\u09C7\u09A8 \u09AB\u09C7\u09B0\u09A4 \u09E7\u09E7 \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0 \u0995\u09CB\u09DF\u09BE\u09B0\u09C7\u09A8\u09CD\u099F\u09BF\u09A8\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ab%e0%a6%be%e0%a6%a8%e0%a7%81%e0%a6%b8-%e0%a6%86%e0%a6%b0-%e0%a6%86%e0%a6%a4%e0%a6%b6%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%bf%e0%a6%a4%e0%a7%87-%e0%a6%a8%e0%a6%a4%e0%a7%81%e0%a6%a8-%e0%a6%ac/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AB\u09BE\u09A8\u09C1\u09B8 \u0986\u09B0 \u0986\u09A4\u09B6\u09AC\u09BE\u099C\u09BF\u09A4\u09C7 \u09A8\u09A4\u09C1\u09A8 \u09AC\u099B\u09B0\u0995\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%97%e0%a7%8b%e0%a6%b2%e0%a6%be%e0%a6%aa%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a6%be%e0%a6%95-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0997\u09CB\u09B2\u09BE\u09AA\u0997\u099E\u09CD\u099C\u09C7 \u099F\u09CD\u09B0\u09BE\u0995-\u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09AC\u09BE\u09B8 \u09B8\u0982\u0998\u09B0\u09CD\u09B7\u09C7 \u09B8\u09BF\u09B2\u09BF\u09A8\u09CD\u09A1\u09BE\u09B0 \u09AC\u09BF\u09B7\u09CD\u09AB\u09CB\u09B0\u09A3, \u09A8\u09BF\u09B9\u09A4 \u09EA")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%87%e0%a6%b8%e0%a7%8b%e0%a6%b2%e0%a7%87%e0%a6%b6%e0%a6%a8%e0%a7%87-%e0%a6%95%e0%a6%be%e0%a6%9f%e0%a6%b2-%e0%a6%ac%e0%a6%bf%e0%a6%8f%e0%a6%a8%e0%a6%aa%e0%a6%bf%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u2018\u0986\u0987\u09B8\u09CB\u09B2\u09C7\u09B6\u09A8\u09C7\u2019 \u0995\u09BE\u099F\u09B2 \u09AC\u09BF\u098F\u09A8\u09AA\u09BF\u09B0 \u09AC\u099B\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80-%e0%a6%85%e0%a6%a7%e0%a6%bf%e0%a6%95%e0%a6%be%e0%a6%b0%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%ae%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%95%e0%a6%be%e0%a6%b0%e0%a6%be%e0%a6%a6/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A8\u09BE\u09B0\u09C0 \u0985\u09A7\u09BF\u0995\u09BE\u09B0\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u0995\u09BE\u09B0\u09BE\u09A6\u09A3\u09CD\u09A1 \u09A6\u09BF\u09DF\u09C7\u099B\u09C7 \u09B8\u09CC\u09A6\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/29945-2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099A\u09B2\u09A8\u09CD\u09A4 \u09AC\u09BE\u09B8\u09C7 \u09A7\u09B0\u09CD\u09B7\u09A3\u099A\u09C7\u09B7\u09CD\u099F\u09BE, \u099A\u09BE\u09B2\u0995\u09C7\u09B0 \u09B8\u09B9\u0995\u09BE\u09B0\u09C0 \u0997\u09CD\u09B0\u09C7\u09AA\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/29940-2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B6\u09C7\u09B7 \u0987\u099A\u09CD\u099B\u09C7 \u0985\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B0\u0987\u09B2 \u0985\u09AD\u09BF\u09A8\u09C7\u09A4\u09BE \u0995\u09BE\u09A6\u09C7\u09B0\u09C7\u09B0\xA0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%8f%e0%a6%87%e0%a6%9a%e0%a6%8f%e0%a6%b8%e0%a6%b8%e0%a6%bf%e0%a6%b0-%e0%a6%ab%e0%a6%b2%e0%a6%be%e0%a6%ab%e0%a6%b2-%e0%a7%a9%e0%a7%a7-%e0%a6%a1%e0%a6%bf%e0%a6%b8%e0%a7%87%e0%a6%ae%e0%a7%8d/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u098F\u0987\u099A\u098F\u09B8\u09B8\u09BF\u09B0 \u09AB\u09B2\u09BE\u09AB\u09B2 \u09E9\u09E7 \u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a6%bf%e0%a6%9f%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%8f%e0%a6%ac%e0%a6%be%e0%a6%b0-%e0%a6%a6-%e0%a6%86%e0%a6%ab%e0%a7%8d%e0%a6%b0%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09CD\u09B0\u09BF\u099F\u09C7\u09A8\u09C7\u09B0 \u09AA\u09B0 \u098F\u09AC\u09BE\u09B0 \u09A6. \u0986\u09AB\u09CD\u09B0\u09BF\u0995\u09BE\u09B0 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A7\u09B0\u09A8 \u09A8\u09BF\u09DF\u09C7 \u0986\u09A4\u0999\u09CD\u0995")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%a7%e0%a7%8d%e0%a6%af-%e0%a6%b9%e0%a7%9f%e0%a7%87%e0%a6%87-%e0%a6%b6%e0%a6%b0%e0%a6%a3%e0%a6%be%e0%a6%b0%e0%a7%8d%e0%a6%a5%e0%a7%80-%e0%a6%b9%e0%a6%a8-%e0%a6%96%e0%a7%81/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BE\u09A7\u09CD\u09AF \u09B9\u09DF\u09C7\u0987 \u09B6\u09B0\u09A3\u09BE\u09B0\u09CD\u09A5\u09C0 \u09B9\u09A8 \u0996\u09C1\u09A8 \u09B9\u0993\u09DF\u09BE\xA0 \u0995\u09BE\u09B0\u09BF\u09AE\u09BE \u09AE\u09C7\u09B9\u09B0\u09BE\u09AC")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a7%a8%e0%a7%a6%e0%a7%a8%e0%a7%a6-%e0%a6%86%e0%a6%ae%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a7%81%e0%a6%95%e0%a7%8d%e0%a6%a4%e0%a6%bf-%e0%a6%a6%e0%a6%be%e0%a6%93/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09E8\u09E6\u09E8\u09E6, \u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u09AE\u09C1\u0995\u09CD\u09A4\u09BF \u09A6\u09BE\u0993")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%82%e0%a6%b2%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95%e0%a7%8d%e0%a6%a4-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u2018\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09C7 \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8 \u09A7\u09B0\u09A8 \u09A8\u09BF\u09AF\u09BC\u09C7 \u0989\u09A6\u09CD\u09AC\u09C7\u0997\u09C7\u09B0 \u0995\u09BF\u099B\u09C1 \u09A8\u09C7\u0987\u2019")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%a8%e0%a6%a4%e0%a7%81%e0%a6%a8-%e0%a6%9d%e0%a7%81%e0%a6%81%e0%a6%95%e0%a6%bf%e0%a6%b0-%e0%a6%ae%e0%a6%a7%e0%a7%8d%e0%a6%af%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8\xA0 \u099D\u09C1\u0981\u0995\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09B2\u09A8\u09CD\u09A1\u09A8 \u09A5\u09C7\u0995\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F \u098F\u09B2\u09C7\u09A8 \u09E7\u09EC\u09EB \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%b0%e0%a6%95%e0%a6%be%e0%a6%b0%e0%a6%bf-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80-%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%ae%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%a4%e0%a6%be%e0%a6%b0-%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09B0\u0995\u09BE\u09B0\u09BF \u09A8\u09BE\u09B0\u09C0 \u0995\u09B0\u09CD\u09AE\u0995\u09B0\u09CD\u09A4\u09BE\u09B0 \u09AE\u09B0\u09A6\u09C7\u09B9 \u0989\u09A6\u09CD\u09A7\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%8d%e0%a6%ac%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%a5%e0%a7%8d%e0%a6%af-%e0%a6%95%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%a1%e0%a6%be%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%86%e0%a6%b0%e0%a6%93/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF \u0995\u09CD\u09AF\u09BE\u09A1\u09BE\u09B0\u09C7\u09B0 \u0986\u09B0\u0993 \u09EB\u09E7\u09E8 \u099A\u09BF\u0995\u09BF\u09CE\u09B8\u0995\u09C7\u09B0 \u09AA\u09A6\u09CB\u09A8\u09CD\u09A8\u09A4\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a7%8b%e0%a6%a6%e0%a6%bf%e0%a6%b0-%e0%a6%95%e0%a6%be%e0%a6%9b%e0%a7%87-%e0%a6%95%e0%a7%83%e0%a6%b7%e0%a6%95%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%95%e0%a7%8d%e0%a6%a4%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09CB\u09A6\u09BF\u09B0 \u0995\u09BE\u099B\u09C7 \u0995\u09C3\u09B7\u0995\u09A6\u09C7\u09B0 \u09B0\u0995\u09CD\u09A4\u09C7 \u09B2\u09C7\u0996\u09BE \u099A\u09BF\u09A0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%a8%e0%a7%9f-%e0%a6%86%e0%a6%a4%e0%a7%8d%e0%a6%ae%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%95%e0%a6%b0%e0%a7%87%e0%a6%9b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1 \u09A8\u09DF, \u0986\u09A4\u09CD\u09AE\u09B9\u09A4\u09CD\u09AF\u09BE \u0995\u09B0\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u09AE\u09CD\u09AF\u09BE\u09B0\u09BE\u09A1\u09CB\u09A8\u09BE!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%be%e0%a6%9c%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a6%be%e0%a6%ac-%e0%a6%86%e0%a6%b8%e0%a6%9b%e0%a7%87-%e0%a6%ad%e0%a6%be%e0%a6%b2%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09BE\u09AC \u0986\u09B8\u099B\u09C7, \u09AD\u09BE\u09B2\u09CB \u0995\u09BF\u099B\u09C1 \u0986\u09B8\u099B\u09C7 \u09A8\u09BE : \u0985\u09AA\u09C1 \u09AC\u09BF\u09B6\u09CD\u09AC\u09BE\u09B8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a2%e0%a6%be%e0%a6%ac%e0%a6%bf%e0%a6%a4%e0%a7%87-%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%b2%e0%a7%80%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a7%a8-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a7%8d/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A2\u09BE\u09AC\u09BF\u09A4\u09C7 \u099B\u09BE\u09A4\u09CD\u09B0\u09B2\u09C0\u0997\u09C7\u09B0 \u09E8 \u09A8\u09C7\u09A4\u09CD\u09B0\u09C0\u09B0 \u09AC\u09BF\u09B0\u09C1\u09A6\u09CD\u09A7\u09C7 \u099C\u09C1\u09A8\u09BF\u09DF\u09B0\u0995\u09C7 \u09AA\u09C7\u099F\u09BE\u09A8\u09CB\u09B0 \u0985\u09AD\u09BF\u09AF\u09CB\u0997")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "tab-pane",
+        id: "tabs-2",
+        role: "tabpanel"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "bg-light",
+        style: {
+          maxHeight: '450px',
+          overflowY: 'scroll'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%93%e0%a7%9f%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ac%e0%a6%97%e0%a6%bf-%e0%a6%b2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09BE\u0987\u099C\u0997\u09BE\u0981\u0993\u09DF\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09AC\u0997\u09BF \u09B2\u09BE\u0987\u09A8\u099A\u09CD\u09AF\u09C1\u09A4, \u09A6\u09C7\u09B6\u09C7\u09B0 \u09B8\u0999\u09CD\u0997\u09C7 \u09B0\u09C7\u09B2 \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09AC\u09A8\u09CD\u09A7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%bf%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a6%be%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a6%b8%e0%a6%b9-%e0%a6%af%e0%a7%87%e0%a6%b8%e0%a6%ac-%e0%a6%8f%e0%a6%b2%e0%a6%be%e0%a6%95%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099C\u09BF\u09A8\u09CD\u09A6\u09BE\u09AC\u09BE\u099C\u09BE\u09B0\u09B8\u09B9 \u09AF\u09C7\u09B8\u09AC \u098F\u09B2\u09BE\u0995\u09BE\u09DF \u0986\u099C \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09A5\u09BE\u0995\u09AC\u09C7 \u09A8\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%a6%e0%a6%b2-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a7%81-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2 \u09A8\u09C7\u09A4\u09BE \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09C7\u099B\u09BE\u09B2\u09CB")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%a8%e0%a7%80%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a7%87-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80%e0%a6%b0-%e0%a6%a6%e0%a6%97%e0%a7%8d%e0%a6%a7/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BF\u09DF\u09BE\u09A8\u09C0\u09AC\u09BE\u099C\u09BE\u09B0\u09C7 \u2018\u09A8\u09BE\u09B0\u09C0\u09B0\u2019 \u09A6\u0997\u09CD\u09A7 \u09B2\u09BE\u09B6 \u0989\u09A6\u09CD\u09A7\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9a%e0%a6%b2%e0%a7%87-%e0%a6%97%e0%a7%87%e0%a6%b2%e0%a7%87%e0%a6%a8-%e0%a6%b2%e0%a7%9c%e0%a6%be%e0%a6%95%e0%a7%81-%e0%a6%af%e0%a7%81%e0%a6%a6%e0%a7%8d%e0%a6%a7%e0%a6%be-%e0%a6%a8%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099A\u09B2\u09C7 \u0997\u09C7\u09B2\u09C7\u09A8 \u09B2\u09DC\u09BE\u0995\u09C1 \u09AF\u09CB\u09A6\u09CD\u09A7\u09BE \u09A8\u09BF\u099C\u09BE\u09AE\u0989\u09A6\u09CD\u09A6\u09BF\u09A8 \u09B2\u09B8\u09CD\u0995\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b2%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a6%a8-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%86%e0%a6%b8%e0%a6%b2%e0%a7%87%e0%a6%a8-%e0%a6%86%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B2\u09A8\u09CD\u09A1\u09A8\u09C7\u09B0 \u0995\u09B0\u09CB\u09A8\u09BE \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF\u09A4\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F \u098F\u09B2\u09C7\u09A8 \u0986\u09B0\u0993 \u09EA\u09E9 \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0-%e0%a6%93-%e0%a6%9c%e0%a7%87%e0%a6%b2%e0%a6%be-%e0%a6%86%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F \u09AE\u09B9\u09BE\u09A8\u0997\u09B0 \u0993 \u099C\u09C7\u09B2\u09BE \u0986\u0993\u09DF\u09BE\u09AE\u09C0 \u09B2\u09C0\u0997\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09A3\u09BE\u0999\u09CD\u0997 \u0995\u09AE\u09BF\u099F\u09BF \u0998\u09CB\u09B7\u09A3\u09BE (\u09A4\u09BE\u09B2\u09BF\u0995\u09BE\u09B8\u09B9)")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%97%e0%a7%8b%e0%a6%b2%e0%a6%be%e0%a6%aa%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a6%be%e0%a6%95-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0997\u09CB\u09B2\u09BE\u09AA\u0997\u099E\u09CD\u099C\u09C7 \u099F\u09CD\u09B0\u09BE\u0995-\u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09AC\u09BE\u09B8 \u09B8\u0982\u0998\u09B0\u09CD\u09B7\u09C7 \u09B8\u09BF\u09B2\u09BF\u09A8\u09CD\u09A1\u09BE\u09B0 \u09AC\u09BF\u09B7\u09CD\u09AB\u09CB\u09B0\u09A3, \u09A8\u09BF\u09B9\u09A4 \u09EA")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/29945-2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099A\u09B2\u09A8\u09CD\u09A4 \u09AC\u09BE\u09B8\u09C7 \u09A7\u09B0\u09CD\u09B7\u09A3\u099A\u09C7\u09B7\u09CD\u099F\u09BE, \u099A\u09BE\u09B2\u0995\u09C7\u09B0 \u09B8\u09B9\u0995\u09BE\u09B0\u09C0 \u0997\u09CD\u09B0\u09C7\u09AA\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%a8%e0%a6%a4%e0%a7%81%e0%a6%a8-%e0%a6%9d%e0%a7%81%e0%a6%81%e0%a6%95%e0%a6%bf%e0%a6%b0-%e0%a6%ae%e0%a6%a7%e0%a7%8d%e0%a6%af%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8\xA0 \u099D\u09C1\u0981\u0995\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09B2\u09A8\u09CD\u09A1\u09A8 \u09A5\u09C7\u0995\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F \u098F\u09B2\u09C7\u09A8 \u09E7\u09EC\u09EB \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%aa%e0%a6%a5%e0%a6%9a%e0%a6%be%e0%a6%b0%e0%a7%80%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%a6%e0%a6%96%e0%a6%b2%e0%a7%87-%e0%a6%b8%e0%a6%bf%e0%a6%8f%e0%a6%a8%e0%a6%9c%e0%a6%bf-%e0%a6%85%e0%a6%9f/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09A5\u099A\u09BE\u09B0\u09C0\u09A6\u09C7\u09B0 \u09A6\u0996\u09B2\u09C7 \u09B8\u09BF\u098F\u09A8\u099C\u09BF \u0985\u099F\u09CB\u09B0\u09BF\u0995\u09B6\u09BE\u09AC\u09BF\u09B9\u09C0\u09A8 \u09B8\u09BF\u09B2\u09C7\u099F")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%ae%e0%a7%81%e0%a6%a8%e0%a7%81%e0%a6%b2-%e0%a6%b9%e0%a6%95%e0%a7%87%e0%a6%b0-%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%b8%e0%a6%ab%e0%a6%b0-%e0%a6%a8%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09BE\u09AE\u09C1\u09A8\u09C1\u09B2 \u09B9\u0995\u09C7\u09B0 \u09B8\u09BF\u09B2\u09C7\u099F \u09B8\u09AB\u09B0 \u09A8\u09BF\u09DF\u09C7 \u0989\u09A4\u09CD\u09A4\u09C7\u099C\u09A8\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%ac%e0%a6%bf%e0%a6%ad%e0%a6%be%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a7%ad-%e0%a6%aa%e0%a7%8c%e0%a6%b0%e0%a6%b8%e0%a6%ad%e0%a6%be%e0%a7%9f-%e0%a6%86/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F \u09AC\u09BF\u09AD\u09BE\u0997\u09C7\u09B0 \u09ED \u09AA\u09CC\u09B0\u09B8\u09AD\u09BE\u09DF \u0986\u0993\u09DF\u09BE\u09AE\u09C0 \u09B2\u09C0\u0997\u09C7\u09B0 \u09AE\u09C7\u09DF\u09B0\u09AA\u09CD\u09B0\u09BE\u09B0\u09CD\u09A5\u09C0 \u09AF\u09BE\u09B0\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%87%e0%a6%87-%e0%a6%8f%e0%a6%b8%e0%a6%86%e0%a6%87-%e0%a6%86%e0%a6%95%e0%a6%ac%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%95%e0%a7%8d%e0%a6%b7%e0%a7%87-%e0%a6%b2%e0%a7%9c%e0%a6%ac/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09C7\u0987 \u098F\u09B8\u0986\u0987 \u0986\u0995\u09AC\u09B0\u09C7\u09B0 \u09AA\u0995\u09CD\u09B7\u09C7 \u09B2\u09DC\u09AC\u09C7\u09A8 \u09AF\u09C7 \u0986\u0987\u09A8\u099C\u09C0\u09AC\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b6%e0%a6%bf%e0%a6%b6%e0%a7%81-%e0%a6%a4%e0%a6%be%e0%a6%b2%e0%a6%b9%e0%a6%be%e0%a6%95%e0%a7%87-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%b0-%e0%a6%9b%e0%a6%ac%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B6\u09BF\u09B6\u09C1 \u09A4\u09BE\u09B2\u09B9\u09BE\u0995\u09C7 \u09B9\u09A4\u09CD\u09AF\u09BE\u09B0 \u099B\u09AC\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%aa%e0%a6%a5%e0%a7%87-%e0%a6%aa%e0%a6%a5%e0%a7%87-%e0%a6%aa%e0%a6%a4%e0%a6%be%e0%a6%95%e0%a6%be%e0%a6%b0-%e0%a6%ab%e0%a7%87%e0%a6%b0%e0%a6%bf%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%b2%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09A5\u09C7 \u09AA\u09A5\u09C7 \u09AA\u09A4\u09BE\u0995\u09BE\u2019\u09B0 \u09AB\u09C7\u09B0\u09BF\u0993\u09DF\u09BE\u09B2\u09BE\u09B0\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%8f%e0%a6%95-%e0%a6%98%e0%a6%a3%e0%a7%8d%e0%a6%9f%e0%a6%be-%e0%a6%9a%e0%a7%87%e0%a6%b7%e0%a7%8d%e0%a6%9f%e0%a6%be%e0%a7%9f-%e0%a6%9f%e0%a7%81%e0%a6%95%e0%a7%87%e0%a6%b0%e0%a6%ac%e0%a6%be/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u098F\u0995 \u0998\u09A3\u09CD\u099F\u09BE \u099A\u09C7\u09B7\u09CD\u099F\u09BE\u09DF \u099F\u09C1\u0995\u09C7\u09B0\u09AC\u09BE\u099C\u09BE\u09B0\u09C7\u09B0 \u0986\u0997\u09C1\u09A8 \u09A8\u09BF\u09DF\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%a8%e0%a7%8d%e0%a6%af-%e0%a6%aa%e0%a6%be%e0%a6%96%e0%a6%bf%e0%a6%b0-%e0%a6%ae%e0%a6%be%e0%a6%82%e0%a6%b8-%e0%a6%a6%e0%a6%bf%e0%a7%9f%e0%a7%87-%e0%a6%ad%e0%a7%8b%e0%a6%9c-%e0%a6%b8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09A8\u09CD\u09AF \u09AA\u09BE\u0996\u09BF\u09B0 \u09AE\u09BE\u0982\u09B8 \u09A6\u09BF\u09DF\u09C7 \u09AD\u09CB\u099C \u09B8\u09BE\u09B0\u09B2\u09C7\u09A8\xA0 \u09B8\u09BF\u09B2\u09C7\u099F\u09C7\u09B0 \u09AA\u09BE\u0981\u099A \u0995\u09BE\u0989\u09A8\u09CD\u09B8\u09BF\u09B2\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%a5%e0%a6%be%e0%a7%9f-%e0%a6%aa%e0%a6%be%e0%a6%a5%e0%a6%b0-%e0%a6%ae%e0%a7%87%e0%a6%b0%e0%a7%87-%e0%a6%b6%e0%a6%bf%e0%a6%b6%e0%a7%81%e0%a6%95%e0%a7%87-%e0%a6%96%e0%a7%81/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AE\u09BE\u09A5\u09BE\u09DF \u09AA\u09BE\u09A5\u09B0 \u09AE\u09C7\u09B0\u09C7 \u09B6\u09BF\u09B6\u09C1\u0995\u09C7 \u0996\u09C1\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/29647-2/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099B\u09DC\u09BE\u09B6\u09BF\u09B2\u09CD\u09AA\u09C0 \u0986\u09AC\u09CD\u09A6\u09C1\u09B2 \u09AC\u09BE\u09B8\u09BF\u09A4 \u09AE\u09CB\u09B9\u09BE\u09AE\u09CD\u09AE\u09A6 \u0986\u09B0 \u09A8\u09C7\u0987")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%b6%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%b7%e0%a7%8d%e0%a6%a0-%e0%a6%9c%e0%a7%9f%e0%a6%bf%e0%a6%a4%e0%a6%be%e0%a6%b0-%e0%a6%b8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09B6\u09CD\u09B0\u09C7\u09B7\u09CD\u09A0 \u099C\u09DF\u09BF\u09A4\u09BE\u2019\u09B0 \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09A8\u09BE \u09AA\u09C7\u09B2\u09C7\u09A8 \u09AA\u09BE\u0981\u099A \u09A8\u09BE\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a8%e0%a6%ac%e0%a6%9c%e0%a6%be%e0%a6%a4%e0%a6%95%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a6%be%e0%a6%a5%e0%a6%be-%e0%a6%95%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%ab%e0%a7%87%e0%a6%b2%e0%a6%b2%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A8\u09AC\u099C\u09BE\u09A4\u0995\u09C7\u09B0 \u09AE\u09BE\u09A5\u09BE \u0995\u09C7\u099F\u09C7 \u09AB\u09C7\u09B2\u09B2\u09C7\u09A8 \u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%9c%e0%a6%be-%e0%a6%96%e0%a7%87%e0%a7%9f%e0%a7%87-%e0%a6%95%e0%a6%bf%e0%a6%ad%e0%a6%be%e0%a6%ac%e0%a7%87-%e0%a6%a7%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a6%bf%e0%a6%a4/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0997\u09BE\u0981\u099C\u09BE \u0996\u09C7\u09DF\u09C7 \u0995\u09BF\u09AD\u09BE\u09AC\u09C7 \u09A7\u09B0\u09CD\u09B7\u09BF\u09A4 \u09B9\u09B2\u09C7\u09A8 \u099C\u09BE\u09A8\u09BE\u09B2\u09C7\u09A8 \u09B8\u09C7\u0987 \u09A4\u09B0\u09C1\u09A3\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%b7%e0%a7%8d%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a6%aa%e0%a6%a4%e0%a6%bf-%e0%a6%93-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a7%e0%a6%be%e0%a6%a8%e0%a6%ae%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%8d/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B0\u09BE\u09B7\u09CD\u099F\u09CD\u09B0\u09AA\u09A4\u09BF \u0993 \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09C0\u0995\u09C7 \u0995\u099F\u09C1\u0995\u09CD\u09A4\u09BF: \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u098F\u0995\u099C\u09A8 \u0997\u09CD\u09B0\u09C7\u09AA\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a7%ad-%e0%a6%b0%e0%a7%8b%e0%a6%b9%e0%a6%bf%e0%a6%99%e0%a7%8d%e0%a6%97%e0%a6%be%e0%a6%b0-%e0%a6%9c%e0%a6%ac%e0%a6%be%e0%a6%a8%e0%a6%ac/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09ED \u09B0\u09CB\u09B9\u09BF\u0999\u09CD\u0997\u09BE\u09B0 \u099C\u09AC\u09BE\u09A8\u09AC\u09A8\u09CD\u09A6\u09BF, \u09E8 \u09AE\u09BE\u09A8\u09AC\u09AA\u09BE\u099A\u09BE\u09B0\u0995\u09BE\u09B0\u09C0 \u0995\u09BE\u09B0\u09BE\u0997\u09BE\u09B0\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%ae%e0%a7%80-%e0%a6%b2%e0%a7%80%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a6%b6%e0%a6%bf%e0%a6%95%e0%a7%8d%e0%a6%b7%e0%a6%be-%e0%a6%89%e0%a6%aa-%e0%a6%95%e0%a6%ae/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u0993\u09DF\u09BE\u09AE\u09C0 \u09B2\u09C0\u0997\u09C7\u09B0 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE \u0989\u09AA-\u0995\u09AE\u09BF\u099F\u09BF\u09A4\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F\u09C7\u09B0 \u09AF\u09BE\u09B0\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%ae%e0%a7%80-%e0%a6%b2%e0%a7%80%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a6%89%e0%a6%aa-%e0%a6%95%e0%a6%ae%e0%a6%bf%e0%a6%9f%e0%a6%bf%e0%a6%a4%e0%a7%87-%e0%a6%9c/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u0993\u09DF\u09BE\u09AE\u09C0 \u09B2\u09C0\u0997\u09C7\u09B0 \u0989\u09AA-\u0995\u09AE\u09BF\u099F\u09BF\u09A4\u09C7 \u099C\u09BE\u0995\u09BF\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%aa%e0%a6%be%e0%a6%a8%e0%a6%b8%e0%a6%bf-%e0%a6%b0%e0%a7%87%e0%a6%b8%e0%a7%8d%e0%a6%9f%e0%a7%81%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%8d%e0%a6%9f%e0%a6%95%e0%a7%87-%e0%a6%b8%e0%a6%be%e0%a7%9c%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09BE\u09A8\u09B8\u09BF \u09B0\u09C7\u09B8\u09CD\u099F\u09C1\u09B0\u09C7\u09A8\u09CD\u099F\u0995\u09C7 \u09B8\u09BE\u09DC\u09C7 \u09E9 \u09B2\u09BE\u0996 \u099F\u09BE\u0995\u09BE \u099C\u09B0\u09BF\u09AE\u09BE\u09A8\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%be%e0%a6%81%e0%a6%9a-%e0%a6%ad%e0%a6%be%e0%a6%87-%e0%a6%b0%e0%a7%87%e0%a6%b8%e0%a7%8d%e0%a6%9f%e0%a7%81%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7\u09B0 \u09AA\u09BE\u0981\u099A \u09AD\u09BE\u0987 \u09B0\u09C7\u09B8\u09CD\u099F\u09C1\u09B0\u09C7\u09A8\u09CD\u099F\u0995\u09C7 \u09E9\u09B2\u09BE\u0996 \u099F\u09BE\u0995\u09BE \u099C\u09B0\u09BF\u09AE\u09BE\u09A8\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b9%e0%a6%a0%e0%a6%be%e0%a7%8e-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%9a%e0%a6%a3%e0%a7%8d%e0%a6%a1-%e0%a6%b6%e0%a6%ac%e0%a7%8d%e0%a6%a6%e0%a7%87-%e0%a6%95%e0%a7%87%e0%a6%81%e0%a6%aa%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B9\u09A0\u09BE\u09CE \u09AA\u09CD\u09B0\u099A\u09A3\u09CD\u09A1 \u09B6\u09AC\u09CD\u09A6\u09C7 \u0995\u09C7\u0981\u09AA\u09C7 \u0989\u09A0\u09B2\u09CB \u09B8\u09BF\u09B2\u09C7\u099F \u099D\u09C7\u09B0\u099D\u09C7\u09B0\u09BF \u09AA\u09BE\u09DC\u09BE!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%aa%e0%a6%be%e0%a6%9a%e0%a6%be%e0%a6%b0-%e0%a6%95%e0%a6%b0%e0%a6%be%e0%a6%b0-%e0%a6%89%e0%a6%a6%e0%a7%8d%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%8d%e0%a6%af%e0%a7%87%e0%a6%87-%e0%a6%b8%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AA\u09BE\u099A\u09BE\u09B0 \u0995\u09B0\u09BE\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF\u09C7\u0987 \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u099C\u09A1\u09BC\u09CB \u0995\u09B0\u09BE \u09B9\u09AF\u09BC \u09E7\u09EA \u09B0\u09CB\u09B9\u09BF\u0999\u09CD\u0997\u09BE\u0995\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%9a%e0%a6%b0%e0%a6%ae%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%87-%e0%a6%aa%e0%a7%80%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a6%be%e0%a6%b9/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u099A\u09B0\u09AE\u09CB\u09A8\u09BE\u0987 \u09AA\u09C0\u09B0\u09C7\u09B0 \u09AE\u09BE\u09B9\u09AB\u09BF\u09B2\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u09A8\u09BE\u09B0\u09C7 \u0986\u0997\u09C1\u09A8 \u09A6\u09BF\u09B2 \u099B\u09BE\u09A4\u09CD\u09B0\u09B2\u09C0\u0997")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87%e0%a6%b0-%e0%a6%b9%e0%a7%81%e0%a6%ae%e0%a6%be%e0%a7%9f%e0%a7%81%e0%a6%a8-%e0%a6%9a%e0%a6%a4%e0%a7%8d%e0%a6%ac%e0%a6%b0-%e0%a6%a5%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7\u09B0 \u09B9\u09C1\u09AE\u09BE\u09DF\u09C1\u09A8 \u099A\u09A4\u09CD\u09AC\u09B0 \u09A5\u09C7\u0995\u09C7 \u09E7\u09EA \u09B0\u09CB\u09B9\u09BF\u0999\u09CD\u0997\u09BE \u0993 \u09E8 \u09AE\u09BE\u09A8\u09AC\u09AA\u09BE\u099A\u09BE\u09B0\u0995\u09BE\u09B0\u09C0 \u0986\u099F\u0995")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%99%e0%a7%8d%e0%a6%97%e0%a6%ac%e0%a6%a8%e0%a7%8d%e0%a6%a7%e0%a7%81-%e0%a6%ad%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%af-%e0%a6%ad%e0%a6%be%e0%a6%82%e0%a6%9a%e0%a7%81/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u0999\u09CD\u0997\u09AC\u09A8\u09CD\u09A7\u09C1 \u09AD\u09BE\u09B8\u09CD\u0995\u09B0\u09CD\u09AF \u09AD\u09BE\u0982\u099A\u09C1\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF\u09AC\u09BE\u09A6\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09AC\u09BF\u09B6\u09BE\u09B2 \u09AC\u09BF\u0995\u09CD\u09B7\u09CB\u09AD \u09AE\u09BF\u099B\u09BF\u09B2")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%be%e0%a6%a8%e0%a6%be%e0%a6%87%e0%a6%98%e0%a6%be%e0%a6%9f%e0%a7%87-%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%b6%e0%a7%8d%e0%a6%ac%e0%a6%be%e0%a6%b8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0995\u09BE\u09A8\u09BE\u0987\u0998\u09BE\u099F\u09C7 \u09B8\u09CD\u09A4\u09CD\u09B0\u09C0\u0995\u09C7 \u09B6\u09CD\u09AC\u09BE\u09B8\u09B0\u09C1\u09A6\u09CD\u09A7 \u0995\u09B0\u09C7 \u09B9\u09A4\u09CD\u09AF\u09BE : \u09B8\u09CD\u09AC\u09BE\u09AE\u09C0 \u0997\u09CD\u09B0\u09C7\u09AB\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a7%9f-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%ac%e0%a7%87%e0%a7%9c/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u0995\u09B0\u09CB\u09A8\u09BE\u09DF \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1 \u09AC\u09C7\u09DC\u09C7 \u09E8\u09EA\u09EB")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%bf%e0%a6%a8%e0%a6%be%e0%a6%ae%e0%a7%82%e0%a6%b2%e0%a7%87-%e0%a6%ae%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%95-%e0%a6%ac%e0%a6%bf%e0%a6%a4%e0%a6%b0%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09AC\u09BF\u09A8\u09BE\u09AE\u09C2\u09B2\u09C7 \u09AE\u09BE\u09B8\u09CD\u0995 \u09AC\u09BF\u09A4\u09B0\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%95%e0%a6%bf%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c%e0%a7%87-%e0%a6%9c%e0%a6%ae%e0%a6%9c%e0%a6%ae%e0%a6%be%e0%a6%9f-%e0%a6%b8%e0%a7%81%e0%a6%aa%e0%a6%be%e0%a6%b0%e0%a6%bf%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099C\u0995\u09BF\u0997\u099E\u09CD\u099C\u09C7 \u099C\u09AE\u099C\u09AE\u09BE\u099F \u09B8\u09C1\u09AA\u09BE\u09B0\u09BF\u09B0 \u09B9\u09BE\u099F")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%85%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%9f%e0%a6%bf%e0%a6%9c%e0%a7%87%e0%a6%a8-%e0%a6%95%e0%a6%b0%e0%a7%87%e0%a6%be%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u0985\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u099C\u09C7\u09A8 \u0995\u09B0\u09C7\u09BE\u09A8\u09BE\u09AD\u09BE\u0987\u09B0\u09BE\u09B8 \u09B6\u09A8\u09BE\u0995\u09CD\u09A4\u09C7 \u09B6\u09C1\u09B0\u09C1\u09B0 \u09A6\u09BF\u09A8\u09C7\u0987 \u09AC\u09BF\u09AA\u09A4\u09CD\u09A4\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a6%b8%e0%a6%b9-%e0%a7%a7%e0%a7%a6-%e0%a6%9c%e0%a7%87%e0%a6%b2%e0%a6%be%e0%a7%9f-%e0%a6%86%e0%a6%9c-%e0%a6%85%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09B8\u09B9 \u09E7\u09E6 \u099C\u09C7\u09B2\u09BE\u09DF \u0986\u099C \u0985\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u099C\u09C7\u09A8 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u09B6\u09C1\u09B0\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%95%e0%a6%bf%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c-%e0%a6%b8%e0%a7%8d%e0%a6%9f%e0%a7%81%e0%a6%a1%e0%a7%87%e0%a6%a8%e0%a7%8d%e0%a6%9f-%e0%a6%95%e0%a6%ae%e0%a6%bf%e0%a6%89%e0%a6%a8%e0%a6%bf/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u099C\u0995\u09BF\u0997\u099E\u09CD\u099C \u09B8\u09CD\u099F\u09C1\u09A1\u09C7\u09A8\u09CD\u099F \u0995\u09AE\u09BF\u0989\u09A8\u09BF\u099F\u09BF\u09B0 \u099A\u09A4\u09C1\u09B0\u09CD\u09A5 \u0985\u09AD\u09BF\u09B7\u09C7\u0995 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%8f%e0%a6%ae%e0%a6%b8%e0%a6%bf-%e0%a6%95%e0%a6%b2%e0%a7%87%e0%a6%9c%e0%a7%87-%e0%a6%b8%e0%a6%82%e0%a6%98%e0%a6%ac%e0%a6%a6%e0%a7%8d%e0%a6%a7-%e0%a6%a7%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a6%a3/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u098F\u09AE\u09B8\u09BF \u0995\u09B2\u09C7\u099C\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3 : \u09EE \u099C\u09A8\u09C7\u09B0 \u09AC\u09BF\u09B0\u09C1\u09A6\u09CD\u09A7\u09C7 \u0985\u09AD\u09BF\u09AF\u09CB\u0997\u09AA\u09A4\u09CD\u09B0 \u09A6\u09BE\u0996\u09BF\u09B2")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%be%e0%a6%82%e0%a6%ac%e0%a6%be%e0%a6%a6%e0%a6%bf%e0%a6%95%e0%a6%a4%e0%a6%be%e0%a6%b0-%e0%a6%89%e0%a6%aa%e0%a6%b0%e0%a7%87-%e0%a6%a8%e0%a7%87%e0%a6%87-%e0%a6%95%e0%a7%8b%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B6\u09CD\u09B0\u09C0\u09AE\u0999\u09CD\u0997\u09B2\u09C7\u09B0 \u09AC\u09B9\u09C1\u09B0\u09C1\u09AA\u09C0 \u09AA\u09CD\u09B0\u09A4\u09BE\u09B0\u0995 \u09B6\u09BE\u09B9\u09BF\u09A8!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%ac%e0%a6%bf%e0%a6%ad%e0%a6%be%e0%a6%97%e0%a7%87-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a7%9f-%e0%a6%86%e0%a6%95%e0%a7%8d%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F \u09AC\u09BF\u09AD\u09BE\u0997\u09C7 \u0995\u09B0\u09CB\u09A8\u09BE\u09DF \u0986\u0995\u09CD\u09B0\u09BE\u09A8\u09CD\u09A4 \u09AC\u09C7\u09DC\u09C7 \u09E7\u09EA\u09EC\u09EA\u09EC")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%a1%e0%a6%bf%e0%a6%8f%e0%a6%a8%e0%a6%8f-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a4%e0%a6%bf%e0%a6%ac%e0%a7%87%e0%a6%a6%e0%a6%a8-%e0%a6%a7%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a6%a3%e0%a7%87%e0%a6%b0/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09A1\u09BF\u098F\u09A8\u098F \u09AA\u09CD\u09B0\u09A4\u09BF\u09AC\u09C7\u09A6\u09A8 \u09A7\u09B0\u09CD\u09B7\u09A3\u09C7\u09B0 \u09B8\u0982\u09B6\u09BF\u09B7\u09CD\u099F\u09A4\u09BE \u09AE\u09BF\u09B2\u099B\u09C7 \u0986\u09B8\u09BE\u09AE\u09C0\u09A6\u09C7\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87%e0%a6%b0-%e0%a6%a4%e0%a6%bf%e0%a6%a8-%e0%a6%aa%e0%a7%87%e0%a7%97%e0%a6%b0%e0%a6%b8%e0%a6%ad%e0%a6%be%e0%a7%9f-%e0%a6%a8%e0%a7%8c%e0%a6%95/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7\u09B0 \u09A4\u09BF\u09A8 \u09AA\u09C7\u09D7\u09B0\u09B8\u09AD\u09BE\u09DF \u09A8\u09CC\u0995\u09BE\u09B0 \u09AA\u09CD\u09B0\u09BE\u09B0\u09CD\u09A5\u09C0 \u099A\u09C2\u09DC\u09BE\u09A8\u09CD\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%b2%e0%a7%80%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a6%95%e0%a7%87%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a7%8d%e0%a6%b0%e0%a7%80%e0%a7%9f-%e0%a6%b8%e0%a6%be%e0%a6%82%e0%a6%97%e0%a6%a0%e0%a6%a8/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0986\u2019\u09B2\u09C0\u0997\u09C7\u09B0 \u0995\u09C7\u09A8\u09CD\u09A6\u09CD\u09B0\u09C0\u09DF \u09B8\u09BE\u0982\u0997\u09A0\u09A8\u09BF\u0995 \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u0995 \u09A8\u09BE\u09A6\u09C7\u09B2\u09C7\u09B0 \u09AC\u09BE\u09B8\u09BE\u09DF \u09A6\u09C1\u09B0\u09CD\u09A7\u09B0\u09CD\u09B7 \u099A\u09C1\u09B0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%8f%e0%a6%95%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87-%e0%a7%a9%e0%a7%a6-%e0%a6%9c%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%95%e0%a6%b0%e0%a7%8b/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u098F\u0995\u09A6\u09BF\u09A8\u09C7 \u09E9\u09E6 \u099C\u09A8\u09C7\u09B0 \u0995\u09B0\u09CB\u09A8\u09BE \u09B6\u09A8\u09BE\u0995\u09CD\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%97%e0%a7%8b%e0%a7%9f%e0%a6%be%e0%a6%87%e0%a6%a8%e0%a6%98%e0%a6%be%e0%a6%9f%e0%a7%87-%e0%a6%97%e0%a7%83%e0%a6%b9%e0%a6%ac%e0%a6%a7%e0%a7%82%e0%a6%b0-%e0%a6%b0%e0%a6%b9%e0%a6%b8%e0%a7%8d%e0%a6%af/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u0997\u09CB\u09DF\u09BE\u0987\u09A8\u0998\u09BE\u099F\u09C7 \u0997\u09C3\u09B9\u09AC\u09A7\u09C2\u09B0 \u09B0\u09B9\u09B8\u09CD\u09AF\u09AE\u09DF \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a7%a9%e0%a6%9f%e0%a6%bf-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a4%e0%a6%bf%e0%a6%b7%e0%a7%8d%e0%a6%a0%e0%a6%be%e0%a6%a8%e0%a6%95%e0%a7%87/"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "news-box-w-sm d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-arrow-right"
+      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09E9\u099F\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u0995\u09C7 \u09B2\u09BE\u0996 \u099F\u09BE\u0995\u09BE \u099C\u09B0\u09BF\u09AE\u09BE\u09A8\u09BE")))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-4 mb-4"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-xl-3 col-12 "
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-4 mb-4"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "wetget mb-4"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-4 mb-4"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ad-box",
+        style: {
+          height: 'auto !important'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ins", {
+        className: "adsbygoogle",
+        style: {
+          display: 'block',
+          height: '0px'
+        },
+        "data-ad-client": "ca-pub-3220166061238106",
+        "data-ad-slot": 4316716040,
+        "data-ad-format": "auto",
+        "data-full-width-responsive": "true",
+        "data-adsbygoogle-status": "done"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ins", {
+        id: "aswift_1_expand",
+        style: {
+          display: 'inline-table',
+          border: 'none',
+          height: '0px',
+          margin: '0px',
+          padding: '0px',
+          position: 'relative',
+          visibility: 'visible',
+          width: '1110px',
+          backgroundColor: 'transparent'
+        },
+        tabIndex: 0,
+        title: "Advertisement",
+        "aria-label": "Advertisement"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ins", {
+        id: "aswift_1_anchor",
+        style: {
+          display: 'block',
+          border: 'none',
+          height: '0px',
+          margin: '0px',
+          padding: '0px',
+          position: 'relative',
+          visibility: 'visible',
+          width: '1110px',
+          backgroundColor: 'transparent',
+          overflow: 'hidden',
+          opacity: 0
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+        id: "aswift_1",
+        name: "aswift_1",
+        style: {
+          left: 0,
+          position: 'absolute',
+          top: 0,
+          border: 0,
+          width: '1110px',
+          height: '280px'
+        },
+        sandbox: "allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation",
+        width: 1110,
+        height: 280,
+        frameBorder: 0,
+        src: "https://googleads.g.doubleclick.net/pagead/ads?guci=2.2.0.0.2.2.0.0&client=ca-pub-3220166061238106&output=html&h=280&slotname=4316716040&adk=2682919827&adf=3185538927&pi=t.ma~as.4316716040&w=1110&fwrn=4&fwrnh=100&lmt=1612687841&rafmt=1&psa=1&format=1110x280&url=https%3A%2F%2Fdeshdorpon.com%2F&flash=0&fwr=0&fwrattr=true&rpe=1&resp_fmts=3&wgl=1&dt=1612687840359&bpp=14&bdt=5076&idt=1287&shv=r20210202&cbv=r20190131&ptt=9&saldr=aa&abxe=1&cookie=ID%3Db4c20b834225e13d-22092266e9c500be%3AT%3D1612330298%3ART%3D1612330298%3AS%3DALNI_MZFJXWw6LPlNGGkS2vcRk1nvcMHsA&prev_fmts=0x0&nras=1&correlator=6382092516898&frm=20&pv=1&ga_vid=700724346.1612330298&ga_sid=1612687842&ga_hid=2005021505&ga_fc=0&u_tz=360&u_his=2&u_java=0&u_h=768&u_w=1366&u_ah=728&u_aw=1366&u_cd=24&u_nplug=3&u_nmime=4&adx=123&ady=1148&biw=1356&bih=657&scr_x=0&scr_y=0&eid=44736376%2C21068769%2C21068893&oid=3&pvsid=261752696402459&pem=269&rx=0&eae=0&fc=1920&brdim=0%2C0%2C0%2C0%2C1366%2C0%2C1366%2C728%2C1366%2C657&vis=1&rsz=%7C%7CeEbr%7C&abl=CS&pfx=0&cms=2&fu=8320&bc=31&ifi=1&uci=a!1&btvi=1&fsb=1&xpc=GfzBu7Tklb&p=https%3A//deshdorpon.com&dtd=1297",
+        marginWidth: 0,
+        marginHeight: 0,
+        vspace: 0,
+        hspace: 0,
+        allowTransparency: "true",
+        scrolling: "no",
+        allowFullScreen: "true",
+        "data-google-container-id": "a!1",
+        "data-google-query-id": "CK-4vq-y1-4CFRkXrQYdZm4OAQ",
+        "data-load-complete": "true"
+      })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "line-bottom mt-4 mb-4"
+      }))));
+    }
+  }]);
+
+  return SectionOne;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (SectionOne);
 
 /***/ }),
 
@@ -72662,7 +71697,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Sections__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Sections */ "./resources/js/components/Sections.js");
-/* harmony import */ var _components_Menu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Menu */ "./resources/js/components/Menu.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72688,7 +71722,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-
 var Home = /*#__PURE__*/function (_React$Component) {
   _inherits(Home, _React$Component);
 
@@ -72703,7 +71736,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
   _createClass(Home, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Menu__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null));
     }
   }]);
 
