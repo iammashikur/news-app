@@ -1,41 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Category from './pages/Category';
+import Single from './pages/Single';
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
-   function Index() {
-    return (
+   class Index extends Component{
+
+    render(){
+
+        return (
 
 
-      <Router>
-          <Navbar/>
+            <Router>
+                <Navbar/>
 
 
-          <div style={{minHeight: "100vh"}}>
+                <div style={{minHeight: "100vh"}}>
 
 
-          <Switch>
+                <Switch>
 
-            <Route path="/" exact component={Home} />
+                  <Route path="/" exact component={Home} />
 
-            <Route exact path="/category/1" exact component={Category} />
+                  <Route exact path="/category/:slug" exact component={Category} />
 
-          </Switch>
+                  <Route path="/news/:slug" exact component={Single} />
 
-
-
-          </div>
-          <Footer/>
-
-      </Router>
+                </Switch>
 
 
-    );
+
+                </div>
+                <Footer/>
+
+            </Router>
+
+
+          );
+
+    }
+
   }
 
 

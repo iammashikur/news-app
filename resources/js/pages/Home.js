@@ -5,10 +5,8 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-               <Sections/>
-               <Sections/>
 
-
+               <Sections/>
 
             </div>
         );

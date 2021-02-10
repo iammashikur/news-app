@@ -69816,9 +69816,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Footer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Footer */ "./resources/js/components/Footer.js");
 /* harmony import */ var _pages_Home__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Home */ "./resources/js/pages/Home.js");
 /* harmony import */ var _pages_Category__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Category */ "./resources/js/pages/Category.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _pages_Single__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Single */ "./resources/js/pages/Single.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
@@ -69827,22 +69849,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-function Index() {
-  var _React$createElement;
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    style: {
-      minHeight: "100vh"
+
+var Index = /*#__PURE__*/function (_Component) {
+  _inherits(Index, _Component);
+
+  var _super = _createSuper(Index);
+
+  function Index() {
+    _classCallCheck(this, Index);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Index, [{
+    key: "render",
+    value: function render() {
+      var _React$createElement;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          minHeight: "100vh"
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
+        path: "/",
+        exact: true,
+        component: _pages_Home__WEBPACK_IMPORTED_MODULE_4__["default"]
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], (_React$createElement = {
+        exact: true,
+        path: "/category/:slug"
+      }, _defineProperty(_React$createElement, "exact", true), _defineProperty(_React$createElement, "component", _pages_Category__WEBPACK_IMPORTED_MODULE_5__["default"]), _React$createElement)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Route"], {
+        path: "/news/:slug",
+        exact: true,
+        component: _pages_Single__WEBPACK_IMPORTED_MODULE_6__["default"]
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Footer__WEBPACK_IMPORTED_MODULE_3__["default"], null));
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
-    path: "/",
-    exact: true,
-    component: _pages_Home__WEBPACK_IMPORTED_MODULE_4__["default"]
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], (_React$createElement = {
-    exact: true,
-    path: "/category/1"
-  }, _defineProperty(_React$createElement, "exact", true), _defineProperty(_React$createElement, "component", _pages_Category__WEBPACK_IMPORTED_MODULE_5__["default"]), _React$createElement)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Footer__WEBPACK_IMPORTED_MODULE_3__["default"], null));
-}
+  }]);
+
+  return Index;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 if (document.getElementById('index')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Index, null), document.getElementById('index'));
@@ -70194,6 +70239,212 @@ var Navbar = /*#__PURE__*/function (_React$Component) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Sections/Parts/Latest.js":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/Sections/Parts/Latest.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var Latest = /*#__PURE__*/function (_Component) {
+  _inherits(Latest, _Component);
+
+  var _super = _createSuper(Latest);
+
+  function Latest() {
+    var _this;
+
+    _classCallCheck(this, Latest);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(Latest, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/latest/" + this.props.skip + "/" + this.props.take).then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+          key: index,
+          to: '/news/' + news.slug
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "news-box-w-sm d-flex"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-arrow-right"
+        }), " ", news.title))));
+      }));
+    }
+  }]);
+
+  return Latest;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Latest);
+
+/***/ }),
+
+/***/ "./resources/js/components/Sections/Parts/LatestByCat.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/Sections/Parts/LatestByCat.js ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var LatestByCat = /*#__PURE__*/function (_Component) {
+  _inherits(LatestByCat, _Component);
+
+  var _super = _createSuper(LatestByCat);
+
+  function LatestByCat() {
+    var _this;
+
+    _classCallCheck(this, LatestByCat);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(LatestByCat, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/" + this.props.cat + "/" + this.props.skip + "/" + this.props.take).then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+          key: index,
+          to: '/news/' + news.slug
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "news-box-w-sm d-flex"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-arrow-right"
+        }), " ", news.title))));
+      }));
+    }
+  }]);
+
+  return LatestByCat;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (LatestByCat);
+
+/***/ }),
+
 /***/ "./resources/js/components/Sections/Parts/LeadFirst.js":
 /*!*************************************************************!*\
   !*** ./resources/js/components/Sections/Parts/LeadFirst.js ***!
@@ -70264,7 +70515,7 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/" + this.props.skip + "/" + this.props.take).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/lead/" + this.props.skip + "/" + this.props.take).then(function (res) {
         var item = res.data;
 
         _this2.setState({
@@ -70286,7 +70537,7 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
           className: "col-md-6 col-12 mt-4 mt-md-0"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, news.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-clock    "
-        }), news.date)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }), " ", news.date)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "col-md-6 col-12"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
           src: news.image,
@@ -70374,7 +70625,7 @@ var LeadOthers = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news/1/" + this.props.skip + "/" + this.props.take).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/lead/" + this.props.skip + "/" + this.props.take).then(function (res) {
         var item = res.data;
 
         _this2.setState({
@@ -70392,7 +70643,7 @@ var LeadOthers = /*#__PURE__*/function (_Component) {
           to: '/news/' + news.slug
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, news.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-clock"
-        }), news.date));
+        }), " ", news.date));
       }));
     }
   }]);
@@ -70504,7 +70755,7 @@ var SubLeads = /*#__PURE__*/function (_Component) {
           className: "col-8 col-md-6 pl-2"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, news.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fas fa-clock"
-        }), news.date)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }), " ", news.date)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: " line-bottom mt-0 mt-md-4"
         }));
       }));
@@ -70532,6 +70783,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Parts_LeadFirst__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Parts/LeadFirst */ "./resources/js/components/Sections/Parts/LeadFirst.js");
 /* harmony import */ var _Parts_LeadOthers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Parts/LeadOthers */ "./resources/js/components/Sections/Parts/LeadOthers.js");
 /* harmony import */ var _Parts_SubLead__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Parts/SubLead */ "./resources/js/components/Sections/Parts/SubLead.js");
+/* harmony import */ var _Parts_Latest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Parts/Latest */ "./resources/js/components/Sections/Parts/Latest.js");
+/* harmony import */ var _Parts_LatestByCat__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Parts/LatestByCat */ "./resources/js/components/Sections/Parts/LatestByCat.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70553,6 +70806,8 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
 
 
 
@@ -70670,567 +70925,10 @@ var SectionOne = /*#__PURE__*/function (_Component) {
           maxHeight: '450px',
           overflowY: 'scroll'
         }
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a7%ac-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0%e0%a7%87-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%b8%e0%a6%ae%e0%a6%be%e0%a6%ac%e0%a7%87%e0%a6%b6%e0%a7%87%e0%a6%b0-%e0%a6%98%e0%a7%8b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09EC \u09AE\u09B9\u09BE\u09A8\u0997\u09B0\u09C7 \u09AE\u09B9\u09BE\u09B8\u09AE\u09BE\u09AC\u09C7\u09B6\u09C7\u09B0 \u0998\u09CB\u09B7\u09A3\u09BE \u09AC\u09BF\u098F\u09A8\u09AA\u09BF\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%93%e0%a7%9f%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ac%e0%a6%97%e0%a6%bf-%e0%a6%b2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AE\u09BE\u0987\u099C\u0997\u09BE\u0981\u0993\u09DF\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09AC\u0997\u09BF \u09B2\u09BE\u0987\u09A8\u099A\u09CD\u09AF\u09C1\u09A4, \u09A6\u09C7\u09B6\u09C7\u09B0 \u09B8\u0999\u09CD\u0997\u09C7 \u09B0\u09C7\u09B2 \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09AC\u09A8\u09CD\u09A7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%bf%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a6%be%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a6%b8%e0%a6%b9-%e0%a6%af%e0%a7%87%e0%a6%b8%e0%a6%ac-%e0%a6%8f%e0%a6%b2%e0%a6%be%e0%a6%95%e0%a6%be/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099C\u09BF\u09A8\u09CD\u09A6\u09BE\u09AC\u09BE\u099C\u09BE\u09B0\u09B8\u09B9 \u09AF\u09C7\u09B8\u09AC \u098F\u09B2\u09BE\u0995\u09BE\u09DF \u0986\u099C \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE \u09A5\u09BE\u0995\u09AC\u09C7 \u09A8\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%81-%e0%a6%9a%e0%a6%bf-%e0%a7%a7%e0%a7%aa-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09C1 \u099A\u09BF \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09B0\u09BF\u09AE\u09BE\u09A8\u09CD\u09A1\u09C7\xA0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%a6%e0%a6%b2-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a7%81-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%ae/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09B2 \u09A8\u09C7\u09A4\u09BE \u09B0\u09BE\u099C\u09C1 \u09B9\u09A4\u09CD\u09AF\u09BE \u09AE\u09BE\u09AE\u09B2\u09BE\u09B0 \u099A\u09BE\u09B0\u09CD\u099C \u0997\u09A0\u09A8 \u09AA\u09C7\u099B\u09BE\u09B2\u09CB")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%9b%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a5%e0%a6%ae-%e0%a6%ae%e0%a6%be%e0%a6%b8%e0%a7%87-%e0%a6%b6%e0%a6%a4%e0%a6%be%e0%a6%a7%e0%a6%bf%e0%a6%95-%e0%a6%a7/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u099B\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09AE\u09BE\u09B8\u09C7 \u09B6\u09A4\u09BE\u09A7\u09BF\u0995 \u09A7\u09B0\u09CD\u09B7\u09A3")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a6%a6%e0%a7%8d%e0%a6%af%e0%a7%81%e0%a6%a4%e0%a7%87%e0%a6%b0-%e0%a6%ad%e0%a7%8b%e0%a6%97%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a4/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09BF\u09B2\u09C7\u099F\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09A4\u09C7\u09B0 \u09AD\u09CB\u0997\u09BE\u09A8\u09CD\u09A4\u09BF \u0986\u09B0\u0993 \u09EC \u09A6\u09BF\u09A8!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a6%be-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b%e0%a6%a4%e0%a7%87-%e0%a6%a4%e0%a7%81/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE \u09A5\u09C7\u0995\u09C7 \u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09A4\u09C7 \u09A4\u09C1\u09B2\u09C7 \u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u0995\u09C7 \u09B8\u0982\u0998\u09AC\u09A6\u09CD\u09A7 \u09A7\u09B0\u09CD\u09B7\u09A3, \u0986\u099F\u0995 \u09E8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%b2%e0%a7%9f%e0%a7%87%e0%a6%b6%e0%a6%bf%e0%a7%9f%e0%a6%be-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%ac%e0%a6%be%e0%a6%b8%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AE\u09BE\u09B2\u09DF\u09C7\u09B6\u09BF\u09DF\u09BE \u09AA\u09CD\u09B0\u09AC\u09BE\u09B8\u09C0\u0995\u09C7 \u09AC\u09BF\u09DF\u09C7 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AA\u09AA\u09BF!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b0%e0%a6%be%e0%a6%9c%e0%a6%a7%e0%a6%be%e0%a6%a8%e0%a7%80%e0%a6%a4%e0%a7%87-%e0%a6%a7%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a6%a3%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%ac%e0%a6%bf%e0%a6%b6/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B0\u09BE\u099C\u09A7\u09BE\u09A8\u09C0\u09A4\u09C7 \u09A7\u09B0\u09CD\u09B7\u09A3\u09C7\u09B0 \u09AA\u09B0 \u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09DF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u0995\u09C7 \u09B9\u09A4\u09CD\u09AF\u09BE\u09B0 \u0985\u09AD\u09BF\u09AF\u09CB\u0997")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%ad%e0%a6%bf%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%aa%e0%a6%be%e0%a6%b0%e0%a7%8b%e0%a6%b8%e0%a6%ae%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%b6%e0%a6%99%e0%a7%8d/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09AD\u09BF\u09A1\u09C7\u09B0 \u09AA\u09B0 \u09AA\u09BE\u09B0\u09CB\u09B8\u09AE\u09BF\u09DF\u09BE\u09B0 \u09B6\u0999\u09CD\u0995\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a4%e0%a6%bf%e0%a6%ae%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80-%e0%a6%aa%e0%a6%b2%e0%a6%95%e0%a6%b8%e0%a6%b9-%e0%a6%a6%e0%a7%8d%e0%a6%ac%e0%a6%bf%e0%a6%a4/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AA\u09CD\u09B0\u09A4\u09BF\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09C0 \u09AA\u09B2\u0995\u09B8\u09B9 \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09A6\u09BF\u09A8\u09C7 \u099F\u09BF\u0995\u09BE \u09A8\u09BF\u09B2\u09C7\u09A8 \u09EB\u09EA\u09E7 \u099C\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a7%9f-%e0%a6%86%e0%a6%b0%e0%a6%93-%e0%a7%a7%e0%a7%ab-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09DF \u0986\u09B0\u0993 \u09E7\u09EB \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1, \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u09EB\u09E6\u09EF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%87%e0%a6%aa%e0%a6%bf%e0%a6%8f%e0%a6%b2%e0%a7%87%e0%a6%b0-%e0%a6%a8%e0%a6%bf%e0%a6%b2%e0%a6%be%e0%a6%ae-%e0%a7%a7%e0%a7%ae-%e0%a6%ab%e0%a7%87%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a7%81/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0986\u0987\u09AA\u09BF\u098F\u09B2\u09C7\u09B0 \u09A8\u09BF\u09B2\u09BE\u09AE \u09E7\u09EE \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/30138-2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099A\u099F\u09CD\u099F\u0997\u09CD\u09B0\u09BE\u09AE\u09C7\u09B0 \u09A8\u09A4\u09C1\u09A8 \u2018\u09A8\u0997\u09B0\u09AA\u09BF\u09A4\u09BE\u2019 \u09A8\u09CC\u0995\u09BE\u09B0 \u09B0\u09C7\u099C\u09BE\u0989\u09B2 \u0995\u09B0\u09BF\u09AE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%bf%e0%a7%9f%e0%a6%be%e0%a6%a8%e0%a7%80%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a7%87-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80%e0%a6%b0-%e0%a6%a6%e0%a6%97%e0%a7%8d%e0%a6%a7/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09BF\u09DF\u09BE\u09A8\u09C0\u09AC\u09BE\u099C\u09BE\u09B0\u09C7 \u2018\u09A8\u09BE\u09B0\u09C0\u09B0\u2019 \u09A6\u0997\u09CD\u09A7 \u09B2\u09BE\u09B6 \u0989\u09A6\u09CD\u09A7\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%be%e0%a6%ac%e0%a7%87%e0%a6%95-%e0%a6%b6%e0%a6%bf%e0%a6%95%e0%a7%8d%e0%a6%b7%e0%a6%be%e0%a6%ae%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80-%e0%a6%a8%e0%a6%be%e0%a6%b9%e0%a6%bf/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09BE\u09AC\u09C7\u0995 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09C0 \u09A8\u09BE\u09B9\u09BF\u09A6\u09C7\u09B0 \u098F\u09AA\u09BF\u098F\u09B8 \u09AA\u09B2\u09BE\u09A4\u0995: \u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3\u09BE\u09B2\u09DF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%ae%e0%a6%bf-%e0%a6%b8%e0%a7%8d%e0%a6%ac%e0%a7%87%e0%a6%9a%e0%a7%8d%e0%a6%9b%e0%a6%be%e0%a7%9f-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%a8%e0%a6%bf%e0%a6%9a%e0%a7%8d%e0%a6%9b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0986\u09AE\u09BF \u09B8\u09CD\u09AC\u09C7\u099A\u09CD\u099B\u09BE\u09DF \u099F\u09BF\u0995\u09BE \u09A8\u09BF\u099A\u09CD\u099B\u09BF : \u09B0\u09C1\u09A8\u09C1 \u09AC\u09C7\u09B0\u09C1\u09A8\u09BF\u0995\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%82%e0%a6%b2%e0%a6%be-%e0%a6%8f%e0%a6%95%e0%a6%be%e0%a6%a1%e0%a7%87%e0%a6%ae%e0%a6%bf-%e0%a6%b8%e0%a6%be%e0%a6%b9%e0%a6%bf%e0%a6%a4%e0%a7%8d%e0%a6%af-%e0%a6%aa%e0%a7%81-2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09BE\u0982\u09B2\u09BE \u098F\u0995\u09BE\u09A1\u09C7\u09AE\u09BF \u09B8\u09BE\u09B9\u09BF\u09A4\u09CD\u09AF \u09AA\u09C1\u09B0\u09B8\u09CD\u0995\u09BE\u09B0 \u09AA\u09C7\u09B2\u09C7\u09A8 \u09E7\u09E6 \u099C\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%85%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%9f%e0%a6%bf%e0%a6%ac%e0%a6%a1%e0%a6%bf-%e0%a6%aa%e0%a6%b0%e0%a7%80%e0%a6%95%e0%a7%8d/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u0985\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u09AC\u09A1\u09BF \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09A6\u09BF\u09B2 \u09B8\u09B0\u0995\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a7%aa-%e0%a6%ac%e0%a6%9b%e0%a6%b0%e0%a7%87-%e0%a7%a9%e0%a7%a6-%e0%a6%b9%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0-%e0%a7%ab%e0%a7%ad%e0%a7%a9-%e0%a6%ae%e0%a6%bf%e0%a6%a5%e0%a7%8d%e0%a6%af%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09EA \u09AC\u099B\u09B0\u09C7 \u09E9\u09E6 \u09B9\u09BE\u099C\u09BE\u09B0 \u09EB\u09ED\u09E9 \u09AE\u09BF\u09A5\u09CD\u09AF\u09C7 \u09AC\u09B2\u09C7 \u09A8\u099C\u09BF\u09B0 \u09B8\u09C3\u09B7\u09CD\u099F\u09BF \u09AA\u09CD\u09B0\u09C7\u09B8\u09BF\u09A1\u09C7\u09A8\u09CD\u099F \u099F\u09CD\u09B0\u09BE\u09AE\u09CD\u09AA\u09C7\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a7%81%e0%a6%a7%e0%a6%ac%e0%a6%be%e0%a6%b0-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%ac%e0%a6%be%e0%a6%82%e0%a6%b2%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%95%e0%a6%b0/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09C1\u09A7\u09AC\u09BE\u09B0 \u09A5\u09C7\u0995\u09C7 \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09C7 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u099F\u09BF\u0995\u09BE\u09A6\u09BE\u09A8 \u09B6\u09C1\u09B0\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a6%be%e0%a6%ae%e0%a7%8d%e0%a6%aa%e0%a6%95%e0%a7%87-%e0%a6%b8%e0%a7%8b%e0%a6%b2%e0%a6%be%e0%a6%87%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a6%bf-%e0%a6%95%e0%a6%a8%e0%a7%8d%e0%a6%af/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099F\u09CD\u09B0\u09BE\u09AE\u09CD\u09AA\u0995\u09C7 \u09B8\u09CB\u09B2\u09BE\u0987\u09AE\u09BE\u09A8\u09BF \u0995\u09A8\u09CD\u09AF\u09BE\u09B0 \u09B9\u09C1\u0981\u09B6\u09BF\u09DF\u09BE\u09B0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a7%ae-%e0%a6%ab%e0%a7%87%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a7%81%e0%a7%9f%e0%a6%be%e0%a6%b0%e0%a6%bf-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%9f%e0%a6%bf/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09EE \u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09BF \u09A5\u09C7\u0995\u09C7 \u09A6\u09C7\u09B6\u09C7 \u099F\u09BF\u0995\u09BE\u09A6\u09BE\u09A8 \u09B6\u09C1\u09B0\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%aa%e0%a7%8c%e0%a6%81%e0%a6%9b%e0%a6%be%e0%a6%b2-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A6\u09C7\u09B6\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09B2 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u099F\u09BF\u0995\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a8%e0%a7%8b%e0%a7%9f%e0%a6%be%e0%a6%96%e0%a6%be%e0%a6%b2%e0%a7%80%e0%a6%a4%e0%a7%87-%e0%a6%ac%e0%a6%bf%e0%a6%ac%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a7%8d%e0%a6%b0-%e0%a6%95%e0%a6%b0%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A8\u09CB\u09DF\u09BE\u0996\u09BE\u09B2\u09C0\u09A4\u09C7 \u09AC\u09BF\u09AC\u09B8\u09CD\u09A4\u09CD\u09B0 \u0995\u09B0\u09C7 \u09A8\u09BF\u09B0\u09CD\u09AF\u09BE\u09A4\u09A8, \u09AE\u09B9\u09BF\u09B2\u09BE \u09AA\u09B0\u09BF\u09B7\u09A6\u09C7\u09B0 \u0997\u09AD\u09C0\u09B0 \u0989\u09A6\u09CD\u09AC\u09C7\u0997")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%9a%e0%a6%b2%e0%a7%87-%e0%a6%97%e0%a7%87%e0%a6%b2%e0%a7%87%e0%a6%a8-%e0%a6%b2%e0%a7%9c%e0%a6%be%e0%a6%95%e0%a7%81-%e0%a6%af%e0%a7%81%e0%a6%a6%e0%a7%8d%e0%a6%a7%e0%a6%be-%e0%a6%a8%e0%a6%bf/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099A\u09B2\u09C7 \u0997\u09C7\u09B2\u09C7\u09A8 \u09B2\u09DC\u09BE\u0995\u09C1 \u09AF\u09CB\u09A6\u09CD\u09A7\u09BE \u09A8\u09BF\u099C\u09BE\u09AE\u0989\u09A6\u09CD\u09A6\u09BF\u09A8 \u09B2\u09B8\u09CD\u0995\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%ac%e0%a6%99%e0%a7%8d%e0%a6%97%e0%a6%ad%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%95%e0%a7%8d%e0%a6%b8%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u099F\u09BF\u0995\u09BE \u09AC\u0999\u09CD\u0997\u09AD\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B0 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE\u09AE\u09C2\u09B2\u0995 \u09AA\u09CD\u09B0\u09DF\u09CB\u0997\u09C7\u09B0 \u0986\u09AC\u09C7\u09A6\u09A8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a7%ad%e0%a7%a6-%e0%a6%ac%e0%a6%9b%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%95%e0%a7%8b%e0%a6%a8%e0%a7%8b-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80%e0%a6%b0-%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09ED\u09E6 \u09AC\u099B\u09B0 \u09AA\u09B0 \u0995\u09CB\u09A8\u09CB \u09A8\u09BE\u09B0\u09C0\u09B0 \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1\u09A6\u09A3\u09CD\u09A1 \u0995\u09BE\u09B0\u09CD\u09AF\u0995\u09B0 \u0995\u09B0\u09B2 \u09AF\u09C1\u0995\u09CD\u09A4\u09B0\u09BE\u09B7\u09CD\u099F\u09CD\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a7%8b%e0%a6%a8-%e0%a6%9c%e0%a7%87%e0%a6%b2%e0%a6%be%e0%a7%9f-%e0%a6%95%e0%a7%80-%e0%a6%aa%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%be%e0%a6%a3-%e0%a6%ad%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%95/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09CB\u09A8 \u099C\u09C7\u09B2\u09BE\u09DF \u0995\u09C0 \u09AA\u09B0\u09BF\u09AE\u09BE\u09A3 \u09AD\u09CD\u09AF\u09BE\u0995\u09B8\u09BF\u09A8 \u09AF\u09BE\u099A\u09CD\u099B\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%aa%e0%a6%bf-%e0%a6%95%e0%a7%87-%e0%a6%b9%e0%a6%be%e0%a6%b2%e0%a6%a6%e0%a6%be%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%98%e0%a6%a8%e0%a6%bf%e0%a6%b7%e0%a7%8d%e0%a6%a0-%e0%a6%b8%e0%a6%b9/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AA\u09BF \u0995\u09C7 \u09B9\u09BE\u09B2\u09A6\u09BE\u09B0\u09C7\u09B0 \u2018\u0998\u09A8\u09BF\u09B7\u09CD\u09A0 \u09B8\u09B9\u09AF\u09CB\u0997\u09C0\u2019 \u0985\u09AC\u09A8\u09CD\u09A4\u09BF\u0995\u09BE \u0997\u09CD\u09B0\u09C7\u09AA\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a4%e0%a6%bf%e0%a6%b0%e0%a7%8b%e0%a6%a7%e0%a7%80-%e0%a6%b8%e0%a7%8d%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a7%87-%e0%a6%86/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09B0\u09CB\u09A8\u09BE \u09AA\u09CD\u09B0\u09A4\u09BF\u09B0\u09CB\u09A7\u09C0 \u09B8\u09CD\u09AA\u09CD\u09B0\u09C7 \u0986\u09AC\u09BF\u09B7\u09CD\u0995\u09BE\u09B0\u09C7\u09B0 \u09A6\u09BE\u09AC\u09BF \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09BF \u0997\u09AC\u09C7\u09B7\u0995\u09A6\u09C7\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%81%e0%a6%b8%e0%a7%8d%e0%a6%a5-%e0%a6%b9%e0%a6%b2%e0%a7%87%e0%a6%93-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%89%e0%a6%aa%e0%a6%b8%e0%a6%b0%e0%a7%8d%e0%a6%97/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09C1\u09B8\u09CD\u09A5 \u09B9\u09B2\u09C7\u0993 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u0989\u09AA\u09B8\u09B0\u09CD\u0997 \u09A5\u09BE\u0995\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7 \u099B\u09DF \u09AE\u09BE\u09B8 : \u0997\u09AC\u09C7\u09B7\u09A3\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b2%e0%a6%a8%e0%a7%8d%e0%a6%a1%e0%a6%a8-%e0%a6%a5%e0%a7%87%e0%a6%95%e0%a7%87-%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%86%e0%a6%b8%e0%a6%b2%e0%a7%87%e0%a6%a8-%e0%a6%86%e0%a6%b0/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B2\u09A8\u09CD\u09A1\u09A8\u09C7\u09B0 \u0995\u09B0\u09CB\u09A8\u09BE \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF\u09A4\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F \u098F\u09B2\u09C7\u09A8 \u0986\u09B0\u0993 \u09EA\u09E9 \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%a8%e0%a7%81%e0%a6%b6%e0%a6%95%e0%a6%be-%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%aa%e0%a6%be%e0%a7%9f%e0%a7%81%e0%a6%aa%e0%a6%a5%e0%a7%87%e0%a6%93-%e0%a6%ae%e0%a6%bf/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0986\u09A8\u09C1\u09B6\u0995\u09BE \u09B9\u09A4\u09CD\u09AF\u09BE : \u09AA\u09BE\u09DF\u09C1\u09AA\u09A5\u09C7\u0993 \u09AE\u09BF\u09B2\u09C7\u099B\u09C7 \u09A8\u09BF\u09B0\u09CD\u09AF\u09BE\u09A4\u09A8\u09C7\u09B0 \u0986\u09B2\u09BE\u09AE\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%ae%e0%a6%b9%e0%a6%be%e0%a6%a8%e0%a6%97%e0%a6%b0-%e0%a6%93-%e0%a6%9c%e0%a7%87%e0%a6%b2%e0%a6%be-%e0%a6%86%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%ae/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09BF\u09B2\u09C7\u099F \u09AE\u09B9\u09BE\u09A8\u0997\u09B0 \u0993 \u099C\u09C7\u09B2\u09BE \u0986\u0993\u09DF\u09BE\u09AE\u09C0 \u09B2\u09C0\u0997\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09A3\u09BE\u0999\u09CD\u0997 \u0995\u09AE\u09BF\u099F\u09BF \u0998\u09CB\u09B7\u09A3\u09BE (\u09A4\u09BE\u09B2\u09BF\u0995\u09BE\u09B8\u09B9)")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a7%e0%a6%ac%e0%a7%80%e0%a6%b0-%e0%a6%9c%e0%a6%a8%e0%a7%8d%e0%a6%ae%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87-%e0%a6%97%e0%a6%bf%e0%a7%9f%e0%a7%87-%e0%a6%b2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09BE\u09A8\u09CD\u09A7\u09AC\u09C0\u09B0 \u099C\u09A8\u09CD\u09AE\u09A6\u09BF\u09A8\u09C7 \u0997\u09BF\u09DF\u09C7 \u09B2\u09BE\u09B6 \u09B9\u09B2\u09C7\u09A8 \u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0\u09AE\u09BE\u0987\u09A8\u09CD\u09A1\u09C7\u09B0 \u099B\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%95%e0%a6%ac%e0%a7%87-%e0%a6%86%e0%a6%b8%e0%a6%ac%e0%a7%87-%e0%a6%9c%e0%a6%be%e0%a6%a8%e0%a6%be%e0%a6%b2%e0%a7%8b-%e0%a6%b8%e0%a7%8d%e0%a6%ac%e0%a6%be/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099F\u09BF\u0995\u09BE \u0995\u09AC\u09C7 \u0986\u09B8\u09AC\u09C7 \u099C\u09BE\u09A8\u09BE\u09B2\u09CB \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF \u0985\u09A7\u09BF\u09A6\u09AA\u09CD\u09A4\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%ae%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%86%e0%a7%9f%e0%a6%b6%e0%a6%be-%e0%a6%86%e0%a6%aa%e0%a6%be/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u0986\u09DF\u09B6\u09BE \u0986\u09AA\u09BE")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a7%9f%e0%a7%8b%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a7%a7%e0%a7%ab-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a6%a7/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A6\u09C7\u09B6\u09C7 \u09AA\u09CD\u09B0\u09DF\u09CB\u0997\u09C7\u09B0 \u09E7\u09EB \u09A6\u09BF\u09A8\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u099F\u09BF\u0995\u09BE \u09B0\u09AA\u09CD\u09A4\u09BE\u09A8\u09BF \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09AC\u09C7 \u09AD\u09BE\u09B0\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ab%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%a8%e0%a7%87%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%a6%e0%a7%81%e0%a6%a6/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AB\u09BE\u0987\u099C\u09BE\u09B0\u09C7\u09B0 \u099F\u09BF\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE\u09B0 \u09A6\u09C1\u09A6\u09BF\u09A8 \u09AA\u09B0\u0987 \u09AA\u09B0\u09CD\u09A4\u09C1\u0997\u09BF\u099C \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF\u0995\u09B0\u09CD\u09AE\u09C0\u09B0 \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%b0%e0%a6%93-%e0%a6%a6%e0%a7%81%e0%a6%9f%e0%a6%bf-%e0%a6%b6%e0%a7%88%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%ac%e0%a6%be%e0%a6%b9-%e0%a6%86%e0%a6%b8%e0%a6%9b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0986\u09B0\u0993 \u09A6\u09C1\u099F\u09BF \u09B6\u09C8\u09A4\u09CD\u09AF\u09AA\u09CD\u09B0\u09AC\u09BE\u09B9 \u0986\u09B8\u099B\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be-%e0%a6%b9%e0%a6%93%e0%a7%9f%e0%a6%be%e0%a6%b0-%e0%a6%97%e0%a7%81%e0%a6%9e%e0%a7%8d%e0%a6%9c%e0%a6%a8-%e0%a6%ac%e0%a6%bf%e0%a6%b7%e0%a7%9f%e0%a7%87-%e0%a6%ae%e0%a7%81%e0%a6%96/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AE\u09BE \u09B9\u0993\u09DF\u09BE\u09B0 \u0997\u09C1\u099E\u09CD\u099C\u09A8 \u09AC\u09BF\u09B7\u09DF\u09C7 \u09AE\u09C1\u0996 \u0996\u09C1\u09B2\u09B2\u09C7\u09A8 \u09AC\u09C1\u09AC\u09B2\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%ab%e0%a7%8d%e0%a6%b0%e0%a6%bf%e0%a6%95%e0%a6%be%e0%a7%9f-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95%e0%a7%8d%e0%a6%a4-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u2018\u0986\u09AB\u09CD\u09B0\u09BF\u0995\u09BE\u09DF \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8 \u09A7\u09B0\u09A8\u09C7 \u09AD\u09CD\u09AF\u09BE\u0995\u09B8\u09BF\u09A8 \u0995\u09BE\u099C \u09A8\u09BE\u0993 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u2019")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%85%e0%a6%95%e0%a7%8d%e0%a6%b8%e0%a6%ab%e0%a7%8b%e0%a6%b0%e0%a7%8d%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%a5%e0%a6%ae-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%a8/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0985\u0995\u09CD\u09B8\u09AB\u09CB\u09B0\u09CD\u09A1\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u099F\u09BF\u0995\u09BE \u09A8\u09BF\u09B2\u09C7\u09A8 \u09EE\u09E8 \u09AC\u099B\u09B0\u09C7\u09B0 \u09AC\u09CD\u09B0\u09BE\u09DF\u09BE\u09A8 \u09AA\u09BF\u0999\u09CD\u0995\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%a6%e0%a7%8d%e0%a6%ac%e0%a6%bf%e0%a6%a4%e0%a7%80%e0%a7%9f-%e0%a6%a6%e0%a6%bf%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a6%a4%e0%a7%8b-%e0%a6%b6%e0%a6%a8/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A6\u09C7\u09B6\u09C7 \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09A6\u09BF\u09A8\u09C7\u09B0 \u09AE\u09A4\u09CB \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u099A\u09BE\u09B0 \u0985\u0982\u0995\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a8%e0%a6%ac%e0%a6%ac%e0%a6%b0%e0%a7%8d%e0%a6%b7%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%be%e0%a6%a4%e0%a7%87-%e0%a6%8f%e0%a6%95-%e0%a6%ab%e0%a7%8d%e0%a6%b2%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%9f/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A8\u09AC\u09AC\u09B0\u09CD\u09B7\u09C7\u09B0 \u09B0\u09BE\u09A4\u09C7 \u098F\u0995 \u09AB\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09C7 \u09EE \u0995\u09BF\u09B6\u09CB\u09B0-\u0995\u09BF\u09B6\u09CB\u09B0\u09C0\u09B0 \u09B0\u09B9\u09B8\u09CD\u09AF\u09AE\u09DF \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%bf%e0%a6%8f%e0%a6%a8%e0%a6%aa%e0%a6%bf-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a6%be-%e0%a6%ae%e0%a6%93%e0%a6%a6%e0%a7%81%e0%a6%a6-%e0%a6%86%e0%a6%b9%e0%a6%ae%e0%a6%a6-%e0%a6%b9%e0%a6%be/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09BF\u098F\u09A8\u09AA\u09BF \u09A8\u09C7\u09A4\u09BE \u09AE\u0993\u09A6\u09C1\u09A6 \u0986\u09B9\u09AE\u09A6 \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ad%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%95%e0%a6%b8%e0%a6%bf%e0%a6%a8-%e0%a6%aa%e0%a6%be%e0%a6%ac%e0%a7%87-%e0%a6%9b%e0%a7%9f-%e0%a6%95%e0%a7%8b%e0%a6%9f%e0%a6%bf-%e0%a6%a8%e0%a6%be%e0%a6%97/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AD\u09CD\u09AF\u09BE\u0995\u09B8\u09BF\u09A8 \u09AA\u09BE\u09AC\u09C7 \u099B\u09DF \u0995\u09CB\u099F\u09BF \u09A8\u09BE\u0997\u09B0\u09BF\u0995")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%bf%e0%a6%b2%e0%a7%87%e0%a6%9f-%e0%a6%95%e0%a6%b0%e0%a6%bf%e0%a6%ae%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c-%e0%a6%b8%e0%a7%80%e0%a6%ae%e0%a6%be%e0%a6%a8%e0%a7%8d%e0%a6%a4%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09BF\u09B2\u09C7\u099F-\u0995\u09B0\u09BF\u09AE\u0997\u099E\u09CD\u099C \u09B8\u09C0\u09AE\u09BE\u09A8\u09CD\u09A4\u09C7 \u09AE\u09BF\u09B2\u09B2 \u0997\u09CB\u09AA\u09A8 \u09B8\u09C1\u09DC\u0999\u09CD\u0997 \u09AA\u09A5")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%85%e0%a6%95%e0%a7%8d%e0%a6%b8%e0%a6%ab%e0%a7%8b%e0%a6%b0%e0%a7%8d%e0%a6%a1%e0%a7%87%e0%a6%b0-%e0%a6%9f%e0%a6%bf%e0%a6%95%e0%a6%be-%e0%a6%ad%e0%a6%be%e0%a6%b0%e0%a6%a4%e0%a7%87-%e0%a6%85/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0985\u0995\u09CD\u09B8\u09AB\u09CB\u09B0\u09CD\u09A1\u09C7\u09B0 \u099F\u09BF\u0995\u09BE \u09AD\u09BE\u09B0\u09A4\u09C7 \u0985\u09A8\u09C1\u09AE\u09CB\u09A6\u09BF\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a6%bf%e0%a6%9f%e0%a7%87%e0%a6%a8-%e0%a6%ab%e0%a7%87%e0%a6%b0%e0%a6%a4-%e0%a7%a7%e0%a7%a7-%e0%a6%af%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a7%80-%e0%a6%95%e0%a7%8b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09CD\u09B0\u09BF\u099F\u09C7\u09A8 \u09AB\u09C7\u09B0\u09A4 \u09E7\u09E7 \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0 \u0995\u09CB\u09DF\u09BE\u09B0\u09C7\u09A8\u09CD\u099F\u09BF\u09A8\u09C7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ab%e0%a6%be%e0%a6%a8%e0%a7%81%e0%a6%b8-%e0%a6%86%e0%a6%b0-%e0%a6%86%e0%a6%a4%e0%a6%b6%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%bf%e0%a6%a4%e0%a7%87-%e0%a6%a8%e0%a6%a4%e0%a7%81%e0%a6%a8-%e0%a6%ac/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AB\u09BE\u09A8\u09C1\u09B8 \u0986\u09B0 \u0986\u09A4\u09B6\u09AC\u09BE\u099C\u09BF\u09A4\u09C7 \u09A8\u09A4\u09C1\u09A8 \u09AC\u099B\u09B0\u0995\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%97%e0%a7%8b%e0%a6%b2%e0%a6%be%e0%a6%aa%e0%a6%97%e0%a6%9e%e0%a7%8d%e0%a6%9c%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a6%be%e0%a6%95-%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%95%e0%a7%8d%e0%a6%b0%e0%a7%8b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0997\u09CB\u09B2\u09BE\u09AA\u0997\u099E\u09CD\u099C\u09C7 \u099F\u09CD\u09B0\u09BE\u0995-\u09AE\u09BE\u0987\u0995\u09CD\u09B0\u09CB\u09AC\u09BE\u09B8 \u09B8\u0982\u0998\u09B0\u09CD\u09B7\u09C7 \u09B8\u09BF\u09B2\u09BF\u09A8\u09CD\u09A1\u09BE\u09B0 \u09AC\u09BF\u09B7\u09CD\u09AB\u09CB\u09B0\u09A3, \u09A8\u09BF\u09B9\u09A4 \u09EA")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%86%e0%a6%87%e0%a6%b8%e0%a7%8b%e0%a6%b2%e0%a7%87%e0%a6%b6%e0%a6%a8%e0%a7%87-%e0%a6%95%e0%a6%be%e0%a6%9f%e0%a6%b2-%e0%a6%ac%e0%a6%bf%e0%a6%8f%e0%a6%a8%e0%a6%aa%e0%a6%bf%e0%a6%b0/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u2018\u0986\u0987\u09B8\u09CB\u09B2\u09C7\u09B6\u09A8\u09C7\u2019 \u0995\u09BE\u099F\u09B2 \u09AC\u09BF\u098F\u09A8\u09AA\u09BF\u09B0 \u09AC\u099B\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80-%e0%a6%85%e0%a6%a7%e0%a6%bf%e0%a6%95%e0%a6%be%e0%a6%b0%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%ae%e0%a7%80%e0%a6%95%e0%a7%87-%e0%a6%95%e0%a6%be%e0%a6%b0%e0%a6%be%e0%a6%a6/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A8\u09BE\u09B0\u09C0 \u0985\u09A7\u09BF\u0995\u09BE\u09B0\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u0995\u09BE\u09B0\u09BE\u09A6\u09A3\u09CD\u09A1 \u09A6\u09BF\u09DF\u09C7\u099B\u09C7 \u09B8\u09CC\u09A6\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/29945-2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u099A\u09B2\u09A8\u09CD\u09A4 \u09AC\u09BE\u09B8\u09C7 \u09A7\u09B0\u09CD\u09B7\u09A3\u099A\u09C7\u09B7\u09CD\u099F\u09BE, \u099A\u09BE\u09B2\u0995\u09C7\u09B0 \u09B8\u09B9\u0995\u09BE\u09B0\u09C0 \u0997\u09CD\u09B0\u09C7\u09AA\u09CD\u09A4\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/29940-2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B6\u09C7\u09B7 \u0987\u099A\u09CD\u099B\u09C7 \u0985\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B0\u0987\u09B2 \u0985\u09AD\u09BF\u09A8\u09C7\u09A4\u09BE \u0995\u09BE\u09A6\u09C7\u09B0\u09C7\u09B0\xA0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%8f%e0%a6%87%e0%a6%9a%e0%a6%8f%e0%a6%b8%e0%a6%b8%e0%a6%bf%e0%a6%b0-%e0%a6%ab%e0%a6%b2%e0%a6%be%e0%a6%ab%e0%a6%b2-%e0%a7%a9%e0%a7%a7-%e0%a6%a1%e0%a6%bf%e0%a6%b8%e0%a7%87%e0%a6%ae%e0%a7%8d/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u098F\u0987\u099A\u098F\u09B8\u09B8\u09BF\u09B0 \u09AB\u09B2\u09BE\u09AB\u09B2 \u09E9\u09E7 \u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a7%8d%e0%a6%b0%e0%a6%bf%e0%a6%9f%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a6%b0-%e0%a6%8f%e0%a6%ac%e0%a6%be%e0%a6%b0-%e0%a6%a6-%e0%a6%86%e0%a6%ab%e0%a7%8d%e0%a6%b0%e0%a6%bf/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09CD\u09B0\u09BF\u099F\u09C7\u09A8\u09C7\u09B0 \u09AA\u09B0 \u098F\u09AC\u09BE\u09B0 \u09A6. \u0986\u09AB\u09CD\u09B0\u09BF\u0995\u09BE\u09B0 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A7\u09B0\u09A8 \u09A8\u09BF\u09DF\u09C7 \u0986\u09A4\u0999\u09CD\u0995")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%a7%e0%a7%8d%e0%a6%af-%e0%a6%b9%e0%a7%9f%e0%a7%87%e0%a6%87-%e0%a6%b6%e0%a6%b0%e0%a6%a3%e0%a6%be%e0%a6%b0%e0%a7%8d%e0%a6%a5%e0%a7%80-%e0%a6%b9%e0%a6%a8-%e0%a6%96%e0%a7%81/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AC\u09BE\u09A7\u09CD\u09AF \u09B9\u09DF\u09C7\u0987 \u09B6\u09B0\u09A3\u09BE\u09B0\u09CD\u09A5\u09C0 \u09B9\u09A8 \u0996\u09C1\u09A8 \u09B9\u0993\u09DF\u09BE\xA0 \u0995\u09BE\u09B0\u09BF\u09AE\u09BE \u09AE\u09C7\u09B9\u09B0\u09BE\u09AC")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a7%a8%e0%a7%a6%e0%a7%a8%e0%a7%a6-%e0%a6%86%e0%a6%ae%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%ae%e0%a7%81%e0%a6%95%e0%a7%8d%e0%a6%a4%e0%a6%bf-%e0%a6%a6%e0%a6%be%e0%a6%93/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09E8\u09E6\u09E8\u09E6, \u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u09AE\u09C1\u0995\u09CD\u09A4\u09BF \u09A6\u09BE\u0993")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ac%e0%a6%be%e0%a6%82%e0%a6%b2%e0%a6%be%e0%a6%a6%e0%a7%87%e0%a6%b6%e0%a7%87-%e0%a6%b6%e0%a6%a8%e0%a6%be%e0%a6%95%e0%a7%8d%e0%a6%a4-%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u2018\u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09C7 \u09B6\u09A8\u09BE\u0995\u09CD\u09A4 \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8 \u09A7\u09B0\u09A8 \u09A8\u09BF\u09AF\u09BC\u09C7 \u0989\u09A6\u09CD\u09AC\u09C7\u0997\u09C7\u09B0 \u0995\u09BF\u099B\u09C1 \u09A8\u09C7\u0987\u2019")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%b0%e0%a7%8b%e0%a6%a8%e0%a6%be%e0%a6%b0-%e0%a6%a8%e0%a6%a4%e0%a7%81%e0%a6%a8-%e0%a6%9d%e0%a7%81%e0%a6%81%e0%a6%95%e0%a6%bf%e0%a6%b0-%e0%a6%ae%e0%a6%a7%e0%a7%8d%e0%a6%af%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u0995\u09B0\u09CB\u09A8\u09BE\u09B0 \u09A8\u09A4\u09C1\u09A8\xA0 \u099D\u09C1\u0981\u0995\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09B2\u09A8\u09CD\u09A1\u09A8 \u09A5\u09C7\u0995\u09C7 \u09B8\u09BF\u09B2\u09C7\u099F \u098F\u09B2\u09C7\u09A8 \u09E7\u09EC\u09EB \u09AF\u09BE\u09A4\u09CD\u09B0\u09C0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a6%b0%e0%a6%95%e0%a6%be%e0%a6%b0%e0%a6%bf-%e0%a6%a8%e0%a6%be%e0%a6%b0%e0%a7%80-%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%ae%e0%a6%95%e0%a6%b0%e0%a7%8d%e0%a6%a4%e0%a6%be%e0%a6%b0-%e0%a6%ae/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09B0\u0995\u09BE\u09B0\u09BF \u09A8\u09BE\u09B0\u09C0 \u0995\u09B0\u09CD\u09AE\u0995\u09B0\u09CD\u09A4\u09BE\u09B0 \u09AE\u09B0\u09A6\u09C7\u09B9 \u0989\u09A6\u09CD\u09A7\u09BE\u09B0")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%b8%e0%a7%8d%e0%a6%ac%e0%a6%be%e0%a6%b8%e0%a7%8d%e0%a6%a5%e0%a7%8d%e0%a6%af-%e0%a6%95%e0%a7%8d%e0%a6%af%e0%a6%be%e0%a6%a1%e0%a6%be%e0%a6%b0%e0%a7%87%e0%a6%b0-%e0%a6%86%e0%a6%b0%e0%a6%93/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF \u0995\u09CD\u09AF\u09BE\u09A1\u09BE\u09B0\u09C7\u09B0 \u0986\u09B0\u0993 \u09EB\u09E7\u09E8 \u099A\u09BF\u0995\u09BF\u09CE\u09B8\u0995\u09C7\u09B0 \u09AA\u09A6\u09CB\u09A8\u09CD\u09A8\u09A4\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a7%8b%e0%a6%a6%e0%a6%bf%e0%a6%b0-%e0%a6%95%e0%a6%be%e0%a6%9b%e0%a7%87-%e0%a6%95%e0%a7%83%e0%a6%b7%e0%a6%95%e0%a6%a6%e0%a7%87%e0%a6%b0-%e0%a6%b0%e0%a6%95%e0%a7%8d%e0%a6%a4%e0%a7%87/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AE\u09CB\u09A6\u09BF\u09B0 \u0995\u09BE\u099B\u09C7 \u0995\u09C3\u09B7\u0995\u09A6\u09C7\u09B0 \u09B0\u0995\u09CD\u09A4\u09C7 \u09B2\u09C7\u0996\u09BE \u099A\u09BF\u09A0\u09BF")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a7%83%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a7%81-%e0%a6%a8%e0%a7%9f-%e0%a6%86%e0%a6%a4%e0%a7%8d%e0%a6%ae%e0%a6%b9%e0%a6%a4%e0%a7%8d%e0%a6%af%e0%a6%be-%e0%a6%95%e0%a6%b0%e0%a7%87%e0%a6%9b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AE\u09C3\u09A4\u09CD\u09AF\u09C1 \u09A8\u09DF, \u0986\u09A4\u09CD\u09AE\u09B9\u09A4\u09CD\u09AF\u09BE \u0995\u09B0\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u09AE\u09CD\u09AF\u09BE\u09B0\u09BE\u09A1\u09CB\u09A8\u09BE!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%95%e0%a6%be%e0%a6%9c%e0%a7%87%e0%a6%b0-%e0%a6%aa%e0%a7%8d%e0%a6%b0%e0%a6%b8%e0%a7%8d%e0%a6%a4%e0%a6%be%e0%a6%ac-%e0%a6%86%e0%a6%b8%e0%a6%9b%e0%a7%87-%e0%a6%ad%e0%a6%be%e0%a6%b2%e0%a7%8b/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09BE\u09AC \u0986\u09B8\u099B\u09C7, \u09AD\u09BE\u09B2\u09CB \u0995\u09BF\u099B\u09C1 \u0986\u09B8\u099B\u09C7 \u09A8\u09BE : \u0985\u09AA\u09C1 \u09AC\u09BF\u09B6\u09CD\u09AC\u09BE\u09B8")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%a2%e0%a6%be%e0%a6%ac%e0%a6%bf%e0%a6%a4%e0%a7%87-%e0%a6%9b%e0%a6%be%e0%a6%a4%e0%a7%8d%e0%a6%b0%e0%a6%b2%e0%a7%80%e0%a6%97%e0%a7%87%e0%a6%b0-%e0%a7%a8-%e0%a6%a8%e0%a7%87%e0%a6%a4%e0%a7%8d/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09A2\u09BE\u09AC\u09BF\u09A4\u09C7 \u099B\u09BE\u09A4\u09CD\u09B0\u09B2\u09C0\u0997\u09C7\u09B0 \u09E8 \u09A8\u09C7\u09A4\u09CD\u09B0\u09C0\u09B0 \u09AC\u09BF\u09B0\u09C1\u09A6\u09CD\u09A7\u09C7 \u099C\u09C1\u09A8\u09BF\u09DF\u09B0\u0995\u09C7 \u09AA\u09C7\u099F\u09BE\u09A8\u09CB\u09B0 \u0985\u09AD\u09BF\u09AF\u09CB\u0997")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_Latest__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        skip: 0,
+        take: 20
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tab-pane",
         id: "tabs-2",
         role: "tabpanel"
@@ -71240,15 +70938,11 @@ var SectionOne = /*#__PURE__*/function (_Component) {
           maxHeight: '450px',
           overflowY: 'scroll'
         }
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://deshdorpon.com/%e0%a6%ae%e0%a6%be%e0%a6%87%e0%a6%9c%e0%a6%97%e0%a6%be%e0%a6%81%e0%a6%93%e0%a7%9f%e0%a7%87-%e0%a6%9f%e0%a7%8d%e0%a6%b0%e0%a7%87%e0%a6%a8%e0%a7%87%e0%a6%b0-%e0%a6%ac%e0%a6%97%e0%a6%bf-%e0%a6%b2/"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "news-box-w-sm d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mt-3 news-title float-right pl-3 pr-0 border-bottom"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fas fa-arrow-right"
-      }), " \u09AE\u09BE\u0987\u099C\u0997\u09BE\u0981\u0993\u09DF\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09AC\u0997\u09BF \u09B2\u09BE\u0987\u09A8\u099A\u09CD\u09AF\u09C1\u09A4, \u09A6\u09C7\u09B6\u09C7\u09B0 \u09B8\u0999\u09CD\u0997\u09C7 \u09B0\u09C7\u09B2 \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09AC\u09A8\u09CD\u09A7")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Parts_LatestByCat__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        cat: 1,
+        skip: 0,
+        take: 20
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://deshdorpon.com/%e0%a6%9c%e0%a6%bf%e0%a6%a8%e0%a7%8d%e0%a6%a6%e0%a6%be%e0%a6%ac%e0%a6%be%e0%a6%9c%e0%a6%be%e0%a6%b0%e0%a6%b8%e0%a6%b9-%e0%a6%af%e0%a7%87%e0%a6%b8%e0%a6%ac-%e0%a6%8f%e0%a6%b2%e0%a6%be%e0%a6%95%e0%a6%be/"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "news-box-w-sm d-flex"
@@ -71781,7 +71475,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
   _createClass(Home, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Sections__WEBPACK_IMPORTED_MODULE_1__["default"], null));
     }
   }]);
 
@@ -71789,6 +71483,113 @@ var Home = /*#__PURE__*/function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
+
+/***/ }),
+
+/***/ "./resources/js/pages/Single.js":
+/*!**************************************!*\
+  !*** ./resources/js/pages/Single.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var Single = /*#__PURE__*/function (_Component) {
+  _inherits(Single, _Component);
+
+  var _super = _createSuper(Single);
+
+  function Single() {
+    var _this;
+
+    _classCallCheck(this, Single);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      item: []
+    });
+
+    return _this;
+  }
+
+  _createClass(Single, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var slug = this.props.match.params.slug;
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news_by_slug/".concat(slug)).then(function (res) {
+        var item = res.data;
+
+        _this2.setState({
+          item: item
+        });
+
+        console.log(item);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, 'News Working');
+    }
+  }]);
+
+  return Single;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Single); // function Xcom ({match})  {
+//     axios.get('https://reqres.in/api/users?page=2')
+//     .then(response => {
+//        console.log(response.data)
+//        const { data } = response.data
+//        setUserData(data)
+//    }).catch(error => {
+//        console.log(error);
+//    })
+//     return(
+//         <>{match.params.slug}</>
+//     )
+// }
+// export default Xcom;
 
 /***/ }),
 

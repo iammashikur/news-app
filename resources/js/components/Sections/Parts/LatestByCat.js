@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-class LeadOthers extends Component {
+class LatestByCat extends Component {
 
 
     state = {
@@ -10,7 +10,7 @@ class LeadOthers extends Component {
     };
 
     componentDidMount() {
-        axios.get("/api/lead/"+this.props.skip+"/"+this.props.take).then(res => {
+        axios.get("/api/news/"+this.props.cat+"/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
         });
@@ -22,18 +22,15 @@ class LeadOthers extends Component {
                 {this.state.item.map((news, index) => (
                     <Link
                         key={index}
-                        className="news-box"
                         to={'/news/'+news.slug}
                     >
 
 
-
-
-                                <h1>{news.title}</h1>
-                                <p>{news.content}</p>
-                                <small>
-                                    <i className="fas fa-clock"/> {news.date}
-                                </small>
+                    <div className="news-box-w-sm d-flex">
+                      <div className="mt-3 news-title float-right pl-3 pr-0 border-bottom">
+                        <h2><i className="fas fa-arrow-right" /> {news.title}</h2>
+                      </div>
+                    </div>
 
 
                     </Link>
@@ -43,4 +40,4 @@ class LeadOthers extends Component {
     }
 }
 
-export default LeadOthers;
+export default LatestByCat;

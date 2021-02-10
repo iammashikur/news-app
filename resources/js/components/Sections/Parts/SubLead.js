@@ -33,7 +33,7 @@ class SubLeads extends Component {
                                 <div className="col-8 col-md-6 pl-2">
                                     <h1>{news.title}</h1>
                                     <small>
-                                        <i className="fas fa-clock"></i>{news.date}
+                                        <i className="fas fa-clock"></i> {news.date}
                                     </small>
                                 </div>
                             </div>

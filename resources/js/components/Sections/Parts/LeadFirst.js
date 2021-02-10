@@ -10,7 +10,7 @@ class LeadFirst extends Component {
     };
 
     componentDidMount() {
-        axios.get("/api/news/1/"+this.props.skip+"/"+this.props.take).then(res => {
+        axios.get("/api/lead/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
         });
@@ -30,7 +30,7 @@ class LeadFirst extends Component {
                                 <h1>{news.title}</h1>
                                 <p>{news.content}</p>
                                 <small>
-                                    <i className="fas fa-clock    " />{news.date}</small>
+                                    <i className="fas fa-clock    " /> {news.date}</small>
                             </div>
                             <div className="col-md-6 col-12">
                                 <img
