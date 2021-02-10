@@ -23,11 +23,12 @@ Route::resource('/category', 'FrontendController');
 
 Route::get('/menu', 'FrontendController@menu');
 
-Route::get('/news', 'FrontendController@news');
 
 Route::get('/api/lead/{skip}/{take}' , 'FrontendController@fetch_lead');
-Route::get('/api/sub/{skip}/{take}' , 'FrontendController@fetch_sub');
+Route::get('/api/sublead/{skip}/{take}' , 'FrontendController@fetch_sublead');
+Route::get('/api/latest/{skip}/{take}' , 'FrontendController@fetch_latest');
 Route::get('/api/news/{category}/{skip}/{take}' , 'FrontendController@fetch_news');
+Route::get('/api/news_by_slug/{slug}' , 'FrontendController@fetch_news_slug');
 
 Auth::routes(['register' => false]);
 
