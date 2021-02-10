@@ -29,6 +29,7 @@ Route::get('/api/sublead/{skip}/{take}' , 'FrontendController@fetch_sublead');
 Route::get('/api/latest/{skip}/{take}' , 'FrontendController@fetch_latest');
 Route::get('/api/news/{category}/{skip}/{take}' , 'FrontendController@fetch_news');
 Route::get('/api/news_by_slug/{slug}' , 'FrontendController@fetch_news_slug');
+Route::get('/api/category_by_slug/{slug}' , 'FrontendController@fetch_category_slug');
 
 Auth::routes(['register' => false]);
 

@@ -1,52 +1,210 @@
-import React from 'react';
-import axios from 'axios';
-import { Component } from 'react';
+import React from "react";
+import axios from "axios";
+import { Component } from "react";
+import { Link } from "react-router-dom";
 
+import Latest from "../components/Sections/Parts/Latest";
 
 class Single extends Component {
 
     state = {
-        item: []
-    };
+        item: [],
+    }
+
 
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         const slug = this.props.match.params.slug;
         axios.get(`/api/news_by_slug/${slug}`).then(res => {
             const item = res.data;
+
             this.setState({ item });
-            console.log(item);
-        });
+
+        })
     }
 
     render() {
+        return (
+            <>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-2 mb-4 mt-4">
+                            <div
+                                style={{
+                                    background: "#e4e4e4",
+                                    padding: "5px",
+                                    borderTopRightRadius: "10px",
+                                    borderTopLeftRadius: "10px"
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        color: "red",
+                                        textAlign: "center",
+                                        fontSize: "12px",
+                                        margin: "0px"
+                                    }}
+                                >
+                                     <Link to={'/category/' + this.state.item.category_slug}>
+                                        {this.state.item.category}
+                                    </Link>
+
+                                </p>
+                            </div>
+                            <br />
+                            <center>
+                                <img
+                                    id="mobile"
+                                    src="https://deshdorpon.com/media/2020/11/coverdesh.jpg"
+                                    className="rounded-circle"
+                                    alt=""
+                                    width="80px"
+                                    height="80px"
+                                />
+                            </center>
+                            <br />
+                            <div
+                                style={{
+                                    background: "#e5e6f1",
+                                    padding: "10px 5px 10px 5px",
+                                    borderTopRightRadius: "10px",
+                                    borderTopLeftRadius: "10px"
+                                }}
+                            >
+                                <p
+                                    className="mt-2"
+                                    style={{
+                                        fontSize: "17px",
+                                        color: "#1f1f1f",
+                                        textAlign: "center"
+                                    }}
+                                >
+                                     {this.state.item.source}
+                                </p>
+                            </div>
+                            <div
+                                style={{
+                                    background: "#444",
+                                    padding: "5px",
+                                    borderBottomRightRadius: "10px",
+                                    borderBottomLeftRadius: "10px"
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        color: "#fff",
+                                        textAlign: "center",
+                                        fontSize: "13px",
+                                        margin: "0px"
+                                    }}
+                                >
+                                   {this.state.item.date}
+                                </p>
+                            </div>
+                            <br />
+                            <div
+                                className="d-none d-md-block"
+                                style={{ height: "auto !important" }}
+                            ></div>
+                        </div>
+                        <div className="col-md-7 line-right line-left mt-4">
+                            <div
+                                style={{
+                                    fontSize: "16px",
+                                    height: "auto !important"
+                                }}
+                                className="news-box single-page"
+                            >
+
+                                    <div>
+                                        <img src={this.state.item.image} width="100%" />
+                                        <h1>{this.state.item.title}</h1>
+                                        <div
+                                            style={{
+                                                height: "auto !important"
+                                            }}
+                                        >
+                                            Social Share
+                                            {this.state.item.content}
+                                        </div>
+                                    </div>
 
 
+                            </div>
+                            <div className="line-bottom mt-4 mb-4" />
 
-        return(
-        <>{ 'News Working' }</>
-    )
+                            <div className="line-bottom mt-4 mb-4" />
+                        </div>
+                        <div className="col-md-3 mt-4">
+                            <div className="latest-popular">
+                                <ul className="nav nav-tabs" role="tablist">
+                                    <li className="nav-item">
+                                        <a
+                                            className="nav-link show active"
+                                            data-toggle="tab"
+                                            href="#tabs-1"
+                                            role="tab"
+                                            aria-selected="true"
+                                        >
+                                            সর্বশেষ
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a
+                                            className="nav-link"
+                                            data-toggle="tab"
+                                            href="#tabs-2"
+                                            role="tab"
+                                            aria-selected="false"
+                                        >
+                                            সিলেটের সর্বশেষ
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div className="tab-content">
+                                    <div
+                                        className="tab-pane show active"
+                                        id="tabs-1"
+                                        role="tabpanel"
+                                    >
+                                        <div
+                                            className="bg-light"
+                                            style={{
+                                                maxHeight: "390px",
+                                                overflowY: "scroll"
+                                            }}
+                                        >
+                                            <Latest skip={0} take={20} />
+                                        </div>
+                                    </div>
+                                    <div
+                                        className="tab-pane"
+                                        id="tabs-2"
+                                        role="tabpanel"
+                                    >
+                                        <div
+                                            className="bg-light"
+                                            style={{
+                                                maxHeight: "390px",
+                                                overflowY: "scroll"
+                                            }}
+                                        >
+                                            <Latest skip={0} take={20} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div className="col-md-12">
+                                <div className="line-bottom mt-4 mb-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
     }
 }
 
 export default Single;
-
-
-// function Xcom ({match})  {
-
-
-//     axios.get('https://reqres.in/api/users?page=2')
-//     .then(response => {
-//        console.log(response.data)
-//        const { data } = response.data
-//        setUserData(data)
-//    }).catch(error => {
-//        console.log(error);
-//    })
-
-//     return(
-//         <>{match.params.slug}</>
-//     )
-// }
-
-// export default Xcom;
