@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FadeLoader } from "react-spinners";
 
 class LeadOthers extends Component {
 
@@ -20,21 +21,7 @@ class LeadOthers extends Component {
 
     render() {
 
-        if (this.state.loader) return (
-            <center>
-            <div className="lds-spinner">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                </div>
-        </center>
-            );
+        if (!this.state.loader) {
 
         return (
             <>
@@ -59,6 +46,19 @@ class LeadOthers extends Component {
                 ))}
             </>
         );
+
+    } else {
+        return (
+
+                <div className="col-md-12 d-flex justify-content-center  mt-5 mb-5">
+                    <FadeLoader
+                        color={"#6996C1"}
+                        loading={this.state.loading}
+                    />
+                </div>
+
+        );
+    }
     }
 }
 

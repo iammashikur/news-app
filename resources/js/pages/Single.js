@@ -3,16 +3,15 @@ import axios from "axios";
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import Latest from "../components/Sections/Parts/Latest";
+import { FadeLoader } from "react-spinners";
 
 class Single extends Component {
-
     state = {
         item: [],
-    }
-
+        loading: true
+    };
 
     componentDidUpdate(prevProps) {
-
         if (this.props.location !== prevProps.location) {
             window.scrollTo(0, 0);
             const slug = this.props.match.params.slug;
@@ -20,12 +19,8 @@ class Single extends Component {
                 const item = res.data;
 
                 this.setState({ item });
-
-            })
+            });
         }
-
-
-
     }
 
     componentDidMount() {
@@ -35,105 +30,112 @@ class Single extends Component {
             const item = res.data;
 
             this.setState({ item });
-
-        })
+            this.setState({ loading: false });
+        });
     }
 
     render() {
-        return (
-            <>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-2 mb-4 mt-4">
-                            <div
-                                style={{
-                                    background: "#e4e4e4",
-                                    padding: "5px",
-                                    borderTopRightRadius: "10px",
-                                    borderTopLeftRadius: "10px"
-                                }}
-                            >
-                                <p
+        if (!this.state.loading) {
+            return (
+                <>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-2 mb-4 mt-4">
+                                <div
                                     style={{
-                                        color: "red",
-                                        textAlign: "center",
-                                        fontSize: "12px",
-                                        margin: "0px"
+                                        background: "#e4e4e4",
+                                        padding: "5px",
+                                        borderTopRightRadius: "10px",
+                                        borderTopLeftRadius: "10px"
                                     }}
                                 >
-                                     <Link to={'/category/' + this.state.item.category_slug}>
-                                        {this.state.item.category}
-                                    </Link>
-
-                                </p>
-                            </div>
-                            <br />
-                            <center>
-                                <img
-                                    id="mobile"
-                                    src="https://deshdorpon.com/media/2020/11/coverdesh.jpg"
-                                    className="rounded-circle"
-                                    alt=""
-                                    width="80px"
-                                    height="80px"
-                                />
-                            </center>
-                            <br />
-                            <div
-                                style={{
-                                    background: "#e5e6f1",
-                                    padding: "10px 5px 10px 5px",
-                                    borderTopRightRadius: "10px",
-                                    borderTopLeftRadius: "10px"
-                                }}
-                            >
-                                <p
-                                    className="mt-2"
+                                    <p
+                                        style={{
+                                            color: "red",
+                                            textAlign: "center",
+                                            fontSize: "12px",
+                                            margin: "0px"
+                                        }}
+                                    >
+                                        <Link
+                                            to={
+                                                "/category/" +
+                                                this.state.item.category_slug
+                                            }
+                                        >
+                                            {this.state.item.category}
+                                        </Link>
+                                    </p>
+                                </div>
+                                <br />
+                                <center>
+                                    <img
+                                        id="mobile"
+                                        src="https://deshdorpon.com/media/2020/11/coverdesh.jpg"
+                                        className="rounded-circle"
+                                        alt=""
+                                        width="80px"
+                                        height="80px"
+                                    />
+                                </center>
+                                <br />
+                                <div
                                     style={{
-                                        fontSize: "17px",
-                                        color: "#1f1f1f",
-                                        textAlign: "center"
+                                        background: "#e5e6f1",
+                                        padding: "10px 5px 10px 5px",
+                                        borderTopRightRadius: "10px",
+                                        borderTopLeftRadius: "10px"
                                     }}
                                 >
-                                     {this.state.item.source}
-                                </p>
-                            </div>
-                            <div
-                                style={{
-                                    background: "#444",
-                                    padding: "5px",
-                                    borderBottomRightRadius: "10px",
-                                    borderBottomLeftRadius: "10px"
-                                }}
-                            >
-                                <p
+                                    <p
+                                        className="mt-2"
+                                        style={{
+                                            fontSize: "17px",
+                                            color: "#1f1f1f",
+                                            textAlign: "center"
+                                        }}
+                                    >
+                                        {this.state.item.source}
+                                    </p>
+                                </div>
+                                <div
                                     style={{
-                                        color: "#fff",
-                                        textAlign: "center",
-                                        fontSize: "13px",
-                                        margin: "0px"
+                                        background: "#444",
+                                        padding: "5px",
+                                        borderBottomRightRadius: "10px",
+                                        borderBottomLeftRadius: "10px"
                                     }}
                                 >
-                                   {this.state.item.date}
-                                </p>
+                                    <p
+                                        style={{
+                                            color: "#fff",
+                                            textAlign: "center",
+                                            fontSize: "13px",
+                                            margin: "0px"
+                                        }}
+                                    >
+                                        {this.state.item.date}
+                                    </p>
+                                </div>
+                                <br />
+                                <div
+                                    className="d-none d-md-block"
+                                    style={{ height: "auto !important" }}
+                                ></div>
                             </div>
-                            <br />
-                            <div
-                                className="d-none d-md-block"
-                                style={{ height: "auto !important" }}
-                            ></div>
-                        </div>
-                        <div className="col-md-7 line-right line-left mt-4">
-                            <div
-                                style={{
-                                    fontSize: "16px",
-                                    height: "auto !important"
-                                }}
-                                className="news-box single-page"
-                            >
-
+                            <div className="col-md-7 line-right line-left mt-4">
+                                <div
+                                    style={{
+                                        fontSize: "16px",
+                                        height: "auto !important"
+                                    }}
+                                    className="news-box single-page"
+                                >
                                     <div>
-                                        <img src={this.state.item.image} width="100%" />
+                                        <img
+                                            src={this.state.item.image} className="mb-4"
+                                            width="100%"
+                                        />
                                         <h1>{this.state.item.title}</h1>
                                         <div
                                             style={{
@@ -144,81 +146,93 @@ class Single extends Component {
                                             {this.state.item.content}
                                         </div>
                                     </div>
+                                </div>
+                                <div className="line-bottom mt-4 mb-4" />
 
-
+                                <div className="line-bottom mt-4 mb-4" />
                             </div>
-                            <div className="line-bottom mt-4 mb-4" />
-
-                            <div className="line-bottom mt-4 mb-4" />
-                        </div>
-                        <div className="col-md-3 mt-4">
-                            <div className="latest-popular">
-                                <ul className="nav nav-tabs" role="tablist">
-                                    <li className="nav-item">
-                                        <a
-                                            className="nav-link show active"
-                                            data-toggle="tab"
-                                            href="#tabs-1"
-                                            role="tab"
-                                            aria-selected="true"
-                                        >
-                                            সর্বশেষ
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a
-                                            className="nav-link"
-                                            data-toggle="tab"
-                                            href="#tabs-2"
-                                            role="tab"
-                                            aria-selected="false"
-                                        >
-                                            সিলেটের সর্বশেষ
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div className="tab-content">
-                                    <div
-                                        className="tab-pane show active"
-                                        id="tabs-1"
-                                        role="tabpanel"
-                                    >
+                            <div className="col-md-3 mt-4">
+                                <div className="latest-popular">
+                                    <ul className="nav nav-tabs" role="tablist">
+                                        <li className="nav-item">
+                                            <a
+                                                className="nav-link show active"
+                                                data-toggle="tab"
+                                                href="#tabs-1"
+                                                role="tab"
+                                                aria-selected="true"
+                                            >
+                                                সর্বশেষ
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                className="nav-link"
+                                                data-toggle="tab"
+                                                href="#tabs-2"
+                                                role="tab"
+                                                aria-selected="false"
+                                            >
+                                                সিলেটের সর্বশেষ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div className="tab-content">
                                         <div
-                                            className="bg-light"
-                                            style={{
-                                                maxHeight: "390px",
-                                                overflowY: "scroll"
-                                            }}
+                                            className="tab-pane show active"
+                                            id="tabs-1"
+                                            role="tabpanel"
                                         >
-                                            <Latest skip={0} take={20} />
+                                            <div
+                                                className="bg-light"
+                                                style={{
+                                                    maxHeight: "390px",
+                                                    overflowY: "scroll"
+                                                }}
+                                            >
+                                                <Latest skip={0} take={20} />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div
-                                        className="tab-pane"
-                                        id="tabs-2"
-                                        role="tabpanel"
-                                    >
                                         <div
-                                            className="bg-light"
-                                            style={{
-                                                maxHeight: "390px",
-                                                overflowY: "scroll"
-                                            }}
+                                            className="tab-pane"
+                                            id="tabs-2"
+                                            role="tabpanel"
                                         >
-                                            <Latest skip={0} take={20} />
+                                            <div
+                                                className="bg-light"
+                                                style={{
+                                                    maxHeight: "390px",
+                                                    overflowY: "scroll"
+                                                }}
+                                            >
+                                                <Latest skip={0} take={20} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div className="col-md-12">
-                                <div className="line-bottom mt-4 mb-4"></div>
+                                <br />
+                                <div className="col-md-12">
+                                    <div className="line-bottom mt-4 mb-4"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </>
+            );
+        } else {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <div
+                            className="col-md-12 d-flex justify-content-center"
+                            style={{ marginTop: "30vh" }}
+                        >
+                            <FadeLoader color={"#6996C1"} loading={this.state.loading} />
+                        </div>
+                    </div>
                 </div>
-            </>
-        );
+            );
+        }
     }
 }
 

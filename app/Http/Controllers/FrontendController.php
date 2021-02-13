@@ -127,8 +127,14 @@ class FrontendController extends Controller
     public function fetch_category_slug(Request $request){
 
         $item = Categories::where('slug' , $request->slug)->first();
+        $news_all = Posts::where(['category_id' => $item->id, 'status' => 'published',])->latest()->paginate(6);
 
-        $news_all = Posts::where(['category_id' => $item->id, 'status' => 'published',])->latest()->paginate(1);
+        foreach ($news_all as $key => $post) {
+            $post->id = $post->id;
+            $post->image = url($post->image);
+            $post->title =  $post->title;
+            $post->content = Str::words(strip_tags($item->content), 16);
+        }
 
         return response($news_all);
 

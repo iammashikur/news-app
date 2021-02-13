@@ -1,22 +1,27 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FadeLoader } from "react-spinners";
 
 class Latest extends Component {
 
 
     state = {
-        item: []
+        item: [],
+        loader: true
     };
 
     componentDidMount() {
         axios.get("/api/latest/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
+            this.setState({loader: false});
         });
     }
 
     render() {
+
+        if (!this.state.loader) {
         return (
             <>
                 {this.state.item.map((news, index) => (
@@ -37,6 +42,19 @@ class Latest extends Component {
                 ))}
             </>
         );
+
+    } else {
+        return (
+
+                <div className="col-md-12 d-flex justify-content-center  mt-5 mb-5">
+                    <FadeLoader
+                        color={"#6996C1"}
+                        loading={this.state.loading}
+                    />
+                </div>
+
+        );
+    }
     }
 }
 

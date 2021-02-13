@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FadeLoader } from "react-spinners";
 
 class SubLeads extends Component {
     state = {
@@ -20,28 +21,12 @@ class SubLeads extends Component {
 
     render() {
 
-        if (this.state.loader) return (
-           <div className="col">
-                <center>
-            <div className="lds-spinner">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                </div>
-        </center>
-           </div>
-            );
+        if (!this.state.loader) {
 
         return (
             <>
                 {this.state.item.map((news, index) => (
-                    <div className="col-md-4" key={index}>
+                    <div className="col-md-4 mb-md-0 mb-4" key={index}>
                         <Link className="news-bar" to={"/news/" + news.slug}>
                             <div className="row">
                                 <div className="col-4 col-md-6 pr-2">
@@ -64,6 +49,19 @@ class SubLeads extends Component {
                 ))}
             </>
         );
+
+    } else {
+        return (
+
+                <div className="col-md-12 d-flex justify-content-center  mt-5 mb-5">
+                    <FadeLoader
+                        color={"#6996C1"}
+                        loading={this.state.loading}
+                    />
+                </div>
+
+        );
+    }
     }
 }
 
