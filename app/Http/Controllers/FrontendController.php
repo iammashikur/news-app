@@ -13,7 +13,7 @@ class FrontendController extends Controller
 {
     public function index()
     {
-        return view('index');
+        return view('app');
 
     }
 
@@ -128,20 +128,17 @@ class FrontendController extends Controller
 
         $item = Categories::where('slug' , $request->slug)->first();
 
-        $news = [];
+        $news_all = Posts::where(['category_id' => $item->id, 'status' => 'published',])->latest()->paginate(1);
 
-        $news_all = Posts::where(['category_id' => $item->id, 'status' => 'published',])->latest()->get();
+        return response($news_all);
 
-        foreach($news_all as $item)
-        {
+    }
 
-            $news[] = [
-                'id' => $item->id,
-                'title' => $item->title,
-                'slug' => $item->slug,
-            ];
-        }
-        return response($news);
+    public function fetch_category_name_slug(Request $request){
+
+        $item = Categories::where('slug' , $request->slug)->first();
+
+        return response($item);
 
     }
 

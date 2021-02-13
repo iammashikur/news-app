@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Auth;
 */
 
 
-Route::resource('/', 'FrontendController');
-
-Route::resource('/category', 'FrontendController');
 
 // Api Routes
 
@@ -30,6 +27,9 @@ Route::get('/api/latest/{skip}/{take}' , 'FrontendController@fetch_latest');
 Route::get('/api/news/{category}/{skip}/{take}' , 'FrontendController@fetch_news');
 Route::get('/api/news_by_slug/{slug}' , 'FrontendController@fetch_news_slug');
 Route::get('/api/category_by_slug/{slug}' , 'FrontendController@fetch_category_slug');
+Route::get('/api/category_name_by_slug/{slug}' , 'FrontendController@fetch_category_name_slug');
+
+
 
 Auth::routes(['register' => false]);
 
@@ -111,3 +111,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('/settings', 'AdminController@settings_update')->name('settings_update');
 
 });
+
+
+Route::get('/{path?}', function () {
+    return view('app');
+})->where('path', '.*');

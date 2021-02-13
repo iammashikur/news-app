@@ -70123,7 +70123,7 @@ var Navbar = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-        className: "navbar navbar-expand-lg navbar-light bg-light"
+        className: "navbar navbar-expand-lg navbar-light bg-light sticky-top"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
@@ -70504,7 +70504,8 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      item: []
+      item: [],
+      loader: true
     });
 
     return _this;
@@ -70521,11 +70522,18 @@ var LeadFirst = /*#__PURE__*/function (_Component) {
         _this2.setState({
           item: item
         });
+
+        _this2.setState({
+          loader: false
+        });
       });
     }
   }, {
     key: "render",
     value: function render() {
+      if (this.state.loader) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "lds-ripple mt-5 mb-5"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null)));
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
           key: index,
@@ -70614,7 +70622,8 @@ var LeadOthers = /*#__PURE__*/function (_Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      item: []
+      item: [],
+      loader: true
     });
 
     return _this;
@@ -70631,11 +70640,18 @@ var LeadOthers = /*#__PURE__*/function (_Component) {
         _this2.setState({
           item: item
         });
+
+        _this2.setState({
+          loader: false
+        });
       });
     }
   }, {
     key: "render",
     value: function render() {
+      if (this.state.loader) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "lds-spinner"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null)));
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
           key: index,
@@ -70714,7 +70730,8 @@ var SubLeads = /*#__PURE__*/function (_Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      item: []
+      item: [],
+      loader: true
     });
 
     return _this;
@@ -70731,11 +70748,20 @@ var SubLeads = /*#__PURE__*/function (_Component) {
         _this2.setState({
           item: item
         });
+
+        _this2.setState({
+          loader: false
+        });
       });
     }
   }, {
     key: "render",
     value: function render() {
+      if (this.state.loader) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("center", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "lds-spinner"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null))));
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.item.map(function (news, index) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "col-md-4",
@@ -71426,27 +71452,58 @@ var Category = /*#__PURE__*/function (_Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      item: []
+      item: [],
+      data: [],
+      cnam: []
     });
 
     return _this;
   }
 
   _createClass(Category, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      var _this2 = this;
+
+      if (this.props.location !== prevProps.location) {
+        window.scrollTo(0, 0);
+        var slug = this.props.match.params.slug;
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/category_name_by_slug/".concat(slug)).then(function (response) {
+          var cnam = response.data;
+
+          _this2.setState({
+            cnam: cnam
+          });
+        });
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/category_by_slug/".concat(slug)).then(function (response) {
+          var item = response.data;
+
+          _this2.setState({
+            item: item
+          });
+        });
+      }
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.scrollTo(0, 0);
       var slug = this.props.match.params.slug;
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/category_by_slug/".concat(slug)).then(function (res) {
-        var item = res.data;
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/category_name_by_slug/".concat(slug)).then(function (response) {
+        var cnam = response.data;
 
-        _this2.setState({
+        _this3.setState({
+          cnam: cnam
+        });
+      });
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/category_by_slug/".concat(slug)).then(function (response) {
+        var item = response.data;
+
+        _this3.setState({
           item: item
         });
-
-        console.log(item);
       });
     }
   }, {
@@ -71457,12 +71514,18 @@ var Category = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-9 line-right line-left mt-4"
+        className: "col-md-9"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "line-bottom mt-4 mb-4"
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "line-bottom mt-4 mb-4"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: " mt-4 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+        className: "cat-title"
+      }, this.state.cnam.name, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "far fa-arrow-alt-circle-right"
+      })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-3 mt-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "latest-popular"
@@ -71659,16 +71722,33 @@ var Single = /*#__PURE__*/function (_Component) {
   }
 
   _createClass(Single, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      var _this2 = this;
+
+      if (this.props.location !== prevProps.location) {
+        window.scrollTo(0, 0);
+        var slug = this.props.match.params.slug;
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news_by_slug/".concat(slug)).then(function (res) {
+          var item = res.data;
+
+          _this2.setState({
+            item: item
+          });
+        });
+      }
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.scrollTo(0, 0);
       var slug = this.props.match.params.slug;
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/news_by_slug/".concat(slug)).then(function (res) {
         var item = res.data;
 
-        _this2.setState({
+        _this3.setState({
           item: item
         });
       });

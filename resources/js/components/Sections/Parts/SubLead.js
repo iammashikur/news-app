@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 
 class SubLeads extends Component {
     state = {
-        item: []
+        item: [],
+        loader: true
     };
 
     componentDidMount() {
@@ -13,10 +14,30 @@ class SubLeads extends Component {
             .then(res => {
                 const item = res.data;
                 this.setState({ item });
+                this.setState({loader: false});
             });
     }
 
     render() {
+
+        if (this.state.loader) return (
+           <div className="col">
+                <center>
+            <div className="lds-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                </div>
+        </center>
+           </div>
+            );
+
         return (
             <>
                 {this.state.item.map((news, index) => (

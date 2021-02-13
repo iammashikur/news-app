@@ -4,19 +4,54 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import Latest from "../components/Sections/Parts/Latest";
 
+
+
+
 class Category extends Component {
+
+
     state = {
-        item: []
+        item: [],
+        data: [],
+        cnam: []
     };
 
+    componentDidUpdate(prevProps) {
+
+        if (this.props.location !== prevProps.location) {
+            window.scrollTo(0, 0);
+        const slug = this.props.match.params.slug;
+
+        axios.get(`/api/category_name_by_slug/${slug}`).then(response => {
+            const cnam = response.data;
+            this.setState({ cnam });
+        });
+
+        axios.get(`/api/category_by_slug/${slug}`).then(response => {
+            const item = response.data;
+            this.setState({ item });
+        });
+        }
+
+
+
+    }
+
     componentDidMount() {
+
         window.scrollTo(0, 0);
         const slug = this.props.match.params.slug;
-        axios.get(`/api/category_by_slug/${slug}`).then(res => {
-            const item = res.data;
-            this.setState({ item });
-            console.log(item);
+
+        axios.get(`/api/category_name_by_slug/${slug}`).then(response => {
+            const cnam = response.data;
+            this.setState({ cnam });
         });
+
+        axios.get(`/api/category_by_slug/${slug}`).then(response => {
+            const item = response.data;
+            this.setState({ item });
+        });
+
     }
 
     render() {
@@ -24,10 +59,41 @@ class Category extends Component {
             <>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-9 line-right line-left mt-4">
-                            <div className="line-bottom mt-4 mb-4" />
+                        <div className="col-md-9">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className=" mt-4 mb-4">
+                                        <h2 className="cat-title">{this.state.cnam.name} <i className="far fa-arrow-alt-circle-right" />
+                                        </h2>
+                                    </div>
+                                </div>
 
-                            <div className="line-bottom mt-4 mb-4" />
+
+
+                                {/* {this.state.item.map((news, idx) => (
+                                    <div className="col-md-4" key={idx}>
+                                        <Link
+                                            className="news-box mb-4"
+                                            to={'/news/'+news.slug}
+                                        >
+                                            <img
+                                                className="mb-4"
+                                                src={news.image}
+                                            />
+                                            <h1>
+                                                {news.title}
+                                            </h1>
+                                            <p>
+                                                {news.content}
+                                            </p>
+                                            <small>
+                                                <i className="fas fa-clock    " />
+                                                2 January 2021, 9:46 PM
+                                            </small>
+                                        </Link>
+                                    </div>
+                                ))} */}
+                            </div>
                         </div>
                         <div className="col-md-3 mt-4">
                             <div className="latest-popular">
@@ -98,6 +164,9 @@ class Category extends Component {
             </>
         );
     }
+
+
 }
+
 
 export default Category;

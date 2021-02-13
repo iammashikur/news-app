@@ -6,19 +6,30 @@ class LeadFirst extends Component {
 
 
     state = {
-        item: []
+        item: [],
+        loader: true,
     };
 
     componentDidMount() {
         axios.get("/api/lead/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
+            this.setState({loader: false});
         });
     }
 
     render() {
+
+        if (this.state.loader) return (
+        <center>
+            <div className="lds-ripple mt-5 mb-5"><div></div><div></div></div>
+        </center>
+        );
+
         return (
             <>
+
+
                 {this.state.item.map((news, index) => (
                     <Link
                         key={index}

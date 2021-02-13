@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { Component } from "react";
 import { Link } from "react-router-dom";
-
 import Latest from "../components/Sections/Parts/Latest";
 
 class Single extends Component {
@@ -12,6 +11,22 @@ class Single extends Component {
     }
 
 
+    componentDidUpdate(prevProps) {
+
+        if (this.props.location !== prevProps.location) {
+            window.scrollTo(0, 0);
+            const slug = this.props.match.params.slug;
+            axios.get(`/api/news_by_slug/${slug}`).then(res => {
+                const item = res.data;
+
+                this.setState({ item });
+
+            })
+        }
+
+
+
+    }
 
     componentDidMount() {
         window.scrollTo(0, 0);
