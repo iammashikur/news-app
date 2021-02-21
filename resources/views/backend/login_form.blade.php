@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Otika - Admin Dashboard Template</title>
+  <title>Deshdorpon - Admin Login</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/app.min.css">
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/bundles/bootstrap-social/bootstrap-social.css">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/custom.css">
-  <link rel='shortcut icon' type='image/x-icon' href='{{url('/')}}/assets/backend/img/favicon.ico' />
+  <link rel="shortcut icon" href="{{url(App\Settings::find(1)->favicon)}}" type="image/x-icon">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 </head>
 

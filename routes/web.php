@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,16 +19,31 @@ use Illuminate\Support\Facades\Auth;
 
 // Api Routes
 
-Route::get('/menu', 'FrontendController@menu');
+Route::get('/api/menu', 'FrontendController@menu');
+Route::get('/api/pre_drop_menu', 'FrontendController@pre_drop_menu');
+Route::get('/api/post_drop_menu', 'FrontendController@post_drop_menu');
+
 
 
 Route::get('/api/lead/{skip}/{take}' , 'FrontendController@fetch_lead');
 Route::get('/api/sublead/{skip}/{take}' , 'FrontendController@fetch_sublead');
 Route::get('/api/latest/{skip}/{take}' , 'FrontendController@fetch_latest');
+
 Route::get('/api/news/{category}/{skip}/{take}' , 'FrontendController@fetch_news');
+
+Route::get('/api/item/{category}/{skip}/{title}/{content}' , 'FrontendController@fetch_news_item');
+
 Route::get('/api/news_by_slug/{slug}' , 'FrontendController@fetch_news_slug');
+
+
 Route::get('/api/category_by_slug/{slug}' , 'FrontendController@fetch_category_slug');
 Route::get('/api/category_name_by_slug/{slug}' , 'FrontendController@fetch_category_name_slug');
+
+Route::get('/api/search' , 'FrontendController@search');
+Route::get('/api/settings' , 'FrontendController@settings');
+
+
+Route::get('/command/{command}', 'FrontendController@command');
 
 
 
@@ -113,6 +129,4 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 });
 
 
-Route::get('/{path?}', function () {
-    return view('app');
-})->where('path', '.*');
+Route::get('/{path?}', 'FrontendController@index')->where('path', '.*');

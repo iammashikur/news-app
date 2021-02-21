@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FadeLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 class LeadFirst extends Component {
     state = {
@@ -9,8 +9,8 @@ class LeadFirst extends Component {
         loader: true
     };
 
-    componentDidMount() {
-        axios
+    async componentDidMount() {
+        await axios
             .get("/api/lead/" + this.props.skip + "/" + this.props.take)
             .then(res => {
                 const item = res.data;
@@ -53,7 +53,7 @@ class LeadFirst extends Component {
         } else {
             return (
                     <div className="col-md-12 d-flex justify-content-center mt-5 mb-5">
-                        <FadeLoader
+                        <ClipLoader
                             color={"#6996C1"}
                             loading={this.state.loading}
                         />

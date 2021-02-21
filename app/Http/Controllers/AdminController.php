@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
+use Intervention\Image\ImageManagerStatic as Image;
 use App\Posts;
 use App\Categories;
 use App\Galleries;
@@ -213,7 +214,7 @@ class AdminController extends Controller
         ]);
 
         Alert::toast('News Updated & ' . $status . ' !', 'success');
-        return redirect()->back();
+        return redirect()->route('news_all');
     }
 
     // News Delete
@@ -637,13 +638,75 @@ class AdminController extends Controller
         if (Auth::user()->is_admin !== 1) {
             return abort(403, 'Unauthorized action.');
         }
-        return view('backend.settings');
+
+        $settings = Settings::find(1);
+
+        return view('backend.settings', compact('settings'));
     }
 
-    public function settings_update()
+    public function settings_update(Request $request)
     {
+
         if (Auth::user()->is_admin !== 1) {
             return abort(403, 'Unauthorized action.');
         }
+
+        if (!$request->hasFile('logo')) {
+            $request->logo = Settings::find(1)->logo;
+        }
+
+        if (!$request->hasFile('favicon')) {
+            $request->favicon = Settings::find(1)->favicon;
+        }
+
+        // Upload image
+        if ($request->hasFile('logo')) {
+
+            // Upload File
+            $image = $request->file('logo');
+            $name = 'logo_' . time();
+            $main_folder  = 'assets/frontend/';
+            $logo_path  = $main_folder .  $name . '.' . $image->getClientOriginalExtension();
+            //Resize Big Image
+            $main = Image::make($image);
+            //$main->fit(400, 410);
+            $main->save(public_path($logo_path));
+            $request->logo = $logo_path;
+        }
+
+        if ($request->hasFile('favicon')) {
+
+            // Upload File
+            $image = $request->file('favicon');
+            $name = 'favicon_' . time();
+            $main_folder  = 'assets/frontend/';
+            $favicon_path  = $main_folder .  $name . '.' . $image->getClientOriginalExtension();
+            //Resize Big Image
+            $main = Image::make($image);
+            $main->fit(100, 100);
+            $main->save(public_path($favicon_path));
+            $request->favicon = $favicon_path;
+        }
+
+
+
+        Settings::where('id', 1)->update([
+
+            'logo'         => $request->logo,
+            'favicon'      => $request->favicon,
+            'title'        => $request->title,
+            'description'  => $request->description,
+            'tags'         => $request->tags,
+            'banner_ad'    => $request->banner_ad,
+            'sidebar_ad'   => $request->sidebar_ad,
+            'post_ad'      => $request->post_ad,
+            'auto_ad'      => $request->auto_ad,
+            'share_button' => $request->share_button,
+            'wetget'       => $request->wetget,
+        ]);
+
+        Alert::toast('Settings Updated !', 'success');
+        return redirect()->back();
+
     }
 }

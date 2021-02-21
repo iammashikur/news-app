@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FadeLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 class Latest extends Component {
 
@@ -11,8 +11,8 @@ class Latest extends Component {
         loader: true
     };
 
-    componentDidMount() {
-        axios.get("/api/latest/"+this.props.skip+"/"+this.props.take).then(res => {
+    async componentDidMount() {
+        await axios.get("/api/latest/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
             this.setState({loader: false});
@@ -32,7 +32,7 @@ class Latest extends Component {
 
 
                     <div className="news-box-w-sm d-flex">
-                      <div className="mt-3 news-title float-right pl-3 pr-0 border-bottom">
+                      <div className="mt-3 news-title float-right pl-3 pr-1 border-bottom">
                         <h2><i className="fas fa-arrow-right" /> {news.title}</h2>
                       </div>
                     </div>
@@ -47,7 +47,7 @@ class Latest extends Component {
         return (
 
                 <div className="col-md-12 d-flex justify-content-center  mt-5 mb-5">
-                    <FadeLoader
+                    <ClipLoader
                         color={"#6996C1"}
                         loading={this.state.loading}
                     />

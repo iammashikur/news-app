@@ -9,8 +9,8 @@ class LatestByCat extends Component {
         item: []
     };
 
-    componentDidMount() {
-        axios.get("/api/news/"+this.props.cat+"/"+this.props.skip+"/"+this.props.take).then(res => {
+    async componentDidMount() {
+        await axios.get("/api/news/"+this.props.cat+"/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
         });
@@ -27,7 +27,7 @@ class LatestByCat extends Component {
 
 
                     <div className="news-box-w-sm d-flex">
-                      <div className="mt-3 news-title float-right pl-3 pr-0 border-bottom">
+                      <div className="mt-3 news-title float-right pl-3 pr-2 border-bottom">
                         <h2><i className="fas fa-arrow-right" /> {news.title}</h2>
                       </div>
                     </div>

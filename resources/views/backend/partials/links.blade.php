@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/custom.css">
-  <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
+  <link rel="shortcut icon" href="{{url(App\Settings::find(1)->favicon)}}" type="image/x-icon">
 
 
 @else
@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="{{url('/')}}/assets/backend/css/custom.css">
-  <link rel='shortcut icon' type='image/x-icon' href='assets/backend/img/favicon.ico' />
+  <link rel="shortcut icon" href="{{url(App\Settings::find(1)->favicon)}}" type="image/x-icon">
 
 
 

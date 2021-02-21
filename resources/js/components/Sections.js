@@ -1,15 +1,17 @@
 import React from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import SectionOne from "./Sections/SectionOne";
-import SectionTwo from "./Sections/SectionTwo";
+import HeaderSection from "./Sections/HeaderSection";
+import MainSections from "./Sections/MainSections";
+import MediaSection from "./Sections/MediaSection";
 
 class Navbar extends React.Component {
+
     render() {
+
         return (
             <>
-                <SectionOne />
-                {/* <SectionTwo /> */}
+                <HeaderSection />
+                <MainSections />
+                <MediaSection />
             </>
         );
     }

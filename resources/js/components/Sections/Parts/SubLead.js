@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FadeLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 class SubLeads extends Component {
     state = {
@@ -9,9 +9,9 @@ class SubLeads extends Component {
         loader: true
     };
 
-    componentDidMount() {
-        axios
-            .get("/api/news/1/" + this.props.skip + "/" + this.props.take)
+    async componentDidMount() {
+        await axios
+            .get("/api/sublead/" + this.props.skip + "/" + this.props.take)
             .then(res => {
                 const item = res.data;
                 this.setState({ item });
@@ -54,7 +54,7 @@ class SubLeads extends Component {
         return (
 
                 <div className="col-md-12 d-flex justify-content-center  mt-5 mb-5">
-                    <FadeLoader
+                    <ClipLoader
                         color={"#6996C1"}
                         loading={this.state.loading}
                     />

@@ -43,8 +43,9 @@
                 <table class="table table-striped border">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Category Name</th>
-                            <th>Menu Order</th>
+                            <th>Slug</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -54,8 +55,11 @@
 
                         <tr>
 
+
+
+                            <td>{{$category->id}}</td>
                             <td>{{$category->name}}</td>
-                            <td>{{$category->order}}</td>
+                            <td>{{$category->slug}}</td>
                             <td class="text-right">
 
 

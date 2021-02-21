@@ -4,6 +4,8 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import Latest from "../components/Sections/Parts/Latest";
 import { FadeLoader } from "react-spinners";
+import {Helmet} from "react-helmet";
+import News from "../components/Sections/Parts/News";
 
 class Single extends Component {
     state = {
@@ -38,6 +40,22 @@ class Single extends Component {
         if (!this.state.loading) {
             return (
                 <>
+                    <Helmet>
+
+
+                    <title>{this.state.item.title}</title>
+                    <meta name="keywords" ontent={this.state.item.tags} />
+                    <meta name="description" content={this.state.item.description} />
+                    <meta property="og:type" content="article" />
+                    <meta property="og:image" content={this.state.item.image} />
+                    <meta property="og:title" content={this.state.item.title} />
+                    <meta property="og:description" content={this.state.item.description} />
+
+
+
+
+                    </Helmet>
+
                     <div className="container">
                         <div className="row">
                             <div className="col-md-2 mb-4 mt-4">
@@ -62,8 +80,7 @@ class Single extends Component {
                                                 "/category/" +
                                                 this.state.item.category_slug
                                             }
-                                        >
-                                            {this.state.item.category}
+                                        >{this.state.item.category}
                                         </Link>
                                     </p>
                                 </div>
@@ -121,6 +138,11 @@ class Single extends Component {
                                 <div
                                     className="d-none d-md-block"
                                     style={{ height: "auto !important" }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: JSON.parse(
+                                            localStorage.getItem("Settings")
+                                        ).sidebar_ad
+                                    }}
                                 ></div>
                             </div>
                             <div className="col-md-7 line-right line-left mt-4">
@@ -133,21 +155,138 @@ class Single extends Component {
                                 >
                                     <div>
                                         <img
-                                            src={this.state.item.image} className="mb-4"
+                                            src={this.state.item.image}
+                                            className="mb-4"
                                             width="100%"
                                         />
+
                                         <h1>{this.state.item.title}</h1>
+
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: JSON.parse(
+                                                    localStorage.getItem(
+                                                        "Settings"
+                                                    )
+                                                ).post_ad
+                                            }}
+                                        ></div>
+
                                         <div
                                             style={{
                                                 height: "auto !important"
                                             }}
                                         >
-                                            Social Share
+                                            <div  className="mt-4 mb-4 d-flex"
+
+                                            ><div
+                                            dangerouslySetInnerHTML={{
+                                                __html: JSON.parse(
+                                                    localStorage.getItem(
+                                                        "Settings"
+                                                    )
+                                                ).share_button
+                                            }}
+                                            ></div> <div className="btn btn-sm btn-default p-2 ml-2"> <i className="fas fa-share    "></i> {(this.state.item.views/2).toFixed()} Shares</div> </div>
+
                                             {this.state.item.content}
+
                                         </div>
+
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: JSON.parse(
+                                                    localStorage.getItem(
+                                                        "Settings"
+                                                    )
+                                                ).post_ad
+                                            }}
+                                        ></div>
                                     </div>
                                 </div>
                                 <div className="line-bottom mt-4 mb-4" />
+
+
+<div className="mt-4 mb-4">
+<h2 className="cat-title">এই ক্যাটাগরীর আরো খবর <i className="far fa-arrow-alt-circle-right"></i></h2>
+</div>
+
+
+                               <div className="row">
+
+                               <div className="col-md-4">
+
+                               <News
+                                    category={this.state.item.category_id}
+                                    skip={1}
+                                    title={10}
+                                    content={10}
+                                    design={"big-news"}
+                                />
+
+                                </div>
+
+                                <div className="col-md-4">
+
+                                <News
+                                    category={this.state.item.category_id}
+                                    skip={2}
+                                    title={10}
+                                    content={10}
+                                    design={"big-news"}
+                                />
+
+                                   </div>
+
+                                   <div className="col-md-4">
+
+                                   <News
+                                    category={this.state.item.category_id}
+                                    skip={3}
+                                    title={10}
+                                    content={10}
+                                    design={"big-news"}
+                                />
+
+                                   </div>
+
+                                   <div className="col-md-4">
+
+                                   <News
+                                    category={this.state.item.category_id}
+                                    skip={4}
+                                    title={10}
+                                    content={10}
+                                    design={"big-news"}
+                                />
+
+                                   </div>
+
+                                   <div className="col-md-4">
+
+                                   <News
+                                    category={this.state.item.category_id}
+                                    skip={5}
+                                    title={10}
+                                    content={10}
+                                    design={"big-news"}
+                                />
+
+                                   </div>
+
+                                   <div className="col-md-4">
+
+                                   <News
+                                    category={this.state.item.category_id}
+                                    skip={6}
+                                    title={10}
+                                    content={10}
+                                    design={"big-news"}
+                                />
+
+                                   </div>
+
+                                </div>
 
                                 <div className="line-bottom mt-4 mb-4" />
                             </div>
@@ -227,7 +366,10 @@ class Single extends Component {
                             className="col-md-12 d-flex justify-content-center"
                             style={{ marginTop: "30vh" }}
                         >
-                            <FadeLoader color={"#6996C1"} loading={this.state.loading} />
+                            <FadeLoader
+                                color={"#6996C1"}
+                                loading={this.state.loading}
+                            />
                         </div>
                     </div>
                 </div>

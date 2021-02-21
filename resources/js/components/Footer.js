@@ -8,7 +8,7 @@ const Footer = () => {
                     <div className="col-md-6 col-sm-12 line-right">
                         <div className="footer-widget">
                             <div className="widget-about">
-                                <a href="https://deshdorpon.com/">
+                                <a href="/">
 
                                 </a>
                                 <a
@@ -49,23 +49,18 @@ const Footer = () => {
                             <div className="footer-menu footer-menu--1">
                                 <ul className="contact-details mb-2">
                                     <li>
-                                        <span className="fas fa-pen-nib"></span>
-                                        <a href="mailto:info@thetopnews24.com">
-
-
-                                            ergerg
+                                        <span className="fas fa-pen-nib"></span> <a href="/">
+                                        সম্পাদক : মুক্তা‌দীর আহমদ মুক্তা
                                         </a>
                                     </li>
                                     <li>
-                                        <span className="far fa-address-book"></span>
-                                        <a href="mailto:info@thetopnews24.com">
-                                         gerger
+                                        <span className="far fa-address-book"></span> <a href="/">
+                                         কা‌নিজ প্লাজা, জিন্দাবাজার, সি‌লেট
                                         </a>
                                     </li>
                                     <li>
-                                        <span className="fas fa-envelope-open"></span>
-                                        <a href="mailto:info@thetopnews24.com">
-                                           egrgerg
+                                        <span className="fas fa-envelope-open"></span> <a href="mailto:info@deshdorpon.com">
+                                            info@deshdorpon.com
                                         </a>
                                     </li>
                                 </ul>
