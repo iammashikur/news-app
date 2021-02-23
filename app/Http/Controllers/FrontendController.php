@@ -445,7 +445,7 @@ class FrontendController extends Controller
 
             $news = [
                 'title' => $item->title,
-                'content' => Str::words(strip_tags($item->content), 16),
+                'content' => $item->content,
                 'image' => url($item->image),
                 'slug' => $item->slug,
                 'source' => $item->source,

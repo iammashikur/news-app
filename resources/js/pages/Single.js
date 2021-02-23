@@ -4,13 +4,14 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import Latest from "../components/Sections/Parts/Latest";
 import { FadeLoader } from "react-spinners";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import News from "../components/Sections/Parts/News";
 
 class Single extends Component {
+
     state = {
         item: [],
-        loading: true
+        loading: false
     };
 
     componentDidUpdate(prevProps) {
@@ -41,19 +42,25 @@ class Single extends Component {
             return (
                 <>
                     <Helmet>
-
-
-                    <title>{this.state.item.title}</title>
-                    <meta name="keywords" ontent={this.state.item.tags} />
-                    <meta name="description" content={this.state.item.description} />
-                    <meta property="og:type" content="article" />
-                    <meta property="og:image" content={this.state.item.image} />
-                    <meta property="og:title" content={this.state.item.title} />
-                    <meta property="og:description" content={this.state.item.description} />
-
-
-
-
+                        <title>{this.state.item.title}</title>
+                        <meta name="keywords" ontent={this.state.item.tags} />
+                        <meta
+                            name="description"
+                            content={this.state.item.description}
+                        />
+                        <meta property="og:type" content="article" />
+                        <meta
+                            property="og:image"
+                            content={this.state.item.image}
+                        />
+                        <meta
+                            property="og:title"
+                            content={this.state.item.title}
+                        />
+                        <meta
+                            property="og:description"
+                            content={this.state.item.description}
+                        />
                     </Helmet>
 
                     <div className="container">
@@ -80,7 +87,8 @@ class Single extends Component {
                                                 "/category/" +
                                                 this.state.item.category_slug
                                             }
-                                        >{this.state.item.category}
+                                        >
+                                            {this.state.item.category}
                                         </Link>
                                     </p>
                                 </div>
@@ -177,20 +185,32 @@ class Single extends Component {
                                                 height: "auto !important"
                                             }}
                                         >
-                                            <div  className="mt-4 mb-4 d-flex"
+                                            <div className="mt-4 mb-4 d-flex">
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: JSON.parse(
+                                                            localStorage.getItem(
+                                                                "Settings"
+                                                            )
+                                                        ).share_button
+                                                    }}
+                                                ></div>{" "}
+                                                <div className="btn btn-sm btn-default p-2 ml-2">
+                                                    {" "}
+                                                    <i className="fas fa-share    "></i>{" "}
+                                                    {(
+                                                        this.state.item.views /
+                                                        2
+                                                    ).toFixed()}{" "}
+                                                    Shares
+                                                </div>{" "}
+                                            </div>
 
-                                            ><div
-                                            dangerouslySetInnerHTML={{
-                                                __html: JSON.parse(
-                                                    localStorage.getItem(
-                                                        "Settings"
-                                                    )
-                                                ).share_button
-                                            }}
-                                            ></div> <div className="btn btn-sm btn-default p-2 ml-2"> <i className="fas fa-share    "></i> {(this.state.item.views/2).toFixed()} Shares</div> </div>
-
-                                            {this.state.item.content}
-
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: this.state.item.content
+                                                }}
+                                            ></div>
                                         </div>
 
                                         <div
@@ -206,86 +226,85 @@ class Single extends Component {
                                 </div>
                                 <div className="line-bottom mt-4 mb-4" />
 
-
-<div className="mt-4 mb-4">
-<h2 className="cat-title">এই ক্যাটাগরীর আরো খবর <i className="far fa-arrow-alt-circle-right"></i></h2>
-</div>
-
-
-                               <div className="row">
-
-                               <div className="col-md-4">
-
-                               <News
-                                    category={this.state.item.category_id}
-                                    skip={1}
-                                    title={10}
-                                    content={10}
-                                    design={"big-news"}
-                                />
-
+                                <div className="mt-4 mb-4">
+                                    <h2 className="cat-title">
+                                        এই ক্যাটাগরীর আরো খবর{" "}
+                                        <i className="far fa-arrow-alt-circle-right"></i>
+                                    </h2>
                                 </div>
 
-                                <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <News
+                                            category={
+                                                this.state.item.category_id
+                                            }
+                                            skip={1}
+                                            title={10}
+                                            content={10}
+                                            design={"big-news"}
+                                        />
+                                    </div>
 
-                                <News
-                                    category={this.state.item.category_id}
-                                    skip={2}
-                                    title={10}
-                                    content={10}
-                                    design={"big-news"}
-                                />
+                                    <div className="col-md-4">
+                                        <News
+                                            category={
+                                                this.state.item.category_id
+                                            }
+                                            skip={2}
+                                            title={10}
+                                            content={10}
+                                            design={"big-news"}
+                                        />
+                                    </div>
 
-                                   </div>
+                                    <div className="col-md-4">
+                                        <News
+                                            category={
+                                                this.state.item.category_id
+                                            }
+                                            skip={3}
+                                            title={10}
+                                            content={10}
+                                            design={"big-news"}
+                                        />
+                                    </div>
 
-                                   <div className="col-md-4">
+                                    <div className="col-md-4">
+                                        <News
+                                            category={
+                                                this.state.item.category_id
+                                            }
+                                            skip={4}
+                                            title={10}
+                                            content={10}
+                                            design={"big-news"}
+                                        />
+                                    </div>
 
-                                   <News
-                                    category={this.state.item.category_id}
-                                    skip={3}
-                                    title={10}
-                                    content={10}
-                                    design={"big-news"}
-                                />
+                                    <div className="col-md-4">
+                                        <News
+                                            category={
+                                                this.state.item.category_id
+                                            }
+                                            skip={5}
+                                            title={10}
+                                            content={10}
+                                            design={"big-news"}
+                                        />
+                                    </div>
 
-                                   </div>
-
-                                   <div className="col-md-4">
-
-                                   <News
-                                    category={this.state.item.category_id}
-                                    skip={4}
-                                    title={10}
-                                    content={10}
-                                    design={"big-news"}
-                                />
-
-                                   </div>
-
-                                   <div className="col-md-4">
-
-                                   <News
-                                    category={this.state.item.category_id}
-                                    skip={5}
-                                    title={10}
-                                    content={10}
-                                    design={"big-news"}
-                                />
-
-                                   </div>
-
-                                   <div className="col-md-4">
-
-                                   <News
-                                    category={this.state.item.category_id}
-                                    skip={6}
-                                    title={10}
-                                    content={10}
-                                    design={"big-news"}
-                                />
-
-                                   </div>
-
+                                    <div className="col-md-4">
+                                        <News
+                                            category={
+                                                this.state.item.category_id
+                                            }
+                                            skip={6}
+                                            title={10}
+                                            content={10}
+                                            design={"big-news"}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="line-bottom mt-4 mb-4" />
