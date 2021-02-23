@@ -9,8 +9,8 @@ class News extends Component {
         loader: true
     };
 
-    async componentDidMount() {
-        await axios
+    componentDidMount() {
+         axios
             .get(
                 "/api/item/" +
                     this.props.category +
@@ -48,6 +48,33 @@ class News extends Component {
                                 />
                                 <h1>{news.title}</h1>
                                 <p>{news.content}</p>
+                                <small>
+                                    <i className="fas fa-clock    " />{" "}
+                                    {news.date}
+                                </small>
+                            </Link>
+                        </div>
+                    ))}
+                </>
+            );
+        }
+
+        if (this.props.design == "big-news-nocntent") {
+            return (
+                <>
+                    {this.state.item.map((news, index) => (
+                        <div className="mb-4" key={index}>
+                            <Link
+                                key={index}
+                                className="news-box"
+                                to={"/news/" + news.slug}
+                            >
+                                <img
+                                    className="mb-4"
+                                    src={news.image}
+                                    width="100%"
+                                />
+                                <h1>{news.title}</h1>
                                 <small>
                                     <i className="fas fa-clock    " />{" "}
                                     {news.date}

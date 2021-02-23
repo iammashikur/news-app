@@ -9,8 +9,8 @@ class LatestByCat extends Component {
         item: []
     };
 
-    async componentDidMount() {
-        await axios.get("/api/news/"+this.props.cat+"/"+this.props.skip+"/"+this.props.take).then(res => {
+    componentDidMount() {
+        axios.get("/api/news/"+this.props.cat+"/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
         });

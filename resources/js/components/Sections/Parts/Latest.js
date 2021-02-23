@@ -11,8 +11,8 @@ class Latest extends Component {
         loader: true
     };
 
-    async componentDidMount() {
-        await axios.get("/api/latest/"+this.props.skip+"/"+this.props.take).then(res => {
+    componentDidMount() {
+        axios.get("/api/latest/"+this.props.skip+"/"+this.props.take).then(res => {
             const item = res.data;
             this.setState({ item });
             this.setState({loader: false});

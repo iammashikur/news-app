@@ -27,6 +27,9 @@ class CreateSettingsTable extends Migration
             $table->text('auto_ad')->nullable();
             $table->text('share_button')->nullable();
             $table->text('wetget')->nullable();
+            $table->text('about')->nullable();
+            $table->text('contact')->nullable();
+            $table->text('privacy')->nullable();
             $table->timestamps();
         });
     }

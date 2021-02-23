@@ -137,6 +137,35 @@
 
 
                         <div class="card">
+                            <div class="card-header">
+                                Pages
+                             </div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label for="">About Us</label>
+                                    <textarea type="text"
+                                    class="summernote" name="about" id="" aria-describedby="helpId">{{$settings->about}}</textarea>
+                                  </div>
+
+
+                                  <div class="form-group">
+                                    <label for="">Contact Us</label>
+                                    <textarea type="text"
+                                    class="summernote" name="contact" id="" aria-describedby="helpId">{{$settings->contact}}</textarea>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label for="">Privacy Policy</label>
+                                    <textarea type="text"
+                                    class="summernote" name="privacy" id="" aria-describedby="helpId">{{$settings->privacy}}</textarea>
+                                  </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="card">
 
                             <div class="card-body">
 

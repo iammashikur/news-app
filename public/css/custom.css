@@ -40,14 +40,18 @@ button.search:hover {
     -webkit-box-shadow: 0 0 5px rgb(0 0 0/14%);
     box-shadow: 0 0 5px rgb(0 0 0/14%);
 }
+
+
+
 ::-webkit-scrollbar {
     background: #eee;
     width: 10px;
 }
 ::-webkit-scrollbar-thumb {
     background: #494949;
-    border-radius: 5px;
 }
+
+
 .ad-box {
     background-color: #c9c9c9;
     height: 193px;
@@ -64,7 +68,7 @@ button.search:hover {
 }
 .news-box h1 {
     font-weight: 700;
-    font-size: 22px;
+    font-size: 20px;
     color: #222;
 }
 .news-box p {
@@ -353,3 +357,10 @@ button.search:hover {
         border-radius: 28px;
         margin: 5px;
       }
+.tab-content{
+    border: 1px solid #ebebeb;
+}
+
+.widget-about a{
+    margin: 4px;
+}

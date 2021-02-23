@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
     return (
@@ -8,38 +9,30 @@ const Footer = () => {
                     <div className="col-md-6 col-sm-12 line-right">
                         <div className="footer-widget">
                             <div className="widget-about">
-                                <a href="/">
 
-                                </a>
-                                <a
-                                    href="page/about-us"
+                                <Link
+                                    to="/page/about-us"
                                     className="btn hyper-link"
                                 >
                                     <i className="fas fa-newspaper"></i> About
                                     Us
-                                </a>
+                                </Link>
 
-                                <a
-                                    href="page/contact-us"
+                                <Link
+                                    to="/page/contact-us"
                                     className="btn hyper-link"
                                 >
                                     <i className="fas fa-phone"></i> Contact Us
-                                </a>
+                                </Link>
 
-                                <a
-                                    href="page/privacy-policy"
+                                <Link
+                                    to="/page/privacy-policy"
                                     className="btn hyper-link"
                                 >
-                                    Privacy Policy
-                                </a>
+                                    <i className="fas fa-key"></i> Privacy Policy
+                                </Link>
 
-                                <a
-                                    href="page/disclaimer"
-                                    className="btn hyper-link"
-                                >
 
-                                    hrthrt
-                                </a>
                             </div>
                         </div>
                     </div>

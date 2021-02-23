@@ -29,7 +29,9 @@
         "query-string": "^6.14.0",
         "react-helmet": "^6.1.0",
         "react-laravel-paginex": "^2.0.8",
+        "react-on-screen": "^2.1.1",
         "react-router-dom": "^5.2.0",
-        "react-spinners": "^0.10.6"
+        "react-spinners": "^0.10.6",
+        "react-visibility-sensor": "^5.1.1"
     }
 }

@@ -268,7 +268,7 @@ class MainSections extends Component {
                                             category={7}
                                             skip={0}
                                             title={10}
-                                            content={20}
+                                            content={55}
                                             design={"big-news"}
                                         />
                                     </div>
@@ -278,14 +278,14 @@ class MainSections extends Component {
                                             skip={1}
                                             title={10}
                                             content={20}
-                                            design={"big-news"}
+                                            design={"big-news-nocntent"}
                                         />
                                         <News
                                             category={7}
                                             skip={2}
                                             title={10}
                                             content={20}
-                                            design={"big-news"}
+                                            design={"big-news-nocntent"}
                                         />
                                     </div>
                                     <div className="col-md-12">

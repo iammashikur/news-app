@@ -55,7 +55,7 @@
 
 
                         <tr>
-                            <td scope="row"><img class="m-4" src="{{url($post->image)}}" alt="" width="100px"></td>
+                    <td scope="row"><img class="m-4" src="@if($post->image !== null) {{url($post->image)}} @endif" alt="" width="100px"></td>
                             <td>{{$post->title}}</td>
                             <td>{{App\User::find($post->author_id)->name}}</td>
                             <td>{{$post->created_at}}</td>

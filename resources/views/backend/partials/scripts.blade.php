@@ -2,14 +2,15 @@
 
 @endif
 
+
+
 @if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update' || Request::segment('2') ==
-'gallery-add'|| Request::segment('2') == 'gallery-update' || Request::segment('2') == 'files')
+'gallery-add'|| Request::segment('2') == 'gallery-update' || Request::segment('2') == 'files' || Request::segment('2') == 'settings')
 
 <!-- General JS Scripts -->
 <script src="{{url('/')}}/assets/backend/js/app.min.js"></script>
 <!-- JS Libraies -->
 <script src="{{url('/')}}/assets/backend/bundles/summernote/summernote-bs4.js"></script>
-<script src="{{url('/')}}/assets/backend/bundles/jquery-selectric/jquery.selectric.min.js"></script>
 <script src="{{url('/')}}/assets/backend/bundles/upload-preview/assets/js/jquery.uploadPreview.min.js"></script>
 <script src="{{url('/')}}/assets/backend/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 <!-- Page Specific JS File -->

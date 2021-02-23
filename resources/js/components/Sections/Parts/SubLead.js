@@ -9,8 +9,8 @@ class SubLeads extends Component {
         loader: true
     };
 
-    async componentDidMount() {
-        await axios
+    componentDidMount() {
+        axios
             .get("/api/sublead/" + this.props.skip + "/" + this.props.take)
             .then(res => {
                 const item = res.data;

@@ -1,6 +1,6 @@
 
 
-@if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update')
+@if (Request::segment('2') == 'news-publish' || Request::segment('2') == 'news-update' || Request::segment('2') == 'settings' )
 
 
   <!-- General CSS Files -->

@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->text('title');
             $table->text('content');
-            $table->text('image')->nullable();
+            $table->string('image')->nullable()->default('/assets/frontend/placeholder.jpg');
             $table->text('caption')->nullable();
             $table->text('description')->nullable();
             $table->text('slug');

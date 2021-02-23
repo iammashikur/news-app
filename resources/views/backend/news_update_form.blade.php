@@ -66,7 +66,7 @@
 
                                         <div class="form-group">
                                             <label for="">Content</label>
-                                            <textarea class="summernote-simple" name="content" required>{{$news->content}}</textarea>
+                                            <textarea class="summernote" name="content" required>{{$news->content}}</textarea>
                                         </div>
 
 
@@ -82,9 +82,9 @@
                                                 Media Gallery
                                             </div>
 
-                                            <img id="news-image" width="200px" src="{{url($news->image)}}">
+                                            <img id="news-image" width="200px" src="@if($news->image !== null) {{url($news->image)}} @endif">
 
-                                            <input id="form-image" type="hidden" name="image" value="{{$news->image}}" required>
+                                            <input id="form-image" type="hidden" name="image" value="@if($news->image !== null) {{url($news->image)}} @endif">
 
                                         </div>
 
@@ -98,14 +98,14 @@
                                           <div class="form-group">
                                             <label for="">News Source</label>
                                             <input type="text"
-                                              class="form-control" name="source" id="" value="{{$news->source}}">
+                                              class="form-control" name="source" id="" value="{{$news->source}}" required>
 
                                           </div>
 
 
                                         <div class="form-group">
                                             <label for="">Short Description</label>
-                                            <textarea name="description" type="text" class="form-control" required>{{$news->description}}</textarea>
+                                            <textarea name="description" type="text" class="form-control">{{$news->description}}</textarea>
                                         </div>
 
 
@@ -113,7 +113,7 @@
 
                                         <div class="form-group">
                                             <label for="">Tags</label>
-                                            <input name="tags" type="text" class="form-control inputtags" value="{{$news->tags}}" required>
+                                            <input name="tags" type="text" class="form-control inputtags" value="{{$news->tags}}">
                                         </div>
 
 

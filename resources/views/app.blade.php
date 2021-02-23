@@ -34,6 +34,9 @@
         auto_ad      : '<?= App\Settings::find(1)->auto_ad ?>',
         share_button : '<?= App\Settings::find(1)->share_button ?>',
         wetget       : '<?= App\Settings::find(1)->wetget ?>',
+        about        : '<?= App\Settings::find(1)->about ?>',
+        contact      : '<?= App\Settings::find(1)->contact ?>',
+        privacy      : '<?= App\Settings::find(1)->privacy ?>',
 
     }
 
@@ -54,6 +57,9 @@
     window.localStorage.setItem('PreMenu',   JSON.stringify(<?= $premenu  ?>));
     window.localStorage.setItem('MainMenu',  JSON.stringify(<?= $mainmenu ?>));
     window.localStorage.setItem('PostMenu',  JSON.stringify(<?= $postmenu ?>));
+
+
+
 
 
     </script>

@@ -3,9 +3,9 @@ import HeaderSection from "./Sections/HeaderSection";
 import MainSections from "./Sections/MainSections";
 import MediaSection from "./Sections/MediaSection";
 
-class Navbar extends React.Component {
+function Sections(){
 
-    render() {
+
 
         return (
             <>
@@ -14,7 +14,7 @@ class Navbar extends React.Component {
                 <MediaSection />
             </>
         );
-    }
+
 }
 
-export default Navbar;
+export default Sections;

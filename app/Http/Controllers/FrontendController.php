@@ -176,146 +176,27 @@ class FrontendController extends Controller
 
     }
 
-    // public function menu(){
-    //     return response(array (
-
-    //         array (
-    //           'id' => 2,
-    //           'name' => 'রাজনীতি',
-    //           'slug' => 'rajneeti',
-    //         ),
-
-    //         array (
-    //           'id' => 3,
-    //           'name' => 'আন্তর্জাতিক',
-    //           'slug' => 'antrjatik',
-    //         ),
-
-    //         array (
-    //           'id' => 4,
-    //           'name' => 'খেলাধুলা',
-    //           'slug' => 'kheladhula',
-    //         ),
-
-    //         array (
-    //           'id' => 6,
-    //           'name' => 'এক্সক্লুসিভ',
-    //           'slug' => 'eksklusiv',
-    //         ),
-
-    //         array (
-    //           'id' => 5,
-    //           'name' => 'বিনোদন',
-    //           'slug' => 'binodn',
-
-    //         ),
-
-    //       ));
-    // }
-
-    // public function pre_drop_menu(){
-    //     return response(array (
-    //         0 =>
-    //         array (
-    //           'id' => 1,
-    //           'name' => 'Bangladesh',
-    //           'slug' => 'bangladesh',
-    //         ),
-    //         1 =>
-    //         array (
-    //           'id' => 2,
-    //           'name' => 'India',
-    //           'slug' => 'india',
-    //         ),
-    //         2 =>
-    //         array (
-    //           'id' => 3,
-    //           'name' => 'আন্তর্জাতিক',
-    //           'slug' => 'antrjatik',
-    //         ),
-    //         3 =>
-    //         array (
-    //           'id' => 4,
-    //           'name' => 'খেলাধুলা',
-    //           'slug' => 'kheladhula',
-    //         ),
-    //         4 =>
-    //         array (
-    //           'id' => 6,
-    //           'name' => 'এক্সক্লুসিভ',
-    //           'slug' => 'eksklusiv',
-    //         ),
-    //         5 =>
-    //         array (
-    //           'id' => 5,
-    //           'name' => 'বিনোদন',
-    //           'slug' => 'binodn',
-
-    //         ),
-    //         6 =>
-    //         array (
-    //           'id' => 7,
-    //           'name' => 'অন্যান্য',
-    //           'slug' => 'onzanz',
-    //         ),
-    //       ));
-    // }
-
-
-
-    // public function post_drop_menu(){
-    //     return response(array (
-    //         0 =>
-    //         array (
-    //           'id' => 1,
-    //           'name' => 'বাংলাদেশ',
-    //           'slug' => 'banglades',
-    //         ),
-    //         1 =>
-    //         array (
-    //           'id' => 2,
-    //           'name' => 'রাজনীতি',
-    //           'slug' => 'rajneeti',
-
-    //         ),
-    //         2 =>
-    //         array (
-    //           'id' => 3,
-    //           'name' => 'আন্তর্জাতিক',
-    //           'slug' => 'antrjatik',
-
-    //         ),
-    //         3 =>
-    //         array (
-    //           'id' => 4,
-    //           'name' => 'খেলাধুলা',
-    //           'slug' => 'kheladhula',
-
-    //         ),
-    //         4 =>
-    //         array (
-    //           'id' => 6,
-    //           'name' => 'এক্সক্লুসিভ',
-    //           'slug' => 'eksklusiv',
-
-    //         ),
-    //         5 =>
-    //         array (
-    //           'id' => 5,
-    //           'name' => 'বিনোদন',
-    //           'slug' => 'binodn',
-
-    //         ),
-    //         6 =>
-    //         array (
-    //           'id' => 7,
-    //           'name' => 'অন্যান্য',
-    //           'slug' => 'onzanz',
-    //         ),
-    //       ));
-    // }
-
-
+    function bangla($str)
+    {
+        $en = array(1,2,3,4,5,6,7,8,9,0);
+        $bn = array('১','২','৩','৪','৫','৬','৭','৮','৯','০');
+        $str = str_replace($en, $bn, $str);
+        $en = array( 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' );
+        $en_short = array( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
+        $bn = array( 'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'অগাস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর' );
+        $str = str_replace( $en, $bn, $str );
+        $str = str_replace( $en_short, $bn, $str );
+        $en = array('Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday');
+        $en_short = array('Sat','Sun','Mon','Tue','Wed','Thu','Fri');
+        $bn_short = array('শনি', 'রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র');
+        $bn = array('শনিবার','রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার');
+        $str = str_replace( $en, $bn, $str );
+        $str = str_replace( $en_short, $bn_short, $str );
+        $en = array( 'am', 'pm' );
+        $bn = array( 'পূর্বাহ্ন', 'অপরাহ্ন' );
+        $str = str_replace( $en, $bn, $str );
+        return $str;
+    }
 
     public function fetch_news(Request $request){
 
@@ -332,7 +213,7 @@ class FrontendController extends Controller
                 'content' => Str::words(strip_tags($item->content), 16),
                 'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' => $item->slug,
-                'date' =>  Carbon::parse($item->created_at)->format('d M Y'),
+                'date' => $this->bangla(Carbon::parse($item->created_at)->format('d M Y'))  ,
             ];
         }
         return response($news);
@@ -353,7 +234,7 @@ class FrontendController extends Controller
                 'content' => Str::words(strip_tags($item->content), $request->content),
                 'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' =>  $item->slug,
-                'date' =>  Carbon::parse($item->created_at)->format('d M Y'),
+                'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
         }
         return response($news);
@@ -375,7 +256,7 @@ class FrontendController extends Controller
                 'content' => Str::words(strip_tags($item->content), 16),
                 'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' => $item->slug,
-                'date' =>  Carbon::parse($item->created_at)->format('d M Y'),
+                'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
         }
         return response($news);
@@ -396,7 +277,7 @@ class FrontendController extends Controller
                 'content' => Str::words(strip_tags($item->content), 16),
                 'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' => $item->slug,
-                'date' =>  Carbon::parse($item->created_at)->format('d M Y'),
+                'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
         }
         return response($news);
@@ -456,7 +337,7 @@ class FrontendController extends Controller
                 'tags' => $item->tags,
                 'views' => $item->views,
                 'description' => $item->description,
-                'date' =>  Carbon::parse($item->created_at)->format('d M Y'),
+                'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
         return response($news);
     }
@@ -472,6 +353,7 @@ class FrontendController extends Controller
             $post->image = url($post->image);
             $post->title =  $post->title;
             $post->content = Str::words(strip_tags($post->content), 16);
+            $post->date = $this->bangla(Carbon::parse($post->created_at)->format('d M Y'));
         }
 
         return response($news_all);

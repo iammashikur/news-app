@@ -180,7 +180,7 @@ export default class CategoryItem extends Component {
                                     <div
                                         className="bg-light"
                                         style={{
-                                            maxHeight: "390px",
+                                            maxHeight: "636px",
                                             overflowY: "scroll"
                                         }}
                                     >
@@ -195,7 +195,7 @@ export default class CategoryItem extends Component {
                                     <div
                                         className="bg-light"
                                         style={{
-                                            maxHeight: "390px",
+                                            maxHeight: "636px",
                                             overflowY: "scroll"
                                         }}
                                     >

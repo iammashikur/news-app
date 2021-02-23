@@ -10,7 +10,7 @@ class HeaderSections extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container" style={{minHeight:'100vh'}}>
 
 
                 <div className="row" style={{ height: "auto !important" }}>
@@ -89,7 +89,7 @@ class HeaderSections extends Component {
                                     <div
                                         className="bg-light"
                                         style={{
-                                            maxHeight: "450px",
+                                            maxHeight: "636px",
                                             overflowY: "scroll"
                                         }}
                                     >
@@ -104,7 +104,7 @@ class HeaderSections extends Component {
                                     <div
                                         className="bg-light"
                                         style={{
-                                            maxHeight: "450px",
+                                            maxHeight: "636px",
                                             overflowY: "scroll"
                                         }}
                                     >
@@ -117,9 +117,7 @@ class HeaderSections extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-12">
-                            <div className="line-bottom mt-4 mb-4"></div>
-                        </div>
+
                     </div>
 
                     <div className="col-md-12 mt-4">

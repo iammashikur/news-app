@@ -11,7 +11,7 @@ class Single extends Component {
 
     state = {
         item: [],
-        loading: false
+        loading: true
     };
 
     componentDidUpdate(prevProps) {
@@ -344,7 +344,7 @@ class Single extends Component {
                                             <div
                                                 className="bg-light"
                                                 style={{
-                                                    maxHeight: "390px",
+                                                    maxHeight: "636px",
                                                     overflowY: "scroll"
                                                 }}
                                             >
@@ -359,7 +359,7 @@ class Single extends Component {
                                             <div
                                                 className="bg-light"
                                                 style={{
-                                                    maxHeight: "390px",
+                                                    maxHeight: "636px",
                                                     overflowY: "scroll"
                                                 }}
                                             >

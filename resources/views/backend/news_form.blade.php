@@ -63,7 +63,7 @@
 
                                     <div class="form-group">
                                         <label for="">Content</label>
-                                        <textarea class="summernote-simple" name="content" required></textarea>
+                                        <textarea class="summernote" name="content" required></textarea>
                                     </div>
 
 
@@ -81,7 +81,7 @@
 
                                         <img id="post-image" width="200px">
 
-                                        <input id="form-image" type="hidden" name="image" value="" required>
+                                        <input id="form-image" type="hidden" name="image" required>
 
                                     </div>
 
@@ -95,14 +95,14 @@
                                     <div class="form-group">
                                         <label for="">News Source</label>
                                         <input type="text"
-                                          class="form-control" name="source" id=""  placeholder="">
+                                          class="form-control" name="source" id=""  placeholder="" required>
 
                                       </div>
 
 
                                     <div class="form-group">
                                         <label for="">Description (Short)</label>
-                                        <textarea name="description" type="text" class="form-control" required></textarea>
+                                        <textarea name="description" type="text" class="form-control"></textarea>
                                     </div>
 
 
@@ -110,7 +110,7 @@
 
                                     <div class="form-group">
                                         <label for="">Tags</label>
-                                        <input name="tags" type="text" class="form-control inputtags" required>
+                                        <input name="tags" type="text" class="form-control inputtags">
                                     </div>
 
 

@@ -53,14 +53,14 @@ class AdminController extends Controller
     // Show All News
     public function news_all()
     {
-        $posts = Posts::where('status', 'published')->orWhere('status', 'drafted')->latest()->paginate(10);
+        $posts = Posts::where('status', 'published')->orWhere('status', 'drafted')->orderBy('id', 'desc')->paginate(10);
         return view('backend.news_all', compact('posts'));
     }
 
     // Show All News
     public function news_trash()
     {
-        $posts = Posts::where('status', 'trashed')->latest()->paginate(10);
+        $posts = Posts::where('status', 'trashed')->orderBy('id', 'desc')->paginate(10);
         return view('backend.news_trash', compact('posts'));
     }
 
@@ -247,7 +247,7 @@ class AdminController extends Controller
     // Show All Categories
     public function category_all(Request $request)
     {
-        $categories = Categories::latest()->paginate(10);
+        $categories = Categories::orderBy('id', 'desc')->paginate(10);
         return view('backend.category_all', compact('categories'));
     }
 
@@ -313,7 +313,7 @@ class AdminController extends Controller
     // Show All Categories
     public function gallery_all(Request $request)
     {
-        $galleries = Galleries::latest()->paginate(10);
+        $galleries = Galleries::orderBy('id', 'desc')->paginate(10);
         return view('backend.gallery_all', compact('galleries'));
     }
 
@@ -386,7 +386,7 @@ class AdminController extends Controller
     // Show All Categories
     public function video_all(Request $request)
     {
-        $galleries = Videos::latest()->paginate(10);
+        $galleries = Videos::orderBy('id', 'desc')->paginate(10);
         return view('backend.video_all', compact('galleries'));
     }
 
@@ -456,7 +456,7 @@ class AdminController extends Controller
     // Show All Categories
     public function files_all(Request $request)
     {
-        $files = Files::latest()->paginate(10);
+        $files = Files::orderBy('id', 'desc')->paginate(10);
         return view('backend.filemanager', compact('files'));
     }
 
@@ -703,6 +703,9 @@ class AdminController extends Controller
             'auto_ad'      => $request->auto_ad,
             'share_button' => $request->share_button,
             'wetget'       => $request->wetget,
+            'about'        => $request->about,
+            'contact'      => $request->contact,
+            'privacy'      => $request->privacy,
         ]);
 
         Alert::toast('Settings Updated !', 'success');

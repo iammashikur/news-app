@@ -9,8 +9,8 @@ class LeadFirst extends Component {
         loader: true
     };
 
-    async componentDidMount() {
-        await axios
+    componentDidMount() {
+        axios
             .get("/api/lead/" + this.props.skip + "/" + this.props.take)
             .then(res => {
                 const item = res.data;
@@ -30,21 +30,25 @@ class LeadFirst extends Component {
                             to={"/news/" + news.slug}
                         >
                             <div className="row">
-                                <div className="col-md-6 col-12 mt-4 mt-md-0">
-                                    <h1>{news.title}</h1>
-                                    <p>{news.content}</p>
-                                    <small>
-                                        <i className="fas fa-clock    " />{" "}
-                                        {news.date}
-                                    </small>
-                                </div>
-                                <div className="col-md-6 col-12">
+
+                            <div className="col-md-6 col-12 order-md-last">
                                     <img
                                         src={news.image}
                                         width="100%"
                                         height="100%"
                                     />
                                 </div>
+
+
+                                <div className="col-md-6 col-12 mt-4 mt-md-0">
+                                    <h1 style={{fontSize: '25px'}}>{news.title}</h1>
+                                    <p>{news.content}</p>
+                                    <small>
+                                        <i className="fas fa-clock    " />{" "}
+                                        {news.date}
+                                    </small>
+                                </div>
+
                             </div>
                         </Link>
                     ))}
