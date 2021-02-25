@@ -211,7 +211,7 @@ class FrontendController extends Controller
                 'id' => $item->id,
                 'title' => $item->title,
                 'content' => Str::words(strip_tags($item->content), 16),
-                'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
+                'image' => url(str_replace('assets/frontend/news_image/','assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' => $item->slug,
                 'date' => $this->bangla(Carbon::parse($item->created_at)->format('d M Y'))  ,
             ];
@@ -232,7 +232,7 @@ class FrontendController extends Controller
                 'id' => $item->id,
                 'title' =>Str::words(strip_tags($item->title), $request->title),
                 'content' => Str::words(strip_tags($item->content), $request->content),
-                'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
+                'image' => url(str_replace('assets/frontend/news_image/','assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' =>  $item->slug,
                 'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
@@ -254,7 +254,7 @@ class FrontendController extends Controller
                 'id' => $item->id,
                 'title' => $item->title,
                 'content' => Str::words(strip_tags($item->content), 16),
-                'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
+                'image' => url(str_replace('assets/frontend/news_image/','assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' => $item->slug,
                 'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
@@ -275,7 +275,7 @@ class FrontendController extends Controller
                 'id' => $item->id,
                 'title' => $item->title,
                 'content' => Str::words(strip_tags($item->content), 16),
-                'image' => url(str_replace('/assets/frontend/news_image/','/assets/frontend/news_image/thumb/' ,$item->image)),
+                'image' => url(str_replace('assets/frontend/news_image/','assets/frontend/news_image/thumb/' ,$item->image)),
                 'slug' => $item->slug,
                 'date' =>   $this->bangla(Carbon::parse($item->created_at)->format('d M Y')),
             ];
@@ -303,12 +303,6 @@ class FrontendController extends Controller
 
     public function fetch_news_slug(Request $request){
 
-
-        Posts::
-            where('slug', $request->slug)
-            ->update([
-                'views' => Posts::raw('views + 1'),
-            ]);
 
          if (!isset($_COOKIE[$request->slug]))
          {
@@ -350,7 +344,7 @@ class FrontendController extends Controller
 
         foreach ($news_all as $key => $post) {
             $post->id = $post->id;
-            $post->image = url($post->image);
+            $post->image = url(str_replace('assets/frontend/news_image/','assets/frontend/news_image/thumb/' ,$post->image));
             $post->title =  $post->title;
             $post->content = Str::words(strip_tags($post->content), 16);
             $post->date = $this->bangla(Carbon::parse($post->created_at)->format('d M Y'));

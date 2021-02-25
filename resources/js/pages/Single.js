@@ -96,7 +96,7 @@ class Single extends Component {
                                 <center>
                                     <img
                                         id="mobile"
-                                        src="https://deshdorpon.com/media/2020/11/coverdesh.jpg"
+                                        src="/source.png"
                                         className="rounded-circle"
                                         alt=""
                                         width="80px"

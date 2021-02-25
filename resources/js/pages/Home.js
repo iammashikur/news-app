@@ -1,5 +1,5 @@
 import React from "react";
-import Sections from "../components/Sections";
+import CrazyLoader from "../components/Sections/CrazyLoader";
 import { Helmet } from "react-helmet";
 
 
@@ -29,7 +29,7 @@ class Home extends React.Component {
                             content={JSON.parse(localStorage.getItem("Settings")).description}
                         />
                     </Helmet>
-                <Sections />
+                <CrazyLoader/>
             </div>
         );
     }

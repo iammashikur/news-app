@@ -62,7 +62,7 @@ export default class CategoryItem extends Component {
     }
 
     getCategoryItem() {
-        console.log(this.state.next_page);
+
 
         if (!this.state.loading) {
             this.setState({

@@ -6,7 +6,7 @@ import SubLead from "./Parts/SubLead";
 import Latest from "./Parts/Latest";
 import LatestByCat from "./Parts/LatestByCat";
 
-class HeaderSections extends Component {
+class SectionOne extends Component {
 
     render() {
         return (
@@ -141,4 +141,4 @@ class HeaderSections extends Component {
     }
 }
 
-export default HeaderSections;
+export default SectionOne;

@@ -86,6 +86,29 @@ class News extends Component {
             );
         }
 
+        if (this.props.design == "big-news-nodate") {
+            return (
+                <>
+                    {this.state.item.map((news, index) => (
+                        <div className="mb-4" key={index}>
+                            <Link
+                                key={index}
+                                className="news-box"
+                                to={"/news/" + news.slug}
+                            >
+                                <img
+                                    className="mb-4"
+                                    src={news.image}
+                                    width="100%"
+                                />
+                                <h1>{news.title}</h1>
+                            </Link>
+                        </div>
+                    ))}
+                </>
+            );
+        }
+
         if (this.props.design == "news-bar") {
             return (
                 <>
@@ -107,6 +130,32 @@ class News extends Component {
                                             <i className="fas fa-clock    "></i>{" "}
                                             {news.date}
                                         </small>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                </>
+            );
+        }
+
+        if (this.props.design == "news-bar-nodate") {
+            return (
+                <>
+                    {this.state.item.map((news, index) => (
+                        <div className="mb-4" key={index}>
+                            <Link
+                                key={index}
+                                className="news-bar"
+                                to={"/news/" + news.slug}
+
+                            >
+                                <div className="row">
+                                    <div className="col-4 col-md-6 pr-2">
+                                        <img src={news.image} width="100%" />
+                                    </div>
+                                    <div className="col-8 col-md-6 pl-2">
+                                        <h1>{news.title}</h1>
                                     </div>
                                 </div>
                             </Link>
@@ -145,7 +194,32 @@ class News extends Component {
                     ))}
                 </>
             );
-        } else {
+        }
+
+        if (this.props.design == "news-bar-big-nocontent") {
+            return (
+                <>
+                    {this.state.item.map((news, index) => (
+                        <Link className="news-bar big"  to={"/news/" + news.slug} key={index}>
+                            <div className="row">
+                                <div className="col-4 col-md-4 pr-2">
+                                <img src={news.image} width="100%" />
+
+                                </div>
+                                <div className="col-8 col-md-8 pl-2">
+                                          <h1>
+                                          {news.title}
+                                        </h1>
+
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </>
+            );
+        }
+
+        else {
             return (
                 <div>
                     <center>

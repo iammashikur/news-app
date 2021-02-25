@@ -404,7 +404,7 @@ class AdminController extends Controller
         // News insert
         Videos::insert([
 
-            'link'        => $request->link,
+            'link'        => str_replace('youtu.be/','youtube.com/embed/',$request->link),
             'title'       => $request->title,
             'created_at'  => Carbon::now(),
             'updated_at'  => Carbon::now(),
@@ -429,7 +429,7 @@ class AdminController extends Controller
         // News insert
         Videos::find($request->id)->update([
 
-            'link'        => $request->link,
+            'link'        => str_replace('youtu.be/','youtube.com/embed/',$request->link),
             'title'       => $request->title,
             'updated_at'  => Carbon::now(),
 

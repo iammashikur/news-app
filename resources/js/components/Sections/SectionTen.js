@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import News from "./Parts/News";
 
-class MediaSection extends Component {
+class SectionTen extends Component {
     render() {
         return (
             <>
@@ -354,4 +354,4 @@ class MediaSection extends Component {
     }
 }
 
-export default MediaSection;
+export default SectionTen;
